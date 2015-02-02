@@ -38,7 +38,7 @@ public class Traveller {
     private String memberType = "M";        //身份(G:領隊、M:成員)
     private String applyVisa = "1";         //單次證申請 (填1)@必填
 //    private String resume;                  //經歷(不用填)
-    private String relative;                //(KINSFOLK) 隨行親友姓名
+    private String kinsfolk;                //(KINSFOLK) 隨行親友姓名
     private String activeStatus = "0";      //??(填0)
     private String completion = "w";              //資料完成度(w/s) @必填
 //    private String receiveNo;               //??(不用填)
@@ -54,7 +54,6 @@ public class Traveller {
 //    private String tourBureauApplyMark;     //??(不用填)
     private String livingCity;              //@居住城市 可能要自己填
 //    private TravelTourGroup travelTourGroup;
-//    private Set<ApplyAttach> applyAttachs;
 //    private static Object transients;
 //    private static Object mapping;
 //    private static Object constraints;
@@ -444,12 +443,12 @@ public class Traveller {
   
   public String getRelative()
   {
-    return this.relative;
+    return this.kinsfolk;
   }
   
   public void setRelative(String paramString)
   {
-    this.relative = paramString.trim();
+    this.kinsfolk = paramString.trim();
   }
   
   public String getActiveStatus()
@@ -628,25 +627,24 @@ public class Traveller {
         for(int i = 0; i < fields.length; i++){
             String name = fields[i].getName();
             Object value = fields[i].get(this);
+            String type = ((Class) fields[i].getType()).getSimpleName();
+            
             if(value == null){ 
                 System.out.println(name + " is NULL.");
                 continue;
             }
-            String type = ((Class) fields[i].getType()).getSimpleName();
-            nameSb.append(name);
+
+            nameSb.append(name + ", ");
             if(type.equals("String")){
-                valueSb.append("'" + value.toString() + "'");
+                valueSb.append("'" + value.toString() + "', ");
             }else{
-                valueSb.append(value.toString());
+                valueSb.append(value.toString() + ", ");
             }
-            if(i+1 < fields.length){
-                nameSb.append(", ");
-                valueSb.append(", ");
-            }
+            
         }
 
-        insertStr = String.format("insert into %s(%s, CreateDate, LastUpdateTime) "
-            + "values(%s, current_timestamp, current_timestamp)",
+        insertStr = String.format("insert into %s(%s CreateDate, LastUpdateTime) "
+            + "values(%s current_timestamp, current_timestamp)",
             objClass.getSimpleName(), nameSb.toString(), valueSb.toString());
 
     } catch(Exception e) {

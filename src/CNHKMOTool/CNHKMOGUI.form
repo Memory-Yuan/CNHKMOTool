@@ -31,16 +31,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane1" min="-2" pref="487" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Component id="jPanel1" alignment="1" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="mainPanel" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -48,16 +45,16 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="mainPanel" min="-2" pref="412" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="247" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="231" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="mainPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -70,52 +67,44 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Component id="submit" min="-2" pref="93" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="exit" min="-2" pref="93" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jLabel3" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel4" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel3" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="tourName" max="32767" attributes="0"/>
-                              <Component id="headShotPath" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jScrollPane3" alignment="1" max="32767" attributes="0"/>
-                              <Component id="clientDataPath" alignment="0" min="-2" pref="319" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  <Component id="selectClientData" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="selectPlusItem" max="32767" attributes="0"/>
-                                          <Component id="removePlusItem" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="selectHeadShot" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="tourName" alignment="0" min="-2" pref="320" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="folderPath" max="32767" attributes="0"/>
+                                      <Component id="clientDataPath" min="-2" pref="320" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="selectClientData" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                          <Component id="selectFolder" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="attachFilePanel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -125,7 +114,13 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="folderPath" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="selectFolder" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="clientDataPath" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="selectClientData" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -133,31 +128,17 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="headShotPath" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="selectHeadShot" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="selectPlusItem" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="removePlusItem" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" min="-2" pref="126" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="tourName" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="18" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="submit" alignment="0" min="-2" pref="38" max="-2" attributes="0"/>
-                      <Component id="exit" min="-2" pref="38" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="attachFilePanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="exit" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="submit" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -192,78 +173,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectClientDataActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x5927;&#x982d;&#x7167;"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="headShotPath">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private File headShot;"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JButton" name="selectHeadShot">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x700f;&#x89bd;"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectHeadShotActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x5176;&#x4ed6;&#x9644;&#x4ef6;"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="selectPlusItem">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x700f;&#x89bd;"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectPlusItemActionPerformed"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JButton" name="exit">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x96e2;&#x958b;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exitActionPerformed"/>
-          </Events>
-        </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane3">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JList" name="plusItemList">
-              <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="plusItemModel" type="code"/>
-                </Property>
-                <Property name="toolTipText" type="java.lang.String" value=""/>
-                <Property name="cellRenderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new MyCellRenderer()" type="code"/>
-                </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private DefaultListModel plusItemModel;"/>
-                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="plusItemModel = new DefaultListModel();"/>
-              </AuxValues>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Component class="javax.swing.JButton" name="removePlusItem">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x79fb;&#x9664;"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removePlusItemActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
@@ -273,6 +188,173 @@
         </Component>
         <Component class="javax.swing.JTextField" name="tourName">
         </Component>
+        <Component class="javax.swing.JLabel" name="jLabel3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x8cc7;&#x6599;&#x593e;"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="selectFolder">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x700f;&#x89bd;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectFolderActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="folderPath">
+        </Component>
+        <Container class="javax.swing.JPanel" name="attachFilePanel">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="&#x9644;&#x4ef6;"/>
+              </Border>
+            </Property>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace pref="18" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" pref="51" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="headShotPath" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="242" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="selectHeadShot" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectPlusItem" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="removePlusItem" alignment="1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="headShotPath" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="selectHeadShot" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="12" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="selectPlusItem" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="removePlusItem" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jScrollPane3" alignment="1" min="-2" pref="126" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JList" name="plusItemList">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="plusItemModel" type="code"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value=""/>
+                    <Property name="cellRenderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new MyCellRenderer()" type="code"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private DefaultListModel plusItemModel;"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="plusItemModel = new DefaultListModel();"/>
+                  </AuxValues>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JButton" name="selectPlusItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x700f;&#x89bd;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectPlusItemActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="removePlusItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x79fb;&#x9664;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removePlusItemActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x5927;&#x982d;&#x7167;"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="headShotPath">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="private File headShot;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="selectHeadShot">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x700f;&#x89bd;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectHeadShotActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel5">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x5176;&#x4ed6;"/>
+              </Properties>
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JList" name="jList1">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -286,7 +368,7 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="=================================================================&#xa;&#x4e00;&#x3001;&#x64cd;&#x4f5c;&#x65b9;&#x6cd5;&#xa;  1.&#x9078;&#x64c7;&#x7533;&#x8acb;&#x8cc7;&#x6599;(&#x6587;&#x4ef6;&#x683c;&#x5f0f;&#x50c5;&#x63a5;&#x53d7;Microsoft Word2003&#x4ee5;&#x4e0a;&#x7248;&#x672c;&#x3002;)&#xa;  2.&#x9078;&#x64c7;&#x7533;&#x8acb;&#x4eba;&#x5927;&#x982d;&#x7167;&#xa;  3.&#x9078;&#x64c7;&#x5176;&#x4ed6;&#x9644;&#x4ef6;&#xa;  4.&#x8f38;&#x5165;&#x884c;&#x7a0b;&#x540d;&#x7a31;&#xa;  5.&#x6309;&#x4e0b;&#x78ba;&#x5b9a;&#xa;  6.&#x5f85;&#x5b8c;&#x6210;&#x4e4b;&#x5f8c;&#x95dc;&#x9589;&#x6b64;&#x5de5;&#x5177;&#xa;  7.&#x81f3;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#x67e5;&#x8a62;&#x8cc7;&#x6599;&#x61c9;&#x53ef;&#x627e;&#x5230;&#x6b64;&#x7b46;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#xa;&#x4e8c;&#x3001;&#x6ce8;&#x610f;&#x4e8b;&#x9805;&#xff1a;&#xa;  1.&#x5728;&#x4f7f;&#x7528;&#x6b64;&#x5de5;&#x5177;&#x4e4b;&#x524d;&#xff0c;&#x8acb;&#x5148;&#x78ba;&#x5b9a;&#x662f;&#x5426;&#x6709;&#x5148;&#x958b;&#x555f;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xff0c;&#xa;    &#x5982;&#x6709;&#x958b;&#x555f;&#xff0c;&#x8acb;&#x5c07;&#x4e4b;&#x95dc;&#x9589;&#xff0c;&#x624d;&#x80fd;&#x5920;&#x4f7f;&#x7528;&#x3002;&#xa;  2.&#x5728;&#x958b;&#x555f;&#x6b64;&#x5de5;&#x5177;&#x7684;&#x60c5;&#x6cc1;&#x4e0b;&#xff0c;&#x7121;&#x6cd5;&#x4f7f;&#x7528;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xa;  3.&#x4ee5;&#x4e0b;&#x8cc7;&#x6599;&#x7121;&#x6cd5;&#x5f9e;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x7372;&#x5f97;&#xff0c;&#x6216;&#x53ef;&#x80fd;&#x7121;&#x6cd5;&#x8fa8;&#x8b58;&#xff0c;&#x56e0;&#x6b64;&#x5fc5;&#x9808;&#x624b;&#x52d5;&#x586b;&#x5beb;:&#xa;    1) &#x7533;&#x8acb;&#x8cc7;&#x683c;&#xa;    2) &#x51fa;&#x751f;&#x5730;&#xa;    3) &#x8077;&#x696d;&#x985e;&#x5225;&#xa;    4) &#x5c45;&#x4f4f;&#x57ce;&#x5e02;&#xa;================================================================="/>
+            <Property name="text" type="java.lang.String" value="===========================================================&#xa;&#x4e00;&#x3001;&#x64cd;&#x4f5c;&#x65b9;&#x6cd5;&#xa;  1.&#x9078;&#x64c7;&#x7533;&#x8acb;&#x8cc7;&#x6599;(&#x6587;&#x4ef6;&#x683c;&#x5f0f;&#x50c5;&#x63a5;&#x53d7;Microsoft Word2003&#x4ee5;&#x4e0a;&#x7248;&#x672c;&#x3002;)&#xa;  2.&#x9078;&#x64c7;&#x7533;&#x8acb;&#x4eba;&#x5927;&#x982d;&#x7167;&#xa;  3.&#x9078;&#x64c7;&#x5176;&#x4ed6;&#x9644;&#x4ef6;&#xa;  4.&#x8f38;&#x5165;&#x884c;&#x7a0b;&#x540d;&#x7a31;&#xa;  5.&#x6309;&#x4e0b;&#x78ba;&#x5b9a;&#xa;  6.&#x5f85;&#x5b8c;&#x6210;&#x4e4b;&#x5f8c;&#x95dc;&#x9589;&#x6b64;&#x5de5;&#x5177;&#xa;  7.&#x81f3;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#x67e5;&#x8a62;&#x8cc7;&#x6599;&#x61c9;&#x53ef;&#x627e;&#x5230;&#x6b64;&#x7b46;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#xa;&#x4e8c;&#x3001;&#x6ce8;&#x610f;&#x4e8b;&#x9805;&#xff1a;&#xa;  1.&#x5728;&#x4f7f;&#x7528;&#x6b64;&#x5de5;&#x5177;&#x4e4b;&#x524d;&#xff0c;&#x8acb;&#x5148;&#x78ba;&#x5b9a;&#x662f;&#x5426;&#x6709;&#x5148;&#x958b;&#x555f;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xff0c;&#xa;    &#x5982;&#x6709;&#x958b;&#x555f;&#xff0c;&#x8acb;&#x5c07;&#x4e4b;&#x95dc;&#x9589;&#xff0c;&#x624d;&#x80fd;&#x5920;&#x4f7f;&#x7528;&#x3002;&#xa;  2.&#x5728;&#x958b;&#x555f;&#x6b64;&#x5de5;&#x5177;&#x7684;&#x60c5;&#x6cc1;&#x4e0b;&#xff0c;&#x7121;&#x6cd5;&#x4f7f;&#x7528;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xa;  3.&#x4ee5;&#x4e0b;&#x8cc7;&#x6599;&#x7121;&#x6cd5;&#x5f9e;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x7372;&#x5f97;&#xff0c;&#x6216;&#x53ef;&#x80fd;&#x7121;&#x6cd5;&#x8fa8;&#x8b58;&#xff0c;&#x56e0;&#x6b64;&#x5fc5;&#x9808;&#x624b;&#x52d5;&#x586b;&#x5beb;:&#xa;    1) &#x7533;&#x8acb;&#x8cc7;&#x683c;&#xa;    2) &#x51fa;&#x751f;&#x5730;&#xa;    3) &#x8077;&#x696d;&#x985e;&#x5225;&#xa;    4) &#x5c45;&#x4f4f;&#x57ce;&#x5e02;&#xa;==========================================================="/>
           </Properties>
         </Component>
       </SubComponents>

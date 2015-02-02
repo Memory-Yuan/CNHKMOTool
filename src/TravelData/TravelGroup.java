@@ -1034,26 +1034,24 @@ public class TravelGroup {
         for(Field field : fields) {
             String name = field.getName();
             Object value = field.get(this);
+            String type = ((Class) field.getType()).getSimpleName();
+            
             if(value == null){ 
                 System.out.println(name + " is NULL.");
                 continue;
             }
-            String type = ((Class) field.getType()).getSimpleName();
-            nameSb.append(name);
+            
+            nameSb.append(name + ", ");
             if(type.equals("String")){
-                valueSb.append("'" + value.toString() + "'");
+                valueSb.append("'" + value.toString() + "', ");
             }else{
-                valueSb.append(value.toString());
-            }
-            if(i < fieldsLength){
-                nameSb.append(", ");
-                valueSb.append(", ");
+                valueSb.append(value.toString() + ", ");
             }
             i++;
         }
 
-        insertStr = String.format("insert into %s(%s, CreateDate, LastUpdateTime) "
-            + "values(%s, current_timestamp, current_timestamp)",
+        insertStr = String.format("insert into %s(%s CreateDate, LastUpdateTime) "
+            + "values(%s current_timestamp, current_timestamp)",
             objClass.getSimpleName(), nameSb.toString(), valueSb.toString());
 
     } catch(Exception e) {

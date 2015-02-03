@@ -11,7 +11,7 @@ public class Attach {
         return this.type;
     }
 
-    public void setHeadShot(String s){
+    public void setType(String s){
         this.type = s;
     }
     

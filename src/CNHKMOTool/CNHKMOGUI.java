@@ -45,8 +45,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     public CNHKMOGUI() {
         initComponents();
         initCustomComponents();
-        travellerTab.setVisible(false);
-        
         createLink("D:/CNHKMO/db/CNHKMO");
         Runtime.getRuntime().addShutdownHook(new ShutdownThread(this.conn));
     }
@@ -65,24 +63,25 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         submit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         clientDataPath = new javax.swing.JFormattedTextField();
-        selectClientData = new javax.swing.JButton();
+        selectClientDataBtn = new javax.swing.JButton();
         exit = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         tourName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        selectFolder = new javax.swing.JButton();
+        selectFolderBtn = new javax.swing.JButton();
         folderPath = new javax.swing.JTextField();
         attachFilePanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        plusItemList = new javax.swing.JList();
-        selectPlusItem = new javax.swing.JButton();
-        removePlusItem = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        attachDetailList = new javax.swing.JList();
+        selectAttachBtn = new javax.swing.JButton();
+        removeAttachBtn = new javax.swing.JButton();
         headShotPath = new javax.swing.JTextField();
         selectHeadShot = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        attachBelongList = new javax.swing.JList();
+        removeAllAttachBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        setToHeadShot = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         appMsg = new javax.swing.JTextArea();
 
@@ -104,10 +103,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         clientDataPath.setEnabled(false);
 
-        selectClientData.setText("瀏覽");
-        selectClientData.addActionListener(new java.awt.event.ActionListener() {
+        selectClientDataBtn.setText("瀏覽");
+        selectClientDataBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectClientDataActionPerformed(evt);
+                selectClientDataBtnActionPerformed(evt);
             }
         });
 
@@ -122,36 +121,34 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         jLabel3.setText("資料夾");
 
-        selectFolder.setText("瀏覽");
-        selectFolder.addActionListener(new java.awt.event.ActionListener() {
+        selectFolderBtn.setText("瀏覽");
+        selectFolderBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectFolderActionPerformed(evt);
+                selectFolderBtnActionPerformed(evt);
             }
         });
 
         attachFilePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("附件"));
 
-        plusItemModel = new DefaultListModel();
-        plusItemList.setModel(plusItemModel);
-        plusItemList.setToolTipText("");
-        plusItemList.setCellRenderer(new MyCellRenderer());
-        jScrollPane3.setViewportView(plusItemList);
+        attachListModel = new DefaultListModel();
+        attachDetailList.setModel(attachListModel);
+        attachDetailList.setToolTipText("");
+        attachDetailList.setCellRenderer(new MyCellRenderer());
+        jScrollPane3.setViewportView(attachDetailList);
 
-        selectPlusItem.setText("瀏覽");
-        selectPlusItem.addActionListener(new java.awt.event.ActionListener() {
+        selectAttachBtn.setText("瀏覽");
+        selectAttachBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectPlusItemActionPerformed(evt);
+                selectAttachBtnActionPerformed(evt);
             }
         });
 
-        removePlusItem.setText("移除");
-        removePlusItem.addActionListener(new java.awt.event.ActionListener() {
+        removeAttachBtn.setText("移除");
+        removeAttachBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removePlusItemActionPerformed(evt);
+                removeAttachBtnActionPerformed(evt);
             }
         });
-
-        jLabel2.setText("大頭照");
 
         headShotPath.setEnabled(false);
 
@@ -162,30 +159,54 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("其他");
+        attachBelongModel = new DefaultListModel();
+        attachBelongList.setModel(attachBelongModel);
+        attachBelongList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        attachBelongList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                attachBelongListValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(attachBelongList);
 
-        jScrollPane2.setViewportView(jList1);
+        removeAllAttachBtn.setText("全部移除");
+        removeAllAttachBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAllAttachBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("大頭照");
+
+        setToHeadShot.setText("設為大頭照");
+        setToHeadShot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setToHeadShotActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout attachFilePanelLayout = new javax.swing.GroupLayout(attachFilePanel);
         attachFilePanel.setLayout(attachFilePanelLayout);
         attachFilePanelLayout.setHorizontalGroup(
             attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(attachFilePanelLayout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(headShotPath)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, attachFilePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(headShotPath)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(selectHeadShot, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(selectPlusItem, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(removePlusItem, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(selectHeadShot, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(selectAttachBtn, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(removeAttachBtn, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(removeAllAttachBtn)
+                    .addComponent(setToHeadShot))
                 .addContainerGap())
         );
         attachFilePanelLayout.setVerticalGroup(
@@ -195,19 +216,20 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(attachFilePanelLayout.createSequentialGroup()
                         .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
                             .addComponent(headShotPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(selectHeadShot))
+                            .addComponent(selectHeadShot)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                        .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, attachFilePanelLayout.createSequentialGroup()
-                                .addComponent(selectPlusItem)
+                        .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(attachFilePanelLayout.createSequentialGroup()
+                                .addComponent(selectAttachBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(removePlusItem))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, attachFilePanelLayout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(111, 111, 111))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(setToHeadShot)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(removeAttachBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(removeAllAttachBtn))))
                     .addComponent(jScrollPane2))
                 .addContainerGap())
         );
@@ -239,10 +261,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(mainPanelLayout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(selectClientData))
+                                        .addComponent(selectClientDataBtn))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(selectFolder))))))
+                                        .addComponent(selectFolderBtn))))))
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(attachFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -254,12 +276,12 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(folderPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectFolder)
+                    .addComponent(selectFolderBtn)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clientDataPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectClientData)
+                    .addComponent(selectClientDataBtn)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -380,7 +402,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_submitActionPerformed
 
-    private void selectClientDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectClientDataActionPerformed
+    private void selectClientDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectClientDataBtnActionPerformed
         FileFilter wordFilter = new ExtensionFileFilter("Microsoft Word file(2003以上版本)", new String[] { "DOC", "DOCX" });
         fileChooser.setFileFilter(wordFilter);
         int status = fileChooser.showOpenDialog(this);
@@ -391,7 +413,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         } else if (status == JFileChooser.CANCEL_OPTION) {
             System.out.println("File access cancelled by user.");
         }
-    }//GEN-LAST:event_selectClientDataActionPerformed
+    }//GEN-LAST:event_selectClientDataBtnActionPerformed
 
     private void selectHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectHeadShotActionPerformed
         FileFilter picFilter = new ExtensionFileFilter("圖片(jpg, jpeg)", new String[] { "JPG", "JPEG" });
@@ -405,30 +427,53 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_selectHeadShotActionPerformed
 
-    private void selectPlusItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPlusItemActionPerformed
+    private void selectAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAttachBtnActionPerformed
         FileFilter picFilter = new ExtensionFileFilter("圖片(jpg, jpeg)", new String[] { "JPG", "JPEG" });
         fileChooser.setFileFilter(picFilter);
         fileChooser.setMultiSelectionEnabled(true);
         int status = fileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
             File[] files = fileChooser.getSelectedFiles();
-            for (File file : files) { plusItemModel.addElement(file); }
+            for (File file : files) { attachListModel.addElement(file); }
         } else if (status == JFileChooser.CANCEL_OPTION) {
             System.out.println("File access cancelled by user.");
         }
-    }//GEN-LAST:event_selectPlusItemActionPerformed
+    }//GEN-LAST:event_selectAttachBtnActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         int q = JOptionPane.showConfirmDialog(null, "真的要關閉嗎?", "問題", JOptionPane.YES_NO_OPTION);
         if(q == 0){ System.exit(0); }
     }//GEN-LAST:event_exitActionPerformed
 
-    private void removePlusItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePlusItemActionPerformed
+    private void removeAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAttachBtnActionPerformed
 
-        while(this.plusItemList.getSelectedIndices().length > 0){
-            int selectFirst = plusItemList.getSelectedIndices()[0];
-            plusItemModel.removeElementAt(selectFirst);
+        int[] idxs = attachDetailList.getSelectedIndices();
+        int abidx = attachBelongList.getSelectedIndex();
+        List<Attach> della = new ArrayList<Attach>();
+
+        for(int i : idxs){
+            della.add(applyAttachList.get(abidx).getAttachList().get(i));
         }
+        
+        List<Attach> la = applyAttachList.get(abidx).getAttachList();
+        la.removeAll(della);
+        applyAttachList.get(abidx).setAttachList(la);
+        setAttachDetail(abidx);
+        /*
+        int idx = attachDetailList.getSelectedIndex();
+        
+        if(idx < 0){ return; }
+        
+        int abidx = attachBelongList.getSelectedIndex();
+        List<Attach> la = applyAttachList.get(abidx).getAttachList();
+        la.remove(idx);
+        applyAttachList.get(abidx).setAttachList(la);
+        setAttachDetail(abidx);
+        */
+//        while(this.attachDetailList.getSelectedIndices().length > 0){
+//            int selectFirst = attachDetailList.getSelectedIndices()[0];
+//            attachListModel.removeElementAt(selectFirst);
+//        }
         /*
         *   以下這個方法不可行，因為在刪除一個選擇的項目的時候，
         *   JList的index會全部刷新，導致下一個要刪除的index是錯誤的目標
@@ -440,9 +485,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         }
         */
-    }//GEN-LAST:event_removePlusItemActionPerformed
+    }//GEN-LAST:event_removeAttachBtnActionPerformed
 
-    private void selectFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFolderActionPerformed
+    private void selectFolderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFolderBtnActionPerformed
         initCustomComponents();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int status = fileChooser.showOpenDialog(this);
@@ -451,14 +496,42 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             folderPath.setText(folder.getAbsolutePath());
             tourName.setText(folder.getName());
             getFolderFile(folder);
-            
+            setAttachPanel();
             if(clientData == null){ showMessage("找不到申請文件，請手動選擇。", "warring"); }
             if(applyAttachList.size() ==0 ){ showMessage("找不到可以附加的圖片，請手動選擇。", "warring"); }
 
         } else if (status == JFileChooser.CANCEL_OPTION) {
             System.out.println("File access cancelled by user.");
         }
-    }//GEN-LAST:event_selectFolderActionPerformed
+    }//GEN-LAST:event_selectFolderBtnActionPerformed
+
+    private void attachBelongListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_attachBelongListValueChanged
+        setAttachDetail(attachBelongList.getSelectedIndex());
+    }//GEN-LAST:event_attachBelongListValueChanged
+
+    private void removeAllAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllAttachBtnActionPerformed
+
+        int abidx = attachBelongList.getSelectedIndex();
+        applyAttachList.get(abidx).setAttachList(new ArrayList<Attach>());
+        setAttachDetail(abidx);
+    }//GEN-LAST:event_removeAllAttachBtnActionPerformed
+
+    private void setToHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setToHeadShotActionPerformed
+
+        int[] idxs = attachDetailList.getSelectedIndices();
+        if(idxs.length != 1){ return; }
+        int abidx = attachBelongList.getSelectedIndex();
+        List<Attach> la = applyAttachList.get(abidx).getAttachList();
+        for(int i = 0; i < la.size(); i++){
+            if(i == idxs[0]){
+                la.get(i).setType("1");
+            }else{
+                la.get(i).setType("2");
+            }
+        }
+        applyAttachList.get(abidx).setAttachList(la);
+        setAttachDetail(abidx);
+    }//GEN-LAST:event_setToHeadShotActionPerformed
 
     /**
      * @param args the command line arguments
@@ -501,6 +574,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea appMsg;
+    private javax.swing.JList attachBelongList;
+    private DefaultListModel attachBelongModel;
+    private javax.swing.JList attachDetailList;
+    private DefaultListModel attachListModel;
     private javax.swing.JPanel attachFilePanel;
     private javax.swing.JFormattedTextField clientDataPath;
     private File clientData;
@@ -513,19 +590,17 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JList plusItemList;
-    private DefaultListModel plusItemModel;
-    private javax.swing.JButton removePlusItem;
-    private javax.swing.JButton selectClientData;
-    private javax.swing.JButton selectFolder;
+    private javax.swing.JButton removeAllAttachBtn;
+    private javax.swing.JButton removeAttachBtn;
+    private javax.swing.JButton selectAttachBtn;
+    private javax.swing.JButton selectClientDataBtn;
+    private javax.swing.JButton selectFolderBtn;
     private javax.swing.JButton selectHeadShot;
-    private javax.swing.JButton selectPlusItem;
+    private javax.swing.JButton setToHeadShot;
     private javax.swing.JButton submit;
     private javax.swing.JTextField tourName;
     // End of variables declaration//GEN-END:variables
@@ -533,7 +608,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private TravelGroup travelgroup;
     private List<Traveller> travellerList;
     private List<ApplyAttach> applyAttachList;
-//    private DefaultListModel
     
     private void initCustomComponents() {
         tourName.setText("");
@@ -542,10 +616,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         clientDataPath.setText("");
         headShot = null;
         headShotPath.setText("");
-        plusItemModel.removeAllElements();
+        attachListModel.removeAllElements();
+        attachBelongModel.removeAllElements();
+        applyAttachList = new ArrayList<ApplyAttach>();
         travelgroup = new TravelGroup();
         travellerList = new ArrayList<Traveller>();
-        applyAttachList = new ArrayList<ApplyAttach>();
         submit.setEnabled(true);
     }
     
@@ -590,6 +665,39 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             aa.setAttachList(la);
             aa.setBelongTo(folder.getName());
             applyAttachList.add(aa);
+        }
+    }
+    
+    private void setAttachPanel(){
+        attachBelongModel.removeAllElements();
+        for(ApplyAttach aa : applyAttachList){
+            attachBelongModel.addElement(aa.getBelongTo());
+        }
+        
+//        attachBelongList.setModel(attachBelongModel);
+        attachBelongList.setSelectedIndex(0);
+    }
+    
+    private void setAttachDetail(int idx){
+        attachListModel.removeAllElements();
+        List<Attach> la = applyAttachList.get(idx).getAttachList();
+        for(Attach a : la){
+            attachListModel.addElement(a.getFile());
+//            attachListModel.addElement(a);
+        }
+        
+        setHeadShot();
+    }
+    
+    private void setHeadShot(){
+        headShotPath.setText("");
+        int abidx = attachBelongList.getSelectedIndex();
+        List<Attach> la = applyAttachList.get(abidx).getAttachList();
+        for(Attach a : la){
+            if(a.getType().equals("1")){
+                headShotPath.setText(a.getFile().getName());
+                break;
+            }
         }
     }
     

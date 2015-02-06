@@ -1037,7 +1037,7 @@ public class TravelGroup {
             String type = ((Class) field.getType()).getSimpleName();
             
             if(value == null){ 
-                System.out.println(name + " is NULL.");
+//                System.out.println(name + " is NULL.");
                 continue;
             }
             

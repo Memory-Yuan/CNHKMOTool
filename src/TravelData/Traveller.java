@@ -315,6 +315,7 @@ public class Traveller {
   public void setOccupationDesc(String paramString)
   {
     this.occupationDesc = paramString.trim();
+    if(this.occupationDesc.equals("")){ this.occupation = 17; }
   }
   
   public String getAddress()
@@ -604,9 +605,6 @@ public class Traveller {
       for(String s : chkArr){
           if(this.chineseName.equals(s)){ return false; }
       }
-      if(!this.birthDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-          return false;
-      }
       if(!this.passportNo.matches("^T\\d{8}$")){
           return false;
       }
@@ -630,7 +628,7 @@ public class Traveller {
             String type = ((Class) fields[i].getType()).getSimpleName();
             
             if(value == null){ 
-                System.out.println(name + " is NULL.");
+//                System.out.println(name + " is NULL.");
                 continue;
             }
 

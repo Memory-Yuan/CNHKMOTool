@@ -1,6 +1,8 @@
 package TravelData;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Traveller {
     private String id;                  //@必填
@@ -53,6 +55,8 @@ public class Traveller {
 //    private Date revokeDate;                //??(不用填)
 //    private String tourBureauApplyMark;     //??(不用填)
     private String livingCity;              //@居住城市 可能要自己填
+    
+    private List<Attach> attachList = new ArrayList<Attach>();
 //    private TravelTourGroup travelTourGroup;
 //    private static Object transients;
 //    private static Object mapping;
@@ -599,16 +603,29 @@ public class Traveller {
           }
       }
   }
+
+  public List<Attach> getAttachList(){
+      return this.attachList;
+  }
+  
+  public void setAttachList(List<Attach> la){
+      this.attachList = la;
+  }
   
   public boolean isValidTraveller(){
       String[] chkArr = {"", "無", "如有生僻字請注明", null};
       for(String s : chkArr){
-          if(this.chineseName.equals(s)){ return false; }
+          if(this.chineseName.equals(s)){
+              System.out.println("1");
+              return false;
+          }
       }
       if(!this.passportNo.matches("^T\\d{8}$")){
+          System.out.println("通行證號格式錯誤！");
           return false;
       }
-      if(!this.personId.matches("^\\d{18}$")){
+      if(!this.personId.matches("^\\w{18}$")){
+          System.out.println("身分證號格式錯誤！");
           return false;
       }
       return true;
@@ -627,8 +644,7 @@ public class Traveller {
             Object value = fields[i].get(this);
             String type = ((Class) fields[i].getType()).getSimpleName();
             
-            if(value == null){ 
-//                System.out.println(name + " is NULL.");
+            if(value == null || name.equals("attachList")){ 
                 continue;
             }
 

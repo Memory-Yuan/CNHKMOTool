@@ -616,16 +616,16 @@ public class Traveller {
       String[] chkArr = {"", "無", "如有生僻字請注明", null};
       for(String s : chkArr){
           if(this.chineseName.equals(s)){
-              System.out.println("1");
+//              System.out.println("無效的名字");
               return false;
           }
       }
       if(!this.passportNo.matches("^T\\d{8}$")){
-          System.out.println("通行證號格式錯誤！");
+//          System.out.println("通行證號格式錯誤！");
           return false;
       }
       if(!this.personId.matches("^\\w{18}$")){
-          System.out.println("身分證號格式錯誤！");
+//          System.out.println("身分證號格式錯誤！");
           return false;
       }
       return true;

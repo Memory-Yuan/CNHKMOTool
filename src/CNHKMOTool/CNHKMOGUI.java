@@ -1,5 +1,5 @@
 /*
-* CNHKMOTool v1.1.0
+* CNHKMOTool v1.2.2
 */
 
 package CNHKMOTool;
@@ -24,13 +24,13 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.hwpf.usermodel.Table;
-import org.apache.poi.hwpf.usermodel.TableCell;
-import org.apache.poi.hwpf.usermodel.TableRow;
+//import org.apache.poi.hwpf.usermodel.TableCell;
+//import org.apache.poi.hwpf.usermodel.TableRow;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+//import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+//import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.imgscalr.Scalr;
 
@@ -42,8 +42,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     public CNHKMOGUI() {
         initComponents();
         initCustomComponents();
-        createLink("D:/CNHKMO/db/CNHKMO");
-//        createLink("db/CNHKMO");
+//        createLink("D:/CNHKMO/db/CNHKMO");
+        createLink("db/CNHKMO");
         Runtime.getRuntime().addShutdownHook(new ShutdownThread(this.conn));
     }
 
@@ -83,6 +83,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         removeAllAttachBtn = new javax.swing.JButton();
         setToHeadShot = new javax.swing.JButton();
         resetHeadShot = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        peopleCountLabel = new javax.swing.JLabel();
+        attachCountLabel = new javax.swing.JLabel();
+        imageCheckBox = new javax.swing.JCheckBox();
         showGuideBtn = new javax.swing.JButton();
         clearAllBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -90,7 +95,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         guideContent.setColumns(20);
         guideContent.setRows(5);
-        guideContent.setText("一、操作方法\n  1.選擇申請資料夾，如「CL01222016-0313-葉大雄 陳靜香(浙商15)」。\n　　（選擇完將自動帶入申請資料及附件，如未正確選擇，請手動修改。）\n  2.設定各申請人大頭照\n  3.按下確定\n  4.待完成之後關閉此工具\n  5.至入台申請平台-離線版查詢資料應可找到此筆申請資料\n\n二、注意事項：\n  1.在使用此工具之前，請先確定是否有先開啟入台證申請平台-離線版，\n    如有開啟，請將之關閉，才能夠使用。\n  2.在開啟此工具的情況下，無法使用入台證申請平台-離線版\n  3.以下資料無法從申請資料獲得，或可能無法辨識，因此必須手動填寫:\n    1) 旅行社 (預設為「浙江商務國際旅行社有限公司」)\n    2) 申請資格 (預設為「年滿20歲且有相當新臺幣20萬以上存款」)\n    3) 出生地\n    4) 職業類別\n    5) 居住城市\n    6) 大頭照");
+        guideContent.setText("一、操作方法\n  1.選擇申請資料夾，如「CL01222016-0313-葉大雄 陳靜香(浙商15)」。\n　　（選擇完將自動帶入申請資料及附件，如未正確選擇，請手動修改。）\n  2.設定各申請人大頭照\n  3.按下確定\n  4.待完成之後關閉此工具\n  5.至入台申請平台-離線版查詢資料應可找到此筆申請資料\n\n二、注意事項：\n  1.在使用此工具之前，請先確定是否有先開啟入台證申請平台-離線版，\n    如有開啟，請將之關閉，才能夠使用。\n  2.在開啟此工具的情況下，無法使用入台證申請平台-離線版\n  3.以下資料無法從申請資料獲得，或可能無法辨識，因此必須手動填寫:\n    1) 旅行社 (預設為「浙江商務國際旅行社有限公司」)\n    2) 申請資格 (預設為「年滿20歲且有相當新臺幣20萬以上存款」)\n    3) 出生地\n    4) 職業類別\n    5) 居住城市\n    6) 大頭照\n  4.如果遇到無法解析檔案的情況，可以試著把Word檔轉成2007以上版本。");
         guideContent.setEnabled(false);
         jScrollPanel1.setViewportView(guideContent);
 
@@ -102,7 +107,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
         guidePanelLayout.setVerticalGroup(
             guidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+            .addComponent(jScrollPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         errMsgContent.setColumns(20);
@@ -125,7 +130,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-1.0.1");
+        setTitle("CNHKMOTool-v1.2.2");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -179,8 +184,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         attachFilePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "附件", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("新細明體", 0, 13))); // NOI18N
 
-        attachListModel = new DefaultListModel();
-        attachJList.setModel(attachListModel);
         attachJList.setToolTipText("");
         attachJList.setCellRenderer(new AttachCellRenderer());
         jScrollPane3.setViewportView(attachJList);
@@ -234,15 +237,42 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("人數：");
+
+        jLabel6.setText("附件數：");
+
+        peopleCountLabel.setText("0");
+
+        attachCountLabel.setText("0");
+
+        imageCheckBox.setText("顯示圖片");
+        imageCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                imageCheckBoxMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout attachFilePanelLayout = new javax.swing.GroupLayout(attachFilePanel);
         attachFilePanel.setLayout(attachFilePanelLayout);
         attachFilePanelLayout.setHorizontalGroup(
             attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(attachFilePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(attachFilePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(peopleCountLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(attachFilePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(attachCountLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(imageCheckBox))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(removeAllAttachBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -261,7 +291,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addComponent(setToHeadShot, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(selectAttachBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addComponent(resetHeadShot)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(removeAttachBtn)
@@ -270,7 +300,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(imageCheckBox)
+                    .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(peopleCountLabel)
+                        .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(attachCountLabel))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         showGuideBtn.setText("操作說明");
@@ -359,18 +398,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addComponent(tourName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
-                .addComponent(attachFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(attachFilePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(statusLabel))
-                .addGap(18, 18, 18)
+                .addGap(10, 10, 10)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showGuideBtn)
                     .addComponent(clearAllBtn))
-                .addContainerGap())
+                .addGap(7, 7, 7))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -415,12 +454,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             travellerList = new ArrayList<Traveller>();
             setAllDisable();
             statusLabel.setText("讀取中...");
-            try{
-                worker = new DataResolveWorker();
-                worker.execute();
-                worker.get();
-            }catch(Exception ignore){}
-            btnEnableChk();
+            worker = new DataResolveWorker();
+            worker.execute();
         }
     }//GEN-LAST:event_selectClientDataBtnActionPerformed
 
@@ -441,19 +476,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             initCustomComponents();
             setAllDisable();
             statusLabel.setText("讀取中...");
-            try{
-                worker = new FolderWorker(fileChooser.getSelectedFile());
-                worker.execute();
-                worker.get();
-                
-                worker = new DataResolveWorker();
-                worker.execute();
-                worker.get();
-            }catch(Exception ignore){}
-            btnEnableChk();
+            worker = new FolderWorker(fileChooser.getSelectedFile());
+            worker.execute();
         }
         
-        showAllData();
+//        showAllData();
     }//GEN-LAST:event_selectFolderBtnActionPerformed
 
     private void showGuideBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGuideBtnActionPerformed
@@ -479,7 +506,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_resetHeadShotActionPerformed
 
     private void setToHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setToHeadShotActionPerformed
-        if(attachJList.getSelectedIndices().length != 1){
+        if(attachJList.getSelectedIndices().length == 0){
+            showMessage("請選擇照片。", "warning");
+            return;
+        }else if(attachJList.getSelectedIndices().length > 1){
             showMessage("大頭照只能選擇一張。", "warning");
             return;
         }
@@ -504,7 +534,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_removeAllAttachBtnActionPerformed
 
     private void travellerJListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_travellerJListValueChanged
-        setAttachJList();
+        if (!evt.getValueIsAdjusting()) {//This line prevents double events
+            setAttachJList();
+        }
     }//GEN-LAST:event_travellerJListValueChanged
 
     private void removeAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAttachBtnActionPerformed
@@ -536,6 +568,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             setAttachJList();
         }
     }//GEN-LAST:event_selectAttachBtnActionPerformed
+
+    private void imageCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageCheckBoxMouseClicked
+        setAttachJList();
+    }//GEN-LAST:event_imageCheckBoxMouseClicked
 
     /**
      * @param args the command line arguments
@@ -577,6 +613,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel attachCountLabel;
     private javax.swing.JPanel attachFilePanel;
     private javax.swing.JList attachJList;
     private DefaultListModel attachListModel;
@@ -589,15 +626,19 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextField folderPath;
     private javax.swing.JTextArea guideContent;
     private javax.swing.JPanel guidePanel;
+    private static javax.swing.JCheckBox imageCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPanel1;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JLabel peopleCountLabel;
     private javax.swing.JButton removeAllAttachBtn;
     private javax.swing.JButton removeAttachBtn;
     private javax.swing.JButton resetHeadShot;
@@ -625,10 +666,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         clientData = null;
         clientDataPath.setText("");
         travellerModel.removeAllElements();
-        attachListModel.removeAllElements();
+        attachListModel = new DefaultListModel();
+        attachJList.setModel(attachListModel);
         applyAttachList = new ArrayList<ApplyAttach>();
         travelgroup = new TravelGroup();
         travellerList = new ArrayList<Traveller>();
+        peopleCountLabel.setText("0");
+        attachCountLabel.setText("0");
         setAllDisable();
         selectFolderBtn.setEnabled(true);
         selectClientDataBtn.setEnabled(true);
@@ -676,6 +720,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 clientData = f;
                 clientDataPath.setText(f.getAbsolutePath());
             }else if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")){
+                try{
+                    BufferedImage image = ImageIO.read(f);
+                    if(image == null){ continue; }
+                }catch(IOException ignore){}
                 a = new Attach();
                 a.setFile(f);
                 la.add(a);
@@ -699,18 +747,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         
         if(travellerModel.size() > 0){
             travellerJList.setSelectedIndex(0);
+            peopleCountLabel.setText(String.valueOf(travellerModel.size()));
         }
     }
     
     private void setAttachJList(){
-        int idx = travellerJList.getSelectedIndex();
-        if(idx < 0){ return; }
-        Traveller tr = (Traveller)travellerJList.getSelectedValue();
-        List<Attach> la = tr.getAttachList();
-        attachListModel.removeAllElements();
-        for(Attach a : la){
-            attachListModel.addElement(a);
-        }
+        setAttachAreaDisable();
+        worker = new AttachListWorker();
+        worker.execute();
     }
 
     private void setAttachAreaDisable(){
@@ -863,10 +907,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         traveller.setAddress(transToTC(table.getRow(15+7*i).getCell(3).getParagraph(0).text()));
                         traveller.setLivingCity(transToTC(table.getRow(15+7*i).getCell(3).getParagraph(0).text()));
 
-                        if(!traveller.isValidTraveller()){
-                            System.out.println("invalid: " + traveller.getChineseName());
-                            break;
-                        }
+                        if(!traveller.isValidTraveller()){ break; }
                         if(i == 0){
                             travellerList.add(traveller);
                             continue;
@@ -877,7 +918,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
                         travellerList.add(traveller);
                     }
-                }catch(IndexOutOfBoundsException e){e.printStackTrace();}
+                }catch(IndexOutOfBoundsException e){
+//                    System.out.println("table資料已讀完，這個錯誤是正常的。");
+//                    e.printStackTrace();
+                }
             }
         } catch(FileFormatException e) {
             e.printStackTrace();
@@ -961,7 +1005,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
                         travellerList.add(traveller);
                     }
-                }catch(IndexOutOfBoundsException e){e.printStackTrace();}
+                }catch(IndexOutOfBoundsException e){
+//                    System.out.println("table資料已讀完，這個錯誤是正常的。");
+//                    e.printStackTrace();
+                }
             }
         } catch(FileFormatException e) {
             e.printStackTrace();
@@ -1237,7 +1284,21 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 }else{
                     setText(attach.getFile().getName());
                 }
-                setIcon(FileSystemView.getFileSystemView().getSystemIcon(attach.getFile()));
+                
+                if(imageCheckBox.isSelected()){
+                    try{
+                        BufferedImage image = ImageIO.read(attach.getFile());
+                        if(image == null){
+                            setIcon(FileSystemView.getFileSystemView().getSystemIcon(attach.getFile()));
+                        }else{
+                            ImageIcon ii = new ImageIcon(Scalr.resize(image, 50));
+                            setIcon(ii);
+                        }
+                    }catch(IOException e){}
+                }else{
+                    setIcon(FileSystemView.getFileSystemView().getSystemIcon(attach.getFile()));
+                }
+                
                 if (isSelected) {
                     setBackground(list.getSelectionBackground());
                     setForeground(list.getSelectionForeground());
@@ -1289,7 +1350,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         
         @Override
-        protected Integer doInBackground() {
+        public Integer doInBackground() {
             getFolderFile(folder);
             if(clientData == null){
                 return 1;
@@ -1303,17 +1364,21 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 folderPath.setText(folder.getAbsolutePath());
                 tourName.setText(folder.getName());
                 int re = get();
-                if(re == 1){
+                if(re == 0){
+                    worker = new DataResolveWorker();
+                    worker.execute();
+                }else if(re == 1){
                     statusLabel.setText("請手動選擇申請文件。");
                     showMessage("找不到申請文件，請手動選擇。", "warning");
                 }
+                btnEnableChk();
             } catch (Exception ignore) {}
         }
     }
     
     public class DataResolveWorker extends SwingWorker<Integer, Void> {
         @Override
-        protected Integer doInBackground() {
+        public Integer doInBackground() {
             if(clientData.getName().endsWith(".doc")){
                 word2003Resolve(clientData);
             }else if(clientData.getName().endsWith(".docx")){
@@ -1321,38 +1386,87 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }else{ return 1; }
             
             if(travellerList.size() == 0){ return 2; }
-            if(applyAttachList.size() == 0){ return 3; }
-            
-            for(Traveller traveller : travellerList){
-                for(ApplyAttach aa : applyAttachList){
-                    if(aa.getBelongTo().indexOf(traveller.getChineseName()) >=0 ){
-                        traveller.setAttachList(aa.getAttachList());
-                    }
-                }
-            }
-            
-            setAttachPanel();
-            
             return 0;
         }
 
         @Override
         protected void done() {
             try {
-                
                 int re  = get();
                 if(re == 0){
-                    statusLabel.setText("讀取完成。");
+                    worker = new MappingWorker();
+                    worker.execute();
                 }else if(re == 1){
                     statusLabel.setText("請手動選擇申請文件。");
                     showMessage("請選擇正確的檔案格式 - Microsotf Word", "warning");
                     clientData = null;
                 }else if(re == 2){
                     statusLabel.setText("無法解析旅客資料。");
-                    showMessage("無法解析旅客資料。", "warning");
-                }else if(re == 3){
+                    showMessage("無法解析旅客資料。如果你使用的是Word2003版本，可以嘗試轉成2007以上版本。", "warning");
+                }
+                btnEnableChk();
+            } catch (Exception ignore) {}
+        }
+    }
+    
+    public class MappingWorker extends SwingWorker<Integer, Void> {
+        @Override
+        public Integer doInBackground() {
+            int re = 0;
+            if(travellerList.size() == 0){ return 1; }
+            if(applyAttachList.size() == 0){
+                re = 2;   
+            }else{
+                for(Traveller traveller : travellerList){
+                    for(ApplyAttach aa : applyAttachList){
+                        if(aa.getBelongTo().indexOf(traveller.getChineseName()) >=0 ){
+                            traveller.setAttachList(aa.getAttachList());
+                        }
+                    }
+                    if(traveller.getAttachList().size() == 0){
+                        re = 2;
+                    }
+                }
+            }
+            setAttachPanel();
+            return re;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                int re =get();
+                if(re == 0){
+                    statusLabel.setText("讀取完成。");
+                }else if(re == 2){
                     statusLabel.setText("找不到可以附加的圖片，請手動選擇。");
                     showMessage("找不到可以附加的圖片，請手動選擇。", "warning");
+                }
+                btnEnableChk();
+            } catch (Exception ignore) {}
+        }
+    }
+    
+    public class AttachListWorker extends SwingWorker<Boolean, Void> {
+        @Override
+        public Boolean doInBackground() {
+            if(travellerJList.getSelectedIndex() < 0){ return false; }
+            attachListModel = new DefaultListModel();
+            Traveller tr = (Traveller)travellerJList.getSelectedValue();
+            List<Attach> la = tr.getAttachList();
+            for(Attach a : la){
+                attachListModel.addElement(a);
+            }
+            attachJList.setModel(attachListModel);
+            return true;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                attachCountLabel.setText(String.valueOf(attachListModel.size()));
+                if(get()){
+                    setAttachAreaEnable();
                 }
             } catch (Exception ignore) {}
         }

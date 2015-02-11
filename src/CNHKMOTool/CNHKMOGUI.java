@@ -1,5 +1,5 @@
 /*
-* CNHKMOTool v1.2.2
+* CNHKMOTool v1.2.3
 */
 
 package CNHKMOTool;
@@ -42,8 +42,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     public CNHKMOGUI() {
         initComponents();
         initCustomComponents();
-//        createLink("D:/CNHKMO/db/CNHKMO");
-        createLink("db/CNHKMO");
+        createLink("D:/CNHKMO/db/CNHKMO");
+//        createLink("db/CNHKMO");
         Runtime.getRuntime().addShutdownHook(new ShutdownThread(this.conn));
     }
 
@@ -130,7 +130,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.2.2");
+        setTitle("CNHKMOTool-v1.2.3");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -303,12 +303,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(imageCheckBox)
-                    .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(peopleCountLabel)
+                    .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(attachCountLabel))))
+                            .addComponent(attachCountLabel))
+                        .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(peopleCountLabel))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1076,7 +1077,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 //                System.out.println(insertStr);
                 List<Attach> la = traveller.getAttachList();
                 for(int i = 0; i < la.size(); i++){
-                    File file = imageProcess(la.get(i).getFile());
+//                    File file = imageProcess(la.get(i).getFile());
+                    File file = la.get(i).getFile();
                     InputStream fin = new FileInputStream(file);
                     PreparedStatement ps = conn.prepareStatement(insertStr);
                     ps.setString(1, traveller.getId() + "at" + i);
@@ -1123,6 +1125,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         return true;
     }
 
+    /*
+    * 圖片處理，目前不用了
     private File imageProcess(File file){
         try{
             if(file.length()/1024 >= IMG_SIZE || file.getName().toLowerCase().endsWith("png")){
@@ -1169,7 +1173,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         return file;
     }
-    
+    */
     private String removeExtension(String name){
         int pos = name.lastIndexOf(".");
         if (pos > 0) {

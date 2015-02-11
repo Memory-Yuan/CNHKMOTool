@@ -1,5 +1,5 @@
 /*
-* CNHKMOTool v1.2.3
+* CNHKMOTool v1.2.4
 */
 
 package CNHKMOTool;
@@ -24,8 +24,8 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.hwpf.usermodel.Table;
-//import org.apache.poi.hwpf.usermodel.TableCell;
-//import org.apache.poi.hwpf.usermodel.TableRow;
+import org.apache.poi.hwpf.usermodel.TableCell;
+import org.apache.poi.hwpf.usermodel.TableRow;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -130,7 +130,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.2.3");
+        setTitle("CNHKMOTool-v1.2.4");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -481,7 +481,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             worker.execute();
         }
         
-//        showAllData();
     }//GEN-LAST:event_selectFolderBtnActionPerformed
 
     private void showGuideBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGuideBtnActionPerformed
@@ -715,6 +714,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         File[] fileList = folder.listFiles();
         List<Attach> la = new ArrayList<Attach>();
         Attach a = null;
+        String[] exceptDir = {"originals", "original", "modified"};
         for(File f : fileList){
             String fn = f.getName().toLowerCase();
             if(fn.endsWith(".doc") || fn.endsWith(".docx")){
@@ -728,7 +728,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 a = new Attach();
                 a.setFile(f);
                 la.add(a);
-            }else if(f.isDirectory() && repeat){
+            }else if(f.isDirectory() && repeat && !Arrays.asList(exceptDir).contains(fn)){
                 getFolderFile(f, false);
             }
         }
@@ -851,6 +851,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
     
     private void word2003Resolve(File file){
+        word2003Resolve(file, false);
+    }
+    
+    private void word2003Resolve(File file, boolean isFix){
         try{
             if(!file.getName().endsWith(".doc")) {
                 throw new FileFormatException();
@@ -893,29 +897,33 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
                 try{
                     Traveller traveller = null;
+                    int fixR = isFix ? 1 : 0;
                     for(int i = 0; true; i++){
+                        int fixR2 = i > 0 ? 1 : 0;
                         traveller = new Traveller();
                         traveller.setSeqNo((short)i);
-                        traveller.setChineseName(transToTC(table.getRow(11+7*i).getCell(1).getParagraph(0).text()));
-                        traveller.setGender(transToTC(table.getRow(11+7*i).getCell(3).getParagraph(0).text()));
-                        traveller.setBirthDate(dateFormatFix(table.getRow(11+7*i).getCell(5).getParagraph(0).text()));
-                        traveller.setEnglishName(table.getRow(12+7*i).getCell(1).getParagraph(0).text());
-                        traveller.setPassportNo(table.getRow(12+7*i).getCell(3).getParagraph(0).text());
-                        traveller.setPassportExpiryDate(dateFormatFix(table.getRow(12+7*i).getCell(5).getParagraph(0).text()));
-                        traveller.setPersonId(table.getRow(13+7*i).getCell(1).getParagraph(0).text());
-                        traveller.setEducation(transToTC(table.getRow(14+7*i).getCell(1).getParagraph(0).text()));
-                        traveller.setOccupationDesc(transToTC(table.getRow(14+7*i).getCell(3).getParagraph(0).text()));
-                        traveller.setAddress(transToTC(table.getRow(15+7*i).getCell(3).getParagraph(0).text()));
-                        traveller.setLivingCity(transToTC(table.getRow(15+7*i).getCell(3).getParagraph(0).text()));
-
+                        traveller.setChineseName(transToTC(table.getRow(11+(7*i)+fixR2).getCell(1).getParagraph(0).text()));
+                        traveller.setGender(transToTC(table.getRow(11+(7*i)+fixR2).getCell(3).getParagraph(0).text()));
+                        try{
+                            traveller.setBirthDate(dateFormatFix(table.getRow(11+(7*i)+fixR2).getCell(5).getParagraph(0).text()));
+                        }catch(Exception e){}
+                        traveller.setEnglishName(table.getRow(12+(7*i)+fixR).getCell(1).getParagraph(0).text());
+                        traveller.setPassportNo(table.getRow(12+(7*i)+fixR).getCell(3).getParagraph(0).text());
+                        traveller.setPassportExpiryDate(dateFormatFix(table.getRow(12+(7*i)+fixR).getCell(5).getParagraph(0).text()));
+                        traveller.setPersonId(table.getRow(13+(7*i)+fixR).getCell(1).getParagraph(0).text());
+                        traveller.setEducation(transToTC(table.getRow(14+(7*i)+fixR).getCell(1).getParagraph(0).text()));
+                        traveller.setOccupationDesc(transToTC(table.getRow(14+(7*i)+fixR).getCell(3).getParagraph(0).text()));
+                        traveller.setAddress(transToTC(table.getRow(15+(7*i)+fixR).getCell(3).getParagraph(0).text()));
+                        traveller.setLivingCity(transToTC(table.getRow(15+(7*i)+fixR).getCell(3).getParagraph(0).text()));
+                        
                         if(!traveller.isValidTraveller()){ break; }
                         if(i == 0){
                             travellerList.add(traveller);
                             continue;
                         }
                         traveller.setRelative(travellerList.get(0).getChineseName());
-                        traveller.setRelativeTitle(transToTC(table.getRow(16+7*i).getCell(1).getParagraph(0).text()));
-                        traveller.setPartnerOfTaiwan(transToTC(table.getRow(16+7*i).getCell(3).getParagraph(0).text()));
+                        traveller.setRelativeTitle(transToTC(table.getRow(16+(7*i)+fixR).getCell(1).getParagraph(0).text()));
+                        traveller.setPartnerOfTaiwan(transToTC(table.getRow(16+(7*i)+fixR).getCell(3).getParagraph(0).text()));
 
                         travellerList.add(traveller);
                     }
@@ -983,17 +991,17 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     for(int i = 0; true; i++){
                         traveller = new Traveller();
                         traveller.setSeqNo((short)i);
-                        traveller.setChineseName(transToTC(table.getRow(11+7*i).getCell(1).getText()));
-                        traveller.setGender(transToTC(table.getRow(11+7*i).getCell(3).getText()));
-                        traveller.setBirthDate(dateFormatFix(table.getRow(11+7*i).getCell(5).getText()));
-                        traveller.setEnglishName(table.getRow(12+7*i).getCell(1).getText());
-                        traveller.setPassportNo(table.getRow(12+7*i).getCell(3).getText());
-                        traveller.setPassportExpiryDate(dateFormatFix(table.getRow(12+7*i).getCell(5).getText()));
-                        traveller.setPersonId(table.getRow(13+7*i).getCell(1).getText());
-                        traveller.setEducation(transToTC(table.getRow(14+7*i).getCell(1).getText()));
-                        traveller.setOccupationDesc(transToTC(table.getRow(14+7*i).getCell(3).getText()));
-                        traveller.setAddress(transToTC(table.getRow(15+7*i).getCell(3).getText()));
-                        traveller.setLivingCity(transToTC(table.getRow(15+7*i).getCell(3).getText()));
+                        traveller.setChineseName(transToTC(table.getRow(11+(7*i)).getCell(1).getText()));
+                        traveller.setGender(transToTC(table.getRow(11+(7*i)).getCell(3).getText()));
+                        traveller.setBirthDate(dateFormatFix(table.getRow(11+(7*i)).getCell(5).getText()));
+                        traveller.setEnglishName(table.getRow(12+(7*i)).getCell(1).getText());
+                        traveller.setPassportNo(table.getRow(12+(7*i)).getCell(3).getText());
+                        traveller.setPassportExpiryDate(dateFormatFix(table.getRow(12+(7*i)).getCell(5).getText()));
+                        traveller.setPersonId(table.getRow(13+(7*i)).getCell(1).getText());
+                        traveller.setEducation(transToTC(table.getRow(14+(7*i)).getCell(1).getText()));
+                        traveller.setOccupationDesc(transToTC(table.getRow(14+(7*i)).getCell(3).getText()));
+                        traveller.setAddress(transToTC(table.getRow(15+(7*i)).getCell(3).getText()));
+                        traveller.setLivingCity(transToTC(table.getRow(15+(7*i)).getCell(3).getText()));
 
                         if(!traveller.isValidTraveller()){ break; }
                         if(i == 0){
@@ -1001,8 +1009,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                             continue;
                         }
                         traveller.setRelative(travellerList.get(0).getChineseName());
-                        traveller.setRelativeTitle(transToTC(table.getRow(16+7*i).getCell(1).getText()));
-                        traveller.setPartnerOfTaiwan(transToTC(table.getRow(16+7*i).getCell(3).getText()));
+                        traveller.setRelativeTitle(transToTC(table.getRow(16+(7*i)).getCell(1).getText()));
+                        traveller.setPartnerOfTaiwan(transToTC(table.getRow(16+(7*i)).getCell(3).getText()));
 
                         travellerList.add(traveller);
                     }
@@ -1385,6 +1393,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         public Integer doInBackground() {
             if(clientData.getName().endsWith(".doc")){
                 word2003Resolve(clientData);
+                if(travellerList.size() == 0){ word2003Resolve(clientData, true); }
             }else if(clientData.getName().endsWith(".docx")){
                 word2007Resolve(clientData);
             }else{ return 1; }

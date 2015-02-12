@@ -1,9 +1,10 @@
 /*
-* CNHKMOTool v1.2.4
+* CNHKMOTool v1.2.5
 */
 
 package CNHKMOTool;
 
+import TravelApply.*;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -19,13 +20,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
-
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.hwpf.usermodel.Table;
-import org.apache.poi.hwpf.usermodel.TableCell;
-import org.apache.poi.hwpf.usermodel.TableRow;
+//import org.apache.poi.hwpf.usermodel.TableCell;
+//import org.apache.poi.hwpf.usermodel.TableRow;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -33,17 +33,15 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 //import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.imgscalr.Scalr;
-
 import taobe.tec.jcc.JChineseConvertor;
-import TravelData.*;
 
 public class CNHKMOGUI extends javax.swing.JFrame {
 
     public CNHKMOGUI() {
         initComponents();
         initCustomComponents();
-        createLink("D:/CNHKMO/db/CNHKMO");
-//        createLink("db/CNHKMO");
+        initAllComponents();
+        createLink();
         Runtime.getRuntime().addShutdownHook(new ShutdownThread(this.conn));
     }
 
@@ -63,11 +61,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         errMsgContent = new javax.swing.JTextArea();
         mainPanel = new javax.swing.JPanel();
-        submit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        clientDataPath = new javax.swing.JFormattedTextField();
-        selectClientDataBtn = new javax.swing.JButton();
-        exit = new javax.swing.JButton();
+        applyDocPath = new javax.swing.JFormattedTextField();
+        selectApplyDocBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         tourName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -88,10 +84,21 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         peopleCountLabel = new javax.swing.JLabel();
         attachCountLabel = new javax.swing.JLabel();
         imageCheckBox = new javax.swing.JCheckBox();
-        showGuideBtn = new javax.swing.JButton();
-        clearAllBtn = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        rootFolderPath = new javax.swing.JTextField();
+        selectRootFolderBtn = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        applyDataJList = new javax.swing.JList();
+        jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
+        showGuideBtn = new javax.swing.JButton();
+        clearAllBtn = new javax.swing.JButton();
+        submit = new javax.swing.JButton();
+        exit = new javax.swing.JButton();
+        createLinkBtn = new javax.swing.JButton();
+        closeLinkBtn = new javax.swing.JButton();
 
         guideContent.setColumns(20);
         guideContent.setRows(5);
@@ -130,39 +137,23 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.2.4");
+        setTitle("CNHKMOTool-v1.2.5");
         setLocationByPlatform(true);
         setResizable(false);
 
         mainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         mainPanel.setEnabled(false);
 
-        submit.setFont(new java.awt.Font("新細明體", 0, 14)); // NOI18N
-        submit.setText("確定");
-        submit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submitActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel1.setText("申請資料");
 
-        clientDataPath.setEnabled(false);
+        applyDocPath.setEnabled(false);
 
-        selectClientDataBtn.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
-        selectClientDataBtn.setText("瀏覽");
-        selectClientDataBtn.addActionListener(new java.awt.event.ActionListener() {
+        selectApplyDocBtn.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        selectApplyDocBtn.setText("瀏覽");
+        selectApplyDocBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectClientDataBtnActionPerformed(evt);
-            }
-        });
-
-        exit.setFont(new java.awt.Font("新細明體", 0, 14)); // NOI18N
-        exit.setText("離開");
-        exit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitActionPerformed(evt);
+                selectApplyDocBtnActionPerformed(evt);
             }
         });
 
@@ -203,8 +194,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
-        travellerModel = new DefaultListModel();
-        travellerJList.setModel(travellerModel);
         travellerJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         travellerJList.setCellRenderer(new TravelCellRenderer());
         travellerJList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -313,26 +302,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        showGuideBtn.setText("操作說明");
-        showGuideBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                showGuideBtnActionPerformed(evt);
-            }
-        });
-
-        clearAllBtn.setText("全部清空");
-        clearAllBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearAllBtnActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("新細明體", 1, 13)); // NOI18N
-        jLabel2.setText("狀態：");
-
-        statusLabel.setFont(new java.awt.Font("新細明體", 1, 13)); // NOI18N
-        statusLabel.setText("正常");
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -359,26 +328,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(jLabel1)
                                         .addGap(18, 18, 18)
-                                        .addComponent(clientDataPath, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(applyDocPath, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addComponent(selectClientDataBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(selectApplyDocBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(attachFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(showGuideBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(clearAllBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(attachFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
@@ -391,8 +347,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(selectClientDataBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clientDataPath, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectApplyDocBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(applyDocPath, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -400,33 +356,182 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addComponent(attachFilePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        jLabel7.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        jLabel7.setText("資料夾");
+
+        rootFolderPath.setEnabled(false);
+
+        selectRootFolderBtn.setText("瀏覽");
+        selectRootFolderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectRootFolderBtnActionPerformed(evt);
+            }
+        });
+
+        applyFolderModel = new DefaultListModel();
+        applyDataJList.setModel(applyFolderModel);
+        jScrollPane4.setViewportView(applyDataJList);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rootFolderPath)
+                        .addGap(4, 4, 4)
+                        .addComponent(selectRootFolderBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(rootFolderPath, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectRootFolderBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4)
+                .addContainerGap())
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        jLabel2.setFont(new java.awt.Font("新細明體", 1, 13)); // NOI18N
+        jLabel2.setText("狀態：");
+
+        statusLabel.setFont(new java.awt.Font("新細明體", 1, 13)); // NOI18N
+        statusLabel.setText("0");
+
+        showGuideBtn.setText("操作說明");
+        showGuideBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showGuideBtnActionPerformed(evt);
+            }
+        });
+
+        clearAllBtn.setText("全部清空");
+        clearAllBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearAllBtnActionPerformed(evt);
+            }
+        });
+
+        submit.setFont(new java.awt.Font("新細明體", 0, 14)); // NOI18N
+        submit.setText("確定");
+        submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitActionPerformed(evt);
+            }
+        });
+
+        exit.setFont(new java.awt.Font("新細明體", 0, 14)); // NOI18N
+        exit.setText("離開");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+
+        createLinkBtn.setText("連結資料庫");
+        createLinkBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createLinkBtnActionPerformed(evt);
+            }
+        });
+
+        closeLinkBtn.setText("關閉資料庫");
+        closeLinkBtn.setEnabled(false);
+        closeLinkBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeLinkBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(createLinkBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(showGuideBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(clearAllBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(closeLinkBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(statusLabel))
-                .addGap(10, 10, 10)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(showGuideBtn)
-                    .addComponent(clearAllBtn))
-                .addGap(7, 7, 7))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(closeLinkBtn)
+                            .addComponent(createLinkBtn, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(showGuideBtn)
+                            .addComponent(clearAllBtn))))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -440,7 +545,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         worker.execute();
     }//GEN-LAST:event_submitActionPerformed
 
-    private void selectClientDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectClientDataBtnActionPerformed
+    private void selectApplyDocBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectApplyDocBtnActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("請選擇申請資料");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -449,16 +554,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         fileChooser.setFileFilter(ff);
         int status = fileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-            clientData = fileChooser.getSelectedFile();
-            clientDataPath.setText(clientData.getAbsolutePath());
+            applyDoc = fileChooser.getSelectedFile();
+            applyDocPath.setText(applyDoc.getAbsolutePath());
             travelgroup = new TravelGroup();
-            travellerList = new ArrayList<Traveller>();
+            travellerModel = new DefaultListModel();
             setAllDisable();
             statusLabel.setText("讀取中...");
             worker = new DataResolveWorker();
             worker.execute();
         }
-    }//GEN-LAST:event_selectClientDataBtnActionPerformed
+    }//GEN-LAST:event_selectApplyDocBtnActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         int q = JOptionPane.showConfirmDialog(null, "真的要關閉嗎?", "關閉確認", JOptionPane.YES_NO_OPTION);
@@ -488,7 +593,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_showGuideBtnActionPerformed
 
     private void clearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllBtnActionPerformed
-        if(clientData == null && tourName.getText().equals("") && travellerModel.size() == 0){ return; }
+        if(applyDoc == null && tourName.getText().equals("") && travellerModel.size() == 0){ return; }
         int q = JOptionPane.showConfirmDialog(null, "真的要全部清空嗎?", "清空確認", JOptionPane.YES_NO_OPTION);
         if(q == 0){ initCustomComponents(); }
     }//GEN-LAST:event_clearAllBtnActionPerformed
@@ -573,6 +678,39 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         setAttachJList();
     }//GEN-LAST:event_imageCheckBoxMouseClicked
 
+    private void selectRootFolderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectRootFolderBtnActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("請選擇資料夾");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setMultiSelectionEnabled(false);
+        FileFilter ff = new ExtensionFileFilter("檔案資料夾", new String[] {});
+        fileChooser.setFileFilter(ff);
+        int status = fileChooser.showOpenDialog(this);
+        if (status == JFileChooser.APPROVE_OPTION) {
+            initAllComponents();
+            setAllDisable();
+            statusLabel.setText("讀取中...");
+            worker = new RootFolderWorker(fileChooser.getSelectedFile());
+            worker.execute();
+        }
+    }//GEN-LAST:event_selectRootFolderBtnActionPerformed
+
+    private void createLinkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createLinkBtnActionPerformed
+        createLink();
+    }//GEN-LAST:event_createLinkBtnActionPerformed
+
+    private void closeLinkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeLinkBtnActionPerformed
+        try {
+            if(!conn.isClosed()){
+                this.conn.close();
+                createLinkBtn.setEnabled(true);
+                closeLinkBtn.setEnabled(false);
+                submit.setEnabled(false);
+                statusLabel.setText("資料庫離線");
+            }
+        } catch (SQLException e) {}
+    }//GEN-LAST:event_closeLinkBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -613,13 +751,17 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList applyDataJList;
+    private DefaultListModel applyFolderModel;
+    private javax.swing.JFormattedTextField applyDocPath;
+    private File applyDoc;
     private javax.swing.JLabel attachCountLabel;
     private javax.swing.JPanel attachFilePanel;
     private javax.swing.JList attachJList;
     private DefaultListModel attachListModel;
     private javax.swing.JButton clearAllBtn;
-    private javax.swing.JFormattedTextField clientDataPath;
-    private File clientData;
+    private javax.swing.JButton closeLinkBtn;
+    private javax.swing.JButton createLinkBtn;
     private javax.swing.JTextArea errMsgContent;
     private javax.swing.JPanel errMsgPanel;
     private javax.swing.JButton exit;
@@ -633,18 +775,24 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPanel1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JLabel peopleCountLabel;
     private javax.swing.JButton removeAllAttachBtn;
     private javax.swing.JButton removeAttachBtn;
     private javax.swing.JButton resetHeadShot;
+    private javax.swing.JTextField rootFolderPath;
+    private javax.swing.JButton selectApplyDocBtn;
     private javax.swing.JButton selectAttachBtn;
-    private javax.swing.JButton selectClientDataBtn;
     private javax.swing.JButton selectFolderBtn;
+    private javax.swing.JButton selectRootFolderBtn;
     private javax.swing.JButton setToHeadShot;
     private javax.swing.JButton showGuideBtn;
     private javax.swing.JLabel statusLabel;
@@ -654,36 +802,56 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private DefaultListModel travellerModel;
     // End of variables declaration//GEN-END:variables
     private static Connection conn;
+    private static final String dbPath = "D:/CNHKMO/db/CNHKMO";
+//    private static final String dbPath = "db/CNHKMO";
     private SwingWorker worker;
     private TravelGroup travelgroup;
-    private List<Traveller> travellerList;
+    private List<ApplyData> applyDataList;
     private List<ApplyAttach> applyAttachList;
     private static final int IMG_SIZE = 500;
+    private static boolean applyAttachListDerty;
+    
+    private void initAllComponents(){
+        applyDataList = new ArrayList<ApplyData>();
+    }
     
     private void initCustomComponents() {
         tourName.setText("");
         folderPath.setText("");
-        clientData = null;
-        clientDataPath.setText("");
-        travellerModel.removeAllElements();
+        applyDoc = null;
+        applyDocPath.setText("");
+        travellerModel = new DefaultListModel();
+        travellerJList.setModel(travellerModel);
         attachListModel = new DefaultListModel();
         attachJList.setModel(attachListModel);
         applyAttachList = new ArrayList<ApplyAttach>();
         travelgroup = new TravelGroup();
-        travellerList = new ArrayList<Traveller>();
+        applyAttachListDerty = false;  //applyAttachList是否已經被mapping過
         peopleCountLabel.setText("0");
         attachCountLabel.setText("0");
         setAllDisable();
         selectFolderBtn.setEnabled(true);
-        selectClientDataBtn.setEnabled(true);
+        selectApplyDocBtn.setEnabled(true);
         statusLabel.setText("正常");
     }
     
-    private void createLink(String dbPath)  {
+    private void createLink(){
+        createLink(dbPath);
+    }
+    
+    private void createLink(String Path)  {
         try{
+            if(this.conn != null && this.conn.isValid(2000)){
+                showMessage("資料庫已連結！", "warning");
+                return;
+            }
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
-            this.conn = DriverManager.getConnection("jdbc:derby:"+dbPath);
+            this.conn = DriverManager.getConnection("jdbc:derby:"+Path);
             System.out.println("資料庫連結成功！");
+            statusLabel.setText("正常");
+            createLinkBtn.setEnabled(false);
+            closeLinkBtn.setEnabled(true);
+            btnEnableChk();
             
             Statement st = conn.createStatement();
             try {
@@ -698,11 +866,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }catch(SQLException e){
             System.out.println("資料庫連結失敗！");
             e.printStackTrace();
-            showMessage("資料庫連結失敗！如有開啟入台證申請-離線版，請先關閉。\n詳細:\n" + e.getMessage(), "err");
+            showMessage("資料庫連結失敗！如有開啟入台證申請-離線版，請先關閉。\n詳細:\n" + e.getMessage(), "warning");
         }catch(Exception e){
             System.out.println("資料庫連結失敗！");
             e.printStackTrace();
-            showMessage("資料庫連結失敗！如有開啟入台證申請-離線版，請先關閉。\n詳細:\n" + e.getMessage() , "err");
+            showMessage("資料庫連結失敗！如有開啟入台證申請-離線版，請先關閉。\n詳細:\n" + e.getMessage() , "warning");
         }
     }
     
@@ -718,8 +886,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         for(File f : fileList){
             String fn = f.getName().toLowerCase();
             if(fn.endsWith(".doc") || fn.endsWith(".docx")){
-                clientData = f;
-                clientDataPath.setText(f.getAbsolutePath());
+                applyDoc = f;
+                applyDocPath.setText(f.getAbsolutePath());
             }else if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")){
                 try{
                     BufferedImage image = ImageIO.read(f);
@@ -741,12 +909,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
     
     private void setAttachPanel(){
-        travellerModel.removeAllElements();
-        for(Traveller traveller : travellerList){
-            travellerModel.addElement(traveller);
-        }
-        
         if(travellerModel.size() > 0){
+            travellerJList.setModel(travellerModel);
             travellerJList.setSelectedIndex(0);
             peopleCountLabel.setText(String.valueOf(travellerModel.size()));
         }
@@ -782,19 +946,21 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         setAttachAreaDisable();
         tourName.setEnabled(false);
         selectFolderBtn.setEnabled(false);
-        selectClientDataBtn.setEnabled(false);
+        selectApplyDocBtn.setEnabled(false);
         submit.setEnabled(false);
+        selectRootFolderBtn.setEnabled(false);
+        applyDataJList.setEnabled(false);
     }
     
     private void btnEnableChk(){
         selectFolderBtn.setEnabled(true);
-        selectClientDataBtn.setEnabled(true);
+        selectApplyDocBtn.setEnabled(true);
         tourName.setEnabled(true);
         if(travellerModel.size() > 0){
             setAttachAreaEnable();
-        }
-        if(travellerList.size() > 0){
-            submit.setEnabled(true);
+            try{
+                if(this.conn.isValid(2000)){ submit.setEnabled(true); }
+            }catch(SQLException ignore){}
         }
     }
     
@@ -898,8 +1064,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 try{
                     Traveller traveller = null;
                     int fixR = isFix ? 1 : 0;
+                    String mainTravellerName = null;
                     for(int i = 0; true; i++){
-                        int fixR2 = i > 0 ? 1 : 0;
+                        int fixR2 = i > 0 && isFix ? 1 : 0;
                         traveller = new Traveller();
                         traveller.setSeqNo((short)i);
                         traveller.setChineseName(transToTC(table.getRow(11+(7*i)+fixR2).getCell(1).getParagraph(0).text()));
@@ -918,14 +1085,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         
                         if(!traveller.isValidTraveller()){ break; }
                         if(i == 0){
-                            travellerList.add(traveller);
+                            travellerModel.addElement(traveller);
+                            mainTravellerName = traveller.getChineseName();
                             continue;
                         }
-                        traveller.setRelative(travellerList.get(0).getChineseName());
+                        traveller.setRelative(mainTravellerName);
                         traveller.setRelativeTitle(transToTC(table.getRow(16+(7*i)+fixR).getCell(1).getParagraph(0).text()));
                         traveller.setPartnerOfTaiwan(transToTC(table.getRow(16+(7*i)+fixR).getCell(3).getParagraph(0).text()));
 
-                        travellerList.add(traveller);
+                        travellerModel.addElement(traveller);
                     }
                 }catch(IndexOutOfBoundsException e){
 //                    System.out.println("table資料已讀完，這個錯誤是正常的。");
@@ -1005,14 +1173,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
                         if(!traveller.isValidTraveller()){ break; }
                         if(i == 0){
-                            travellerList.add(traveller);
+                            travellerModel.addElement(traveller);
                             continue;
                         }
-                        traveller.setRelative(travellerList.get(0).getChineseName());
+                        Traveller mainTraveller = (Traveller)travellerModel.firstElement();
+                        traveller.setRelative(mainTraveller.getChineseName());
                         traveller.setRelativeTitle(transToTC(table.getRow(16+(7*i)).getCell(1).getText()));
                         traveller.setPartnerOfTaiwan(transToTC(table.getRow(16+(7*i)).getCell(3).getText()));
 
-                        travellerList.add(traveller);
+                        travellerModel.addElement(traveller);
                     }
                 }catch(IndexOutOfBoundsException e){
 //                    System.out.println("table資料已讀完，這個錯誤是正常的。");
@@ -1054,8 +1223,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         travelgroup.setApplyDate();
         travelgroup.setNiaApplyDate();
         travelgroup.setTourName(tourName.getText());
-        travelgroup.setGroupCount((short)travellerList.size());
-        travelgroup.setPermitApplyCount(Integer.toString(travellerList.size()));
+        travelgroup.setGroupCount((short)travellerModel.size());
+        travelgroup.setPermitApplyCount(Integer.toString(travellerModel.size()));
         
         String idBase = getNowTimeToSS();
         String travelGroupId = idBase + "tg";
@@ -1072,9 +1241,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 //            System.out.println(insertStr);
             st.executeUpdate(insertStr);
             
-            int j = 1;
-            for(Traveller traveller : travellerList){
-                traveller.setId(travellerId + j);
+            for(int i = 0; i < travellerModel.size(); i++){
+                Traveller traveller = (Traveller)travellerModel.get(i);
+                traveller.setId(travellerId + i);
                 traveller.setTravelGroupId(travelGroupId);
                 insertStr = traveller.getInsertStr();
 //                System.out.println(insertStr);
@@ -1084,20 +1253,19 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         + "values(?, ?, 0, ?, ?, ?, current_timestamp)";
 //                System.out.println(insertStr);
                 List<Attach> la = traveller.getAttachList();
-                for(int i = 0; i < la.size(); i++){
-//                    File file = imageProcess(la.get(i).getFile());
-                    File file = la.get(i).getFile();
+                for(int j = 0; j < la.size(); j++){
+//                    File file = imageProcess(la.get(j).getFile());
+                    File file = la.get(j).getFile();
                     InputStream fin = new FileInputStream(file);
                     PreparedStatement ps = conn.prepareStatement(insertStr);
-                    ps.setString(1, traveller.getId() + "at" + i);
+                    ps.setString(1, traveller.getId() + "at" + j);
                     ps.setString(2, traveller.getId());
                     ps.setString(3, file.getName());
-                    ps.setString(4, la.get(i).getType());
+                    ps.setString(4, la.get(j).getType());
                     ps.setBinaryStream(5, fin);
                     ps.execute();
                     fin.close();
                 }
-                j++;
             }
             
             insertStr = String.format(
@@ -1182,6 +1350,51 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         return file;
     }
     */
+    
+    private boolean mappingProcess(){
+        applyAttachListDerty = true;
+        return mappingProcess(true);
+    }
+    
+    private boolean mappingProcess(boolean retryOnce){
+        try{
+        boolean re = false;
+        for(int i = 0; i < travellerModel.size(); i++){
+            Traveller traveller = (Traveller)travellerModel.get(i);
+            for(ApplyAttach aa : applyAttachList){
+                boolean found = false;
+                if(aa.getBelongTo().indexOf(traveller.getChineseName()) >=0 ){
+                    found = true;
+                }else if(i == 0 && aa.getBelongTo().indexOf("主") >= 0){
+                    found = true;
+                }else if(applyAttachList.size() == 1){
+                    found = true;
+                }
+                if(found){
+                    traveller.setAttachList(aa.getAttachList());
+                    applyAttachList.remove(aa);
+                    break;
+                }
+            }
+            if(traveller.getAttachList().size() == 0){
+                re = true;
+            }
+        }
+        
+        if(re){
+            if(retryOnce){
+                mappingProcess(false);
+            }else{
+                return false;
+            }
+        }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return true;
+    }
+    
     private String removeExtension(String name){
         int pos = name.lastIndexOf(".");
         if (pos > 0) {
@@ -1208,7 +1421,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         System.out.println("緊急聯絡人-性別：" + travelgroup.getContactGenderOfMainland());
         System.out.println("緊急聯絡人-電話：" + travelgroup.getContactTelNoOfMainland());
         System.out.println("緊急聯絡人-地址：" + travelgroup.getContactAddressOfMainland());
-        for(Traveller traveller : travellerList){
+        for(int i = 0; i < travellerModel.size(); i++){
+            Traveller traveller = (Traveller)travellerModel.get(i);
             System.out.println("--------------------------------------");
             System.out.println("seqno：" + traveller.getSeqNo());
             System.out.println("中文姓名：" + traveller.getChineseName());
@@ -1354,8 +1568,31 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
     
-    public class FolderWorker extends SwingWorker<Integer, Void> {
+    public class RootFolderWorker extends SwingWorker<Integer, Void> {
 
+        private File folder;
+        public RootFolderWorker(File f){
+            this.folder = f;
+        }
+        
+        @Override
+        public Integer doInBackground() {
+            File[] fileList = folder.listFiles();
+            for(File f : fileList){
+            }
+            return 0;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                
+                btnEnableChk();
+            } catch (Exception ignore) {}
+        }
+    } 
+    
+    public class FolderWorker extends SwingWorker<Integer, Void> {
         private File folder;
         public FolderWorker(File f){
             this.folder = f;
@@ -1364,7 +1601,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Integer doInBackground() {
             getFolderFile(folder);
-            if(clientData == null){
+            if(applyDoc == null){
                 return 1;
             }
             return 0;
@@ -1391,14 +1628,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     public class DataResolveWorker extends SwingWorker<Integer, Void> {
         @Override
         public Integer doInBackground() {
-            if(clientData.getName().endsWith(".doc")){
-                word2003Resolve(clientData);
-                if(travellerList.size() == 0){ word2003Resolve(clientData, true); }
-            }else if(clientData.getName().endsWith(".docx")){
-                word2007Resolve(clientData);
+            if(applyDoc.getName().endsWith(".doc")){
+                word2003Resolve(applyDoc);
+                if(travellerModel.size() == 0){ word2003Resolve(applyDoc, true); }
+            }else if(applyDoc.getName().endsWith(".docx")){
+                word2007Resolve(applyDoc);
             }else{ return 1; }
             
-            if(travellerList.size() == 0){ return 2; }
+            if(travellerModel.size() == 0){ return 2; }
             return 0;
         }
 
@@ -1406,13 +1643,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         protected void done() {
             try {
                 int re  = get();
-                if(re == 0){
+                if(re == 0 ){
                     worker = new MappingWorker();
                     worker.execute();
                 }else if(re == 1){
                     statusLabel.setText("請手動選擇申請文件。");
                     showMessage("請選擇正確的檔案格式 - Microsotf Word", "warning");
-                    clientData = null;
+                    applyDoc = null;
                 }else if(re == 2){
                     statusLabel.setText("無法解析旅客資料。");
                     showMessage("無法解析旅客資料。如果你使用的是Word2003版本，可以嘗試轉成2007以上版本。", "warning");
@@ -1426,20 +1663,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Integer doInBackground() {
             int re = 0;
-            if(travellerList.size() == 0){ return 1; }
+            if(travellerModel.size() == 0){ return 1; }
             if(applyAttachList.size() == 0){
                 re = 2;   
+            }else if(applyAttachListDerty){
+                re = 3;
             }else{
-                for(Traveller traveller : travellerList){
-                    for(ApplyAttach aa : applyAttachList){
-                        if(aa.getBelongTo().indexOf(traveller.getChineseName()) >=0 ){
-                            traveller.setAttachList(aa.getAttachList());
-                        }
-                    }
-                    if(traveller.getAttachList().size() == 0){
-                        re = 2;
-                    }
-                }
+                if(!mappingProcess()){ re = 2; }
             }
             setAttachPanel();
             return re;
@@ -1454,6 +1684,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 }else if(re == 2){
                     statusLabel.setText("找不到可以附加的圖片，請手動選擇。");
                     showMessage("找不到可以附加的圖片，請手動選擇。", "warning");
+                }else if(re == 3){
+                    statusLabel.setText("請手動選擇附加圖片。");
+                    showMessage("請手動選擇附加圖片。", "warning");
                 }
                 btnEnableChk();
             } catch (Exception ignore) {}

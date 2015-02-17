@@ -19,7 +19,7 @@ public class CommonHelp {
     }
     
     public static String dateFormatFix(String d){
-        d = d.trim();
+        d = transToTC(d.trim());
         try{
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");;
             if(d.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
@@ -32,6 +32,8 @@ public class CommonHelp {
                 formatter = new SimpleDateFormat("yyyy/MM/dd");
             }else if(d.matches("^(19|20)\\d{2}\\.(0[1-9]|1[0-2])\\.(0[1-9]|1\\d|2\\d|3[0-1])$")){
                 formatter = new SimpleDateFormat("yyyy.MM.dd");
+            }else if(d.matches("^(19|20)\\d{2}年(0[1-9]|1[0-2])月(0[1-9]|1\\d|2\\d|3[0-1])日$")){
+                formatter = new SimpleDateFormat("yyyy年MM月dd日");
             }else{
                 return d;
             }

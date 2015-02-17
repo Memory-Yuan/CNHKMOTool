@@ -41,9 +41,10 @@ public class ApplyData {
         this.applyAttachList = new ArrayList<ApplyAttach>();
         this.processErrList = new ArrayList<String>();
         this.applyPeopleFolder = 0;
+        this.status = 0;
     }
     
-    private boolean status = false;
+    private int status; //0: 未處理、1: 成功、2: 失敗
     private File applyFolder;
     private File applyDoc;
     private TravelGroup travelgroup;
@@ -60,10 +61,14 @@ public class ApplyData {
     };
     
     public boolean isSuccess(){
+        return this.status == 1;
+    }
+    
+    public int getStatus(){
         return this.status;
     }
     
-    public void setStatus(boolean s){
+    public void setStatus(int s){
         this.status = s;
     }
     

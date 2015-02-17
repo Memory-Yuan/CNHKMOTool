@@ -108,7 +108,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="CNHKMOTool-v1.3.0"/>
+    <Property name="title" type="java.lang.String" value="CNHKMOTool-v1.3.1"/>
     <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>

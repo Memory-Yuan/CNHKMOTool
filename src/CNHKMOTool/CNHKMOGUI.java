@@ -1,5 +1,5 @@
 /**
- * CNHKMOTool v1.3.0
+ * CNHKMOTool v1.3.1
  */
 
 package CNHKMOTool;
@@ -154,7 +154,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.3.0");
+        setTitle("CNHKMOTool-v1.3.1");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -650,7 +650,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         setBottomAreaDisable();
         setAllDisable();
-        statusLabel.setText("處理中...");
+//        statusLabel.setText("處理中...");
         SwingWorker smworker = new SubmitWorker();
         smworker.execute();
     }//GEN-LAST:event_submitActionPerformed
@@ -1232,7 +1232,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
      * @param applyData
      * @return 儲存成功return true
      */
-    private boolean insertData(ApplyData applyData){
+    private String insertData(ApplyData applyData){
         TravelGroup travelgroup = applyData.getTravelgroup();
         DefaultListModel travellerModel = applyData.getTravellerModel();
         
@@ -1240,7 +1240,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         travelgroup.setNiaApplyDate();
         
         //自行生出ID
-        String idBase = CommonHelp.getNowTimeToSS();  //已毫秒來當底，才不會重複
+        String idBase = CommonHelp.getNowTimeToSS();  //以毫秒來當底，才不會重複
         String travelGroupId = idBase + "tg";
         String travellerId = idBase + "tr";
         String travelTourId = idBase + "tt";
@@ -1301,18 +1301,27 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         }catch(IOException e){
             e.printStackTrace();
-            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "err");
+            return travelgroup.getTourName()+ " - " + e.getMessage();
+//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
+//            return false;
         }catch(SQLException e){
             e.printStackTrace();
-            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "err");
+            return travelgroup.getTourName()+ " - " + e.getMessage();
+//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
+//            return false;
         }catch(ParseException e){
             e.printStackTrace();
-            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "err");
+            return travelgroup.getTourName()+ " - " + e.getMessage();
+//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
+//            return false;
         }catch(Exception e){
             e.printStackTrace();
-            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "err");
+            return travelgroup.getTourName()+ " - " + e.getMessage();
+//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
+//            return false;
         }
-        return true;
+
+        return "";
     }
 
     /**
@@ -1474,24 +1483,27 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 boolean cellHasFocus) {
             if (value instanceof ApplyData) {
                 ApplyData applyData = (ApplyData) value;
-                if(applyData.isSuccess()){
+                int status = applyData.getStatus();
+                if(status == 1){
                     setText("[完成] " + applyData.getTourName());
+                }else if(status == 2){
+                    setText("[失敗] " + applyData.getTourName());
                 }else{
                     setText(applyData.getTourName());
                 }
                 if (isSelected) {
                     setBackground(list.getSelectionBackground());
-                    if(applyData.isPass()){
-                        setForeground(list.getSelectionForeground());
-                    }else{
+                    if(!applyData.isPass() || applyData.getStatus() == 2){
                         setForeground(Color.RED);
+                    }else{
+                        setForeground(list.getSelectionForeground());
                     }
                 } else {
                     setBackground(list.getBackground());
-                    if(applyData.isPass()){
-                        setForeground(list.getForeground());
-                    }else{
+                    if(!applyData.isPass() || applyData.getStatus() == 2){
                         setForeground(Color.RED);
+                    }else{
+                        setForeground(list.getForeground());
                     }
                 }
                 setEnabled(list.isEnabled());
@@ -1648,17 +1660,24 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     public class SubmitWorker extends SwingWorker<Void, Void> {
         @Override
         public Void doInBackground() {
+            String err = "";
             for(int i = 0; i < applyDataModel.size(); i++){
+                statusLabel.setText(String.format("處理中...(%d/%d筆)", i+1, applyDataModel.size()));
                 ApplyData applyData = (ApplyData)applyDataModel.get(i);
-                if(applyData.isSuccess()){
+                if(applyData.getStatus() != 0){
                     continue;
                 }
                 if(applyData.isPass()){
-                    if(insertData(applyData)){
-                        applyData.setStatus(true);
+                    String result = insertData(applyData);
+                    if(result.isEmpty()){
+                        applyData.setStatus(1);
+                    }else{
+                        applyData.setStatus(2);
+                        err += result + "\n";
                     }
                 }
             }
+            if(!err.isEmpty()){ showMessage("有資料出錯，可能需要手工處理該筆資料：\n" + err, "warning"); }
             return null;
         }
 

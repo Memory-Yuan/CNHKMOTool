@@ -2,6 +2,7 @@ package TravelApply;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Traveller {
@@ -58,11 +59,6 @@ public class Traveller {
     
     private List<Attach> attachList = new ArrayList<Attach>();
 //    private TravelTourGroup travelTourGroup;
-//    private static Object transients;
-//    private static Object mapping;
-//    private static Object constraints;
-//    private static Object hasMany;
-//    private static Object belongsTo;
   
   public String getId()
   {
@@ -213,6 +209,14 @@ public class Traveller {
     }
   }
   
+  public String getGenderMean(){
+      if(this.gender == null){
+          return "";
+      }else{
+          return this.gender.equals("1") ? "女" : "男";
+      }
+  }
+  
   public String getBirthDate()
   {
     return this.birthDate;
@@ -289,9 +293,16 @@ public class Traveller {
               this.education = 9;
               break;
       }
-    
   }
 
+  public String getEducationMean(){
+      if(this.education == null){
+          return "";
+      }
+      String[] eduList = {"", "博士", "碩士", "大學", "專科", "五專", "高中", "國中", "國小", "無"};
+      return eduList[this.education];
+  }
+  
 //  public String getEducationDesc()
 //  {
 //    return this.educationDesc;
@@ -414,6 +425,13 @@ public class Traveller {
     }else if(paramString.trim().equals("否")){
         this.partnerOfTaiwan = "0";
     }
+  }
+  
+  public String getPartnerOfTaiwanMean(){
+      if(this.partnerOfTaiwan == null){
+          return "";
+      }
+      return this.partnerOfTaiwan.equals("1") ? "是" : "否";
   }
   
   public String getMemberType()
@@ -604,6 +622,15 @@ public class Traveller {
       }
   }
 
+  public String getLiningCityMean(){
+      if(this.livingCity == null){
+          return "無";
+      }
+      String[] liveCityArr = {"北京", "上海", "廈門", "天津", "重慶", "南京", "廣州", "杭州", "成都", "濟南", "西安", "福州", "深圳" };
+      int idx = Integer.valueOf(this.livingCity.substring(1));
+      return liveCityArr[idx];
+  }
+  
   public List<Attach> getAttachList(){
       return this.attachList;
   }
@@ -666,6 +693,19 @@ public class Traveller {
         return null;
     }
     return insertStr;
+  }
+  
+  public boolean isPass(){
+      if(this.attachList.size() == 0){ return false; }
+      if(!this.isSetHeadShot()){ return false; }
+      return true;
+  }
+  
+  public boolean isSetHeadShot(){
+      for(Attach a : this.attachList){
+          if(a.getType().equals("1")){ return true; }
+      }
+      return false;
   }
   
 }

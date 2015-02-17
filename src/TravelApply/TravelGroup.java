@@ -983,6 +983,15 @@ public class TravelGroup {
       }
   }
   
+  public String getContactGenderOfMainlandMean()
+  {
+      if(this.contactGenderOfMainland == null){
+          return "";
+      }else{
+          return this.contactGenderOfMainland.equals("1") ? "女" : "男";
+      }
+  }
+  
   public String getContactTelNoOfMainland()
   {
     return this.contactTelNoOfMainland;

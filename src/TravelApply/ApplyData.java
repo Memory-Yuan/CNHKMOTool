@@ -1,6 +1,5 @@
 package TravelApply;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -8,11 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
@@ -25,7 +21,6 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 //import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 //import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
-import org.imgscalr.Scalr;
 
 public class ApplyData {
     public ApplyData(File f){
@@ -140,15 +135,10 @@ public class ApplyData {
             if(fn.endsWith(".doc") || fn.endsWith(".docx")){
                 this.applyDoc = f;
             }else if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")){
-                try{
-                    BufferedImage image = ImageIO.read(f);
-                    if(image == null){ continue; }
-                    ImageIcon ii = new ImageIcon(Scalr.resize(image, 50));
-                    a = new Attach();
-                    a.setFile(f);
-                    a.setImageIcon(ii);
-                    la.add(a);
-                }catch(IOException ignore){}
+                a = new Attach();
+                a.setFile(f);
+                if(fn.equals("1 照片.jpg")){ a.setType("1"); }
+                la.add(a);
             }else if(f.isDirectory() && enter){
                 this.applyPeopleFolder++;
                 this.getFolderFile(f, false);

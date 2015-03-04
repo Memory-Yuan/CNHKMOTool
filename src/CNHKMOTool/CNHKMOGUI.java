@@ -1,5 +1,8 @@
 /**
- * CNHKMOTool v1.3.1
+ * CNHKMOTool v1.3.3
+ * 1.修改新增附件不會顯示圖片的BUG
+ * 2.預設大頭照
+ * 3.可以拖曳的方式新增
  */
 
 package CNHKMOTool;
@@ -7,7 +10,14 @@ package CNHKMOTool;
 import TravelApply.*;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.image.BufferedImage;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,11 +26,9 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.util.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
-import org.imgscalr.Scalr;
 
 public class CNHKMOGUI extends javax.swing.JFrame {
 
@@ -50,15 +58,12 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jScrollPane6 = new javax.swing.JScrollPane();
         detailConatent = new javax.swing.JTextArea();
         mainPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        applyDocPath = new javax.swing.JFormattedTextField();
-        selectApplyDocBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         tourName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         folderPath = new javax.swing.JTextField();
         attachFilePanel = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        attachScrollPane = new javax.swing.JScrollPane();
         attachJList = new javax.swing.JList();
         selectAttachBtn = new javax.swing.JButton();
         removeAttachBtn = new javax.swing.JButton();
@@ -76,9 +81,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         peopleCountLabel = new javax.swing.JLabel();
         saveTourNameBtn = new javax.swing.JButton();
+        applyDocPanel = new javax.swing.JPanel();
+        applyDocPath = new javax.swing.JFormattedTextField();
+        selectApplyDocBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         batchSelectFolderBtn = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
+        applyScrollPane = new javax.swing.JScrollPane();
         applyDataJList = new javax.swing.JList();
         jLabel8 = new javax.swing.JLabel();
         applyDataCountLabel = new javax.swing.JLabel();
@@ -154,25 +163,12 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.3.1");
+        setTitle("CNHKMOTool-v1.3.3");
         setLocationByPlatform(true);
         setResizable(false);
 
         mainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         mainPanel.setEnabled(false);
-
-        jLabel1.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
-        jLabel1.setText("申請資料");
-
-        applyDocPath.setEnabled(false);
-
-        selectApplyDocBtn.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
-        selectApplyDocBtn.setText("瀏覽");
-        selectApplyDocBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectApplyDocBtnActionPerformed(evt);
-            }
-        });
 
         jLabel4.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel4.setText("行程名稱");
@@ -186,7 +182,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         attachJList.setToolTipText("");
         attachJList.setCellRenderer(new AttachCellRenderer());
-        jScrollPane3.setViewportView(attachJList);
+        attachScrollPane.setViewportView(attachJList);
+        attachDnDListener = new AttachDataDragDropListener();
+        attachDropTarget = new DropTarget(attachJList, attachDnDListener);
+        attachDropTarget.setActive(false);
 
         selectAttachBtn.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         selectAttachBtn.setText("新增");
@@ -251,7 +250,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addComponent(attachCountLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(imageCheckBox))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(attachScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(removeAllAttachBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -275,7 +274,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addComponent(removeAttachBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(removeAllAttachBtn))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(attachScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(imageCheckBox)
@@ -336,6 +335,36 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
+        applyDocPath.setEnabled(false);
+
+        javax.swing.GroupLayout applyDocPanelLayout = new javax.swing.GroupLayout(applyDocPanel);
+        applyDocPanel.setLayout(applyDocPanelLayout);
+        applyDocPanelLayout.setHorizontalGroup(
+            applyDocPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(applyDocPath, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+        );
+        applyDocPanelLayout.setVerticalGroup(
+            applyDocPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, applyDocPanelLayout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addComponent(applyDocPath, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        docDnDListener = new DocDataDragDropListener();
+        docDropTarget = new DropTarget(applyDocPath, docDnDListener);
+        docDropTarget.setActive(false);
+
+        selectApplyDocBtn.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        selectApplyDocBtn.setText("瀏覽");
+        selectApplyDocBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectApplyDocBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        jLabel1.setText("申請資料");
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -343,55 +372,57 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(18, 18, 18)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(folderPath, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(tourName, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(saveTourNameBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane5)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(attachFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4))
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
-                        .addComponent(applyDocPath, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(selectApplyDocBtn)))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(applyDocPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(selectApplyDocBtn))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(folderPath, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(mainPanelLayout.createSequentialGroup()
+                                        .addComponent(tourName, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(saveTourNameBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(folderPath, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(tourName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveTourNameBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(saveTourNameBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tourName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(applyDocPath, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectApplyDocBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(applyDocPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectApplyDocBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(attachFilePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -412,7 +443,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 applyDataJListValueChanged(evt);
             }
         });
-        jScrollPane4.setViewportView(applyDataJList);
+        applyScrollPane.setViewportView(applyDataJList);
+        applyDataDnDListener = new ApplyDataDragDropListener();
+        applyDropTarget = new DropTarget(applyDataJList, applyDataDnDListener);
+        applyDropTarget.setActive(false);
 
         jLabel8.setText("總筆數：");
 
@@ -448,7 +482,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(applyScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
@@ -468,7 +502,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4)
+                .addComponent(applyScrollPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -665,12 +699,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         fileChooser.setFileFilter(ff);
         int status = fileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-            ApplyData ad = (ApplyData)applyDataJList.getSelectedValue();
-            ad.setApplyDoc(fileChooser.getSelectedFile());
-            setAllDisable();
-            statusLabel.setText("讀取中...");
-            SwingWorker drsworker = new DocReSelectWorker();
-            drsworker.execute();
+            addDoc(fileChooser.getSelectedFile());
+//            ApplyData ad = (ApplyData)applyDataJList.getSelectedValue();
+//            ad.setApplyDoc(fileChooser.getSelectedFile());
+//            setAllDisable();
+//            statusLabel.setText("讀取中...");
+//            SwingWorker drsworker = new DocReSelectWorker();
+//            drsworker.execute();
         }
     }//GEN-LAST:event_selectApplyDocBtnActionPerformed
 
@@ -764,21 +799,22 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         if(travellerJList.getSelectedIndex() < 0){ return; }
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("請選擇附件");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fileChooser.setMultiSelectionEnabled(true);
-        FileFilter ff = new ExtensionFileFilter("圖片(jpg, jpeg, png)", new String[] { "JPG", "JPEG", "PNG" });
-        fileChooser.setFileFilter(ff);
+//        FileFilter ff = new ExtensionFileFilter("圖片或資料夾(jpg, jpeg, png)", new String[] {});
+//        fileChooser.setFileFilter(ff);
         int status = fileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
             File[] files = fileChooser.getSelectedFiles();
-            Traveller tr = (Traveller)travellerJList.getSelectedValue();
-            List<Attach> la = tr.getAttachList();
-            for (File file : files) {
-                Attach a = new Attach();
-                a.setFile(file);
-                la.add(a);
-            }
-            setAttachJList();
+            addAttach(Arrays.asList(files));
+//            Traveller tr = (Traveller)travellerJList.getSelectedValue();
+//            List<Attach> la = tr.getAttachList();
+//            for (File file : files) {
+//                Attach a = new Attach();
+//                a.setFile(file);
+//                la.add(a);
+//            }
+//            setAttachJList();
         }
     }//GEN-LAST:event_selectAttachBtnActionPerformed
 
@@ -955,11 +991,20 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel applyDataCountLabel;
     private javax.swing.JList applyDataJList;
     private DefaultListModel applyDataModel;
+    private ApplyDataDragDropListener applyDataDnDListener;
+    private DropTarget applyDropTarget;
+    private javax.swing.JPanel applyDocPanel;
     private javax.swing.JFormattedTextField applyDocPath;
+    private DocDataDragDropListener docDnDListener;
+    private DropTarget docDropTarget;
     private javax.swing.JTextArea applyErrMsg;
+    private javax.swing.JScrollPane applyScrollPane;
     private javax.swing.JLabel attachCountLabel;
     private javax.swing.JPanel attachFilePanel;
     private javax.swing.JList attachJList;
+    private AttachDataDragDropListener attachDnDListener;
+    private DropTarget attachDropTarget;
+    private javax.swing.JScrollPane attachScrollPane;
     private javax.swing.JButton batchSelectFolderBtn;
     private javax.swing.JButton clearAllBtn;
     private javax.swing.JButton closeLinkBtn;
@@ -987,8 +1032,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPanel1;
@@ -1015,7 +1058,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private static final String dbPath = "D:/CNHKMO/db/CNHKMO";
 //    private static final String dbPath = "db/CNHKMO";
 //    private static final int IMG_SIZE = 500;
-    
+    private static final Color borderColor = new Color(255, 102, 51);
+    private static final javax.swing.border.Border dashedBorder = BorderFactory.createDashedBorder(borderColor, 3, 3, 1, true);
+    private java.io.FileFilter dirFilter = new java.io.FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            return file.isDirectory();
+        }
+    };
     private void initAllBlock(){
         applyDataModel.removeAllElements();
         applyDataCountLabel.setText("0");
@@ -1179,6 +1229,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         batchSelectFolderBtn.setEnabled(false);
         refreshBtn.setEnabled(false);
         removeApplyDataBtn.setEnabled(false);
+        applyDropTarget.setActive(false);
+        docDropTarget.setActive(false);
+        attachDropTarget.setActive(false);
     }
     
     /**
@@ -1194,9 +1247,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         removeApplyDataBtn.setEnabled(true);
         clearAllBtn.setEnabled(true);
         exit.setEnabled(true);
-        if(applyDataModel.size() > 0){ applyDataJList.setEnabled(true); }
+        if(applyDataModel.size() > 0){
+            applyDataJList.setEnabled(true);
+            docDropTarget.setActive(true);
+        }
         
-        if(travellerJList.getModel().getSize() > 0){ setAttachAreaEnable(); }
+        if(travellerJList.getModel().getSize() > 0){
+            setAttachAreaEnable();
+            attachDropTarget.setActive(true);
+        }
         
         try{
             if(this.conn == null || this.conn.isClosed()){
@@ -1341,6 +1400,40 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             for(String s : eml){
                 applyErrMsg.append(s + "\n");
             }
+        }
+    }
+    
+    private void addAttach(List<File> files){
+        addAttach(files, true);
+        setAttachJList();
+    }
+    
+    private void addAttach(List<File> files, boolean reOnce){
+        Traveller tr = (Traveller)travellerJList.getSelectedValue();
+        List<Attach> la = tr.getAttachList();
+        for (File file : files) {
+            if(file.isDirectory() && reOnce){
+                addAttach(Arrays.asList(file.listFiles()), false);
+            }else{
+                String fn = file.getName().toLowerCase();
+                if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")){
+                    Attach a = new Attach();
+                    a.setFile(file);
+                    la.add(a);
+                }
+            }
+        }
+    }
+    
+    private void addDoc(File file){
+        String fn = file.getName().toLowerCase();
+        if(fn.endsWith(".doc") || fn.endsWith(".docx")){
+            ApplyData ad = (ApplyData)applyDataJList.getSelectedValue();
+            ad.setApplyDoc(file);
+            setAllDisable();
+            statusLabel.setText("讀取中...");
+            SwingWorker drsworker = new DocReSelectWorker();
+            drsworker.execute();
         }
     }
     
@@ -1528,7 +1621,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             String msg;
             int i = 1;
             for(File folder : folderList){
-                File[] fileList = folder.listFiles();
+                File[] fileList = folder.listFiles(dirFilter);
                 int j = 1;
                 for(File f : fileList){
                     msg = String.format("處理中...(資料夾：%d/%d , %d/%d筆)", i, folderList.length, j, fileList.length);
@@ -1688,6 +1781,125 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
 
+    public class ApplyDataDragDropListener implements DropTargetListener {
+        @Override
+        public void drop(DropTargetDropEvent event) {
+            applyScrollPane.setBorder(null);
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+            Transferable transferable = event.getTransferable();
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+            for (DataFlavor flavor : flavors) {
+                try {
+                    if (flavor.isFlavorJavaFileListType()) {
+                        List< File > files = (List) transferable.getTransferData(flavor);
+                        for (File file : files) {
+
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+            applyScrollPane.setBorder(dashedBorder);
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+            applyScrollPane.setBorder(null);
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {}
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {}
+
+    }
+    
+    public class AttachDataDragDropListener implements DropTargetListener {
+        @Override
+        public void drop(DropTargetDropEvent event) {
+            attachScrollPane.setBorder(null);
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+            Transferable transferable = event.getTransferable();
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+            for (DataFlavor flavor : flavors) {
+                try {
+                    if (flavor.isFlavorJavaFileListType()) {
+                        List<File> files = (List) transferable.getTransferData(flavor);
+                        addAttach(files);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+            attachScrollPane.setBorder(dashedBorder);
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+            attachScrollPane.setBorder(null);
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {}
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {}
+
+    }
+    
+    public class DocDataDragDropListener implements DropTargetListener {
+        @Override
+        public void drop(DropTargetDropEvent event) {
+            applyDocPanel.setBorder(null);
+            event.acceptDrop(DnDConstants.ACTION_COPY);
+            Transferable transferable = event.getTransferable();
+            DataFlavor[] flavors = transferable.getTransferDataFlavors();
+            for (DataFlavor flavor : flavors) {
+                try {
+                    if (flavor.isFlavorJavaFileListType()) {
+                        List< File > files = (List) transferable.getTransferData(flavor);
+                        if(files.size() == 1){
+                            addDoc(files.get(0));
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            event.dropComplete(true);
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent event) {
+            applyDocPanel.setBorder(dashedBorder);
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent event) {
+            applyDocPanel.setBorder(null);
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent event) {}
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent event) {}
+
+    }
+    
     class ShutdownThread extends Thread {
         private Connection conn;
         ShutdownThread(Connection conn) {

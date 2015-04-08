@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <RandomAccessFile name="FILE" fileName="CNHKMOTool.log">
+            <PatternLayout>
+                <Pattern>[%d{DEFAULT}][%-5level][%t] - %msg%n: %throwable{5}%n</Pattern>
+            </PatternLayout>
+        </RandomAccessFile>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>[%d{DEFAULT}][%-5level][%t] - %msg%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="WARN">
+            <AppenderRef ref="FILE" />
+            <AppenderRef ref="STDOUT" />
+        </Root>
+    </Loggers>
+</Configuration>

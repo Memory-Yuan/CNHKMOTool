@@ -5,10 +5,9 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultListModel;
+import org.apache.logging.log4j.Level;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
@@ -26,16 +25,23 @@ public class ApplyData {
     public ApplyData(File f){
         this.applyFolder = f;
         this.initData();
-        this.allDataProcess();
+        this.handleApplyData();
     }
     
     private void initData(){
         this.travelgroup = new TravelGroup();
+        this.travellerList = this.travelgroup.getTravellerList();
         this.setTourName(this.applyFolder.getName());
-        this.travellerModel = new DefaultListModel();
         this.applyAttachList = new ArrayList<ApplyAttach>();
-        this.processErrList = new ArrayList<String>();
-        this.applyPeopleFolder = 0;
+        this.errOfResolvingList = new ArrayList<ErrMsg>();
+        this.applyPeopleFolderQty = 0;
+        this.status = 0;
+    }
+    
+    private void initDocData(){
+        this.travelgroup = new TravelGroup();
+        this.travellerList = this.travelgroup.getTravellerList();
+        this.errOfResolvingList = new ArrayList<ErrMsg>();
         this.status = 0;
     }
     
@@ -43,10 +49,11 @@ public class ApplyData {
     private File applyFolder;
     private File applyDoc;
     private TravelGroup travelgroup;
-    private DefaultListModel travellerModel;
+    private List<Traveller> travellerList;
     private List<ApplyAttach> applyAttachList;
-    private List<String> processErrList;
-    private int applyPeopleFolder;
+    private List<ErrMsg> errOfResolvingList;
+    private int applyPeopleFolderQty;
+    private final String HeadShotName = "1 照片.jpg";
     
     private FileFilter hiddenFilter = new FileFilter() {
         @Override
@@ -90,21 +97,47 @@ public class ApplyData {
     public TravelGroup getTravelgroup(){
         return this.travelgroup;
     }
-    
-    public DefaultListModel getTravellerModel(){
-        return this.travellerModel;
-    }
-    
-    public List<ApplyAttach> travellerModel(){
+
+    public List<ApplyAttach> getApplyAttachList(){
         return this.applyAttachList;
     }
     
-    public List<String> getProcessErrMsg(){
-        return this.processErrList;
+    public List<ApplyAttach> getRestApplyAttachList(){
+        List<ApplyAttach> rest = new ArrayList<ApplyAttach>();
+        for(ApplyAttach aa : this.applyAttachList){
+            if(!aa.isMapping()){ rest.add(aa); }
+        }
+        return rest;
     }
     
-    public void clearProcessErr(){
-        this.processErrList = new ArrayList<String>();
+    public String getTravellerNames(){
+        String s = "";
+        for(Traveller traveller : this.travellerList){
+            s += String.format("「%s」 ", traveller.getChineseName());
+        }
+        return s;
+    }
+    
+    public String getTravellerNamesOfNoAttach(){
+        String s = "";
+        for(Traveller traveller : this.travellerList){
+            if(traveller.getAttachList().isEmpty()){ s += String.format("「%s」 ", traveller.getChineseName()); }
+        }
+        return s;
+    }
+    
+    public String getApplyFolderNames(){
+        String s = "";
+        for(ApplyAttach aa : this.applyAttachList){ s += String.format("「%s」 ", aa.getBelongTo()); }
+        return s;
+    }
+    
+    public String getRestApplyFolderNames(){
+        String s = "";
+        for(ApplyAttach aa : this.applyAttachList){
+            if(!aa.isMapping()){ s += String.format("「%s」 ", aa.getBelongTo()); }
+        }
+        return s;
     }
     
     private boolean isMoreThanOne(File folder){
@@ -114,7 +147,7 @@ public class ApplyData {
         File[] files = folder.listFiles(hiddenFilter);
         for(File f : files){
             if(f.isFile()){
-                this.applyPeopleFolder = 1;
+                this.applyPeopleFolderQty = 1;
                 return false;
             }
         }
@@ -137,10 +170,10 @@ public class ApplyData {
             }else if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")){
                 a = new Attach();
                 a.setFile(f);
-                if(fn.equals("1 照片.jpg")){ a.setType("1"); }
+                if(fn.equals(HeadShotName)){ a.setType("1"); }
                 la.add(a);
             }else if(f.isDirectory() && enter){
-                this.applyPeopleFolder++;
+                this.applyPeopleFolderQty++;
                 this.getFolderFile(f, false);
             }
         }
@@ -152,104 +185,103 @@ public class ApplyData {
         }
     }
     
-    public void word2003Resolve(File file){
-        this.word2003Resolve(file, false);
-    }
-    
-    private void word2003Resolve(File file, boolean isFix){
+    private void word2003Resolve(File file){
         try{
             if(!file.getName().endsWith(".doc")) {
                 throw new FileFormatException();
-            } else {
-                POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-                HWPFDocument doc = new HWPFDocument(fs);
-                Range range = doc.getRange();
-                Table table = null;
-                
-                for (int i=0; i<range.numParagraphs(); i++) {
-                    Paragraph par = range.getParagraph(i);
-                    if(par.isInTable()){
-                        table = range.getTable(par);
-                        break;
-                    }
-                }
-                if(table == null){ this.processErrList.add("無法解析檔案！"); return; }
-                /*
-                *   印出所有Table資料，確認用。
-                *
-                for (int rowIdx=0; rowIdx<table.numRows(); rowIdx++) {
-                    TableRow row = table.getRow(rowIdx);
-                    System.out.println("row "+rowIdx);
-                    for (int colIdx=0; colIdx<row.numCells(); colIdx++) {
-                        TableCell cell = row.getCell(colIdx);
-                        System.out.println("column: "+colIdx+", text: "+cell.getParagraph(0).text());
-                    }
-                }
-                */
-                String sDate = CommonHelp.dateFormatFix(table.getRow(0).getCell(2).getParagraph(0).text());
-                String eDate = CommonHelp.calculateTourDate(sDate, 14);
-                this.travelgroup.setTourStartDate(sDate);
-                this.travelgroup.setTourEndDate(eDate);
-                this.travelgroup.setContactNameOfMainland(CommonHelp.transToTC(table.getRow(4).getCell(1).getParagraph(0).text()));
-                this.travelgroup.setContactTitleOfMainland(CommonHelp.transToTC(table.getRow(4).getCell(3).getParagraph(0).text()));
-                this.travelgroup.setContactMobileNoOfMainland(table.getRow(5).getCell(1).getParagraph(0).text());
-                this.travelgroup.setContactGenderOfMainland(CommonHelp.transToTC(table.getRow(5).getCell(3).getParagraph(0).text()));
-                this.travelgroup.setContactTelNoOfMainland(table.getRow(5).getCell(5).getParagraph(0).text());
-                this.travelgroup.setContactAddressOfMainland(CommonHelp.transToTC(table.getRow(6).getCell(1).getParagraph(0).text()));
-
-                try{
-                    Traveller traveller = null;
-                    int fixR = isFix ? 1 : 0;
-                    String mainTravellerName = null;
-                    for(int i = 0; true; i++){
-                        int fixR2 = i > 0 && isFix ? 1 : 0;
-                        traveller = new Traveller();
-                        traveller.setSeqNo((short)i);
-                        traveller.setChineseName(CommonHelp.transToTC(table.getRow(11+(7*i)+fixR2).getCell(1).getParagraph(0).text()));
-                        traveller.setGender(CommonHelp.transToTC(table.getRow(11+(7*i)+fixR2).getCell(3).getParagraph(0).text()));
-                        try{
-                            traveller.setBirthDate(CommonHelp.dateFormatFix(table.getRow(11+(7*i)+fixR2).getCell(5).getParagraph(0).text()));
-                        }catch(Exception e){}
-                        traveller.setEnglishName(table.getRow(12+(7*i)+fixR).getCell(1).getParagraph(0).text());
-                        traveller.setPassportNo(table.getRow(12+(7*i)+fixR).getCell(3).getParagraph(0).text());
-                        traveller.setPassportExpiryDate(CommonHelp.dateFormatFix(table.getRow(12+(7*i)+fixR).getCell(5).getParagraph(0).text()));
-                        traveller.setPersonId(table.getRow(13+(7*i)+fixR).getCell(1).getParagraph(0).text());
-                        traveller.setEducation(CommonHelp.transToTC(table.getRow(14+(7*i)+fixR).getCell(1).getParagraph(0).text()));
-                        traveller.setOccupationDesc(CommonHelp.transToTC(table.getRow(14+(7*i)+fixR).getCell(3).getParagraph(0).text()));
-                        traveller.setAddress(CommonHelp.transToTC(table.getRow(15+(7*i)+fixR).getCell(3).getParagraph(0).text()));
-                        traveller.setLivingCity(CommonHelp.transToTC(table.getRow(15+(7*i)+fixR).getCell(3).getParagraph(0).text()));
-                        
-                        if(!traveller.isValidTraveller()){ break; }
-                        if(i == 0){
-                            this.travellerModel.addElement(traveller);
-                            mainTravellerName = traveller.getChineseName();
-                            continue;
-                        }
-                        traveller.setRelative(mainTravellerName);
-                        traveller.setRelativeTitle(CommonHelp.transToTC(table.getRow(16+(7*i)+fixR).getCell(1).getParagraph(0).text()));
-                        traveller.setPartnerOfTaiwan(CommonHelp.transToTC(table.getRow(16+(7*i)+fixR).getCell(3).getParagraph(0).text()));
-
-                        this.travellerModel.addElement(traveller);
-                    }
-                }catch(IndexOutOfBoundsException e){
-//                    System.out.println("table資料已讀完，這個錯誤是正常的。");
-//                    e.printStackTrace();
-                }
-                this.travelgroup.setGroupCount((short)this.travellerModel.size());
-                this.travelgroup.setPermitApplyCount(Integer.toString(this.travellerModel.size()));
             }
+            
+            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
+            HWPFDocument doc = new HWPFDocument(fs);
+            Range range = doc.getRange();
+            Table table = null;
+
+            for (int i=0; i<range.numParagraphs(); i++) {
+                Paragraph par = range.getParagraph(i);
+                if(par.isInTable()){
+                    table = range.getTable(par);
+                    break;
+                }
+            }
+            if(table == null){
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s] Word文件找不到資料表格！", this.getTourName()));
+                this.errOfResolvingList.add(new ErrMsg("Word文件找不到資料表格！", 0)); return;
+            }
+            /*
+            *   印出所有Table資料，確認用。
+            *
+            for (int rowIdx=0; rowIdx<table.numRows(); rowIdx++) {
+                TableRow row = table.getRow(rowIdx);
+                System.out.println("row "+rowIdx);
+                for (int colIdx=0; colIdx<row.numCells(); colIdx++) {
+                    TableCell cell = row.getCell(colIdx);
+                    System.out.println("column: "+colIdx+", text: "+cell.getParagraph(0).text());
+                }
+            }
+            */
+            try{
+                this.travelgroup.setTourStartDate(table.getRow(0).getCell(2).getParagraph(0).text());
+                this.travelgroup.setContactNameOfMainland(table.getRow(4).getCell(1).getParagraph(0).text());
+                this.travelgroup.setContactTitleOfMainland(table.getRow(4).getCell(3).getParagraph(0).text());
+                this.travelgroup.setContactMobileNoOfMainland(table.getRow(5).getCell(1).getParagraph(0).text());
+                this.travelgroup.setContactGenderOfMainland(table.getRow(5).getCell(3).getParagraph(0).text());
+                this.travelgroup.setContactTelNoOfMainland(table.getRow(5).getCell(5).getParagraph(0).text());
+                this.travelgroup.setContactAddressOfMainland(table.getRow(6).getCell(1).getParagraph(0).text());
+            }catch(Exception e){
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s][TravelGroup] 資料解析有誤！", this.getTourName()), e);
+            }
+
+            Traveller traveller = null;
+            String mainTravellerName = null;
+            for(int i = 0; i < this.applyPeopleFolderQty; i++){
+                traveller = new Traveller();
+                traveller.setSeqNo((short)i);
+                try{
+                    traveller.setChineseName(table.getRow(11+7*i).getCell(1).getParagraph(0).text());
+                    traveller.setGender(table.getRow(11+7*i).getCell(3).getParagraph(0).text());
+                    traveller.setBirthDate(table.getRow(11+7*i).getCell(5).getParagraph(0).text());
+                    traveller.setEnglishName(table.getRow(12+7*i).getCell(1).getParagraph(0).text());
+                    traveller.setPassportNo(table.getRow(12+7*i).getCell(3).getParagraph(0).text());
+                    traveller.setPassportExpiryDate(table.getRow(12+7*i).getCell(5).getParagraph(0).text());
+                    traveller.setPersonId(table.getRow(13+7*i).getCell(1).getParagraph(0).text());
+                    traveller.setEducation(traveller.getEducationIdx(table.getRow(14+7*i).getCell(1).getParagraph(0).text()));
+                    traveller.setOccupationDesc(table.getRow(14+7*i).getCell(3).getParagraph(0).text());
+                    traveller.setAddress(table.getRow(15+7*i).getCell(3).getParagraph(0).text());
+                    traveller.setLivingCity(traveller.getLivingCityCode(table.getRow(15+7*i).getCell(3).getParagraph(0).text()));
+
+//                    if(!traveller.isValidTraveller()){ continue; }
+                    if(i == 0){
+                        this.travellerList.add(traveller);
+                        mainTravellerName = traveller.getChineseName();
+                        continue;
+                    }
+                    traveller.setRelative(mainTravellerName);
+                    traveller.setRelativeTitle(table.getRow(16+7*i).getCell(1).getParagraph(0).text());
+                    traveller.setPartnerOfTaiwan(table.getRow(16+7*i).getCell(3).getParagraph(0).text());
+                }catch(IndexOutOfBoundsException e){
+                    //@modify
+                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
+                }catch (Exception e) {
+                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
+                }
+                this.travellerList.add(traveller);
+            }
+            
+//            this.travelgroup.setGroupCount((short)this.travellerList.size());
+//            this.travelgroup.setPermitApplyCount(Integer.toString(this.travellerList.size()));
+            
         } catch(FileFormatException e) {
-            e.printStackTrace();
-            this.processErrList.add("請選擇正確的檔案格式 - Microsotf Word。\n詳細:\n" + e.getMessage());
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 請選擇正確的檔案格式 - Microsotf Word", this.getTourName()));
+            this.errOfResolvingList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            this.processErrList.add("找不到檔案！\n詳細:\n" + e.getMessage());
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到文件！", this.getTourName()));
+            this.errOfResolvingList.add(new ErrMsg("找不到文件！", 0));
         } catch (IOException e) {
-            e.printStackTrace();
-            this.processErrList.add("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            this.processErrList.add("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage());
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
+        } catch (Exception e) {
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
         }
     }
     
@@ -257,90 +289,96 @@ public class ApplyData {
         try{
             if(!file.getName().endsWith(".docx")) {
                 throw new FileFormatException();
-            } else {
-                XWPFDocument doc = new XWPFDocument(new FileInputStream(file));
-                List<XWPFTable> tableList = doc.getTables();
-                
-                if(tableList == null){ this.processErrList.add("無法解析檔案！"); return; }
-                /*
-                * 印出所有Table資料，確認用。
-                *
-                XWPFTable xwpfTable = tableList.get(0);
-                List<XWPFTableRow> row = xwpfTable.getRows();
-                int rowidx = 0, colidx = 0;
-                for (XWPFTableRow xwpfTableRow : row) {
-                    System.out.println("row " + rowidx);
-                    rowidx++; colidx = 0;
-                    List<XWPFTableCell> cell = xwpfTableRow.getTableCells();
-                    for (XWPFTableCell xwpfTableCell : cell) {
-                        if(xwpfTableCell!=null){
-                            System.out.println("column " + colidx + ", text: " + xwpfTableCell.getText());
-                            colidx++;
-                        }
-                    }
-                }
-                */
-                XWPFTable table = tableList.get(0);
-                String sDate = CommonHelp.dateFormatFix(table.getRow(0).getCell(2).getText());
-                String eDate = CommonHelp.calculateTourDate(sDate, 14);
-                this.travelgroup.setTourStartDate(sDate);
-                this.travelgroup.setTourEndDate(eDate);
-                this.travelgroup.setContactNameOfMainland(CommonHelp.transToTC(table.getRow(4).getCell(1).getText()));
-                this.travelgroup.setContactTitleOfMainland(CommonHelp.transToTC(table.getRow(4).getCell(3).getText()));
-                this.travelgroup.setContactMobileNoOfMainland(table.getRow(5).getCell(1).getText());
-                this.travelgroup.setContactGenderOfMainland(CommonHelp.transToTC(table.getRow(5).getCell(3).getText()));
-                this.travelgroup.setContactTelNoOfMainland(table.getRow(5).getCell(5).getText());
-                this.travelgroup.setContactAddressOfMainland(CommonHelp.transToTC(table.getRow(6).getCell(1).getText()));
-
-                try{
-                    Traveller traveller = null;
-                    String mainTravellerName = null;
-                    for(int i = 0; true; i++){
-                        traveller = new Traveller();
-                        traveller.setSeqNo((short)i);
-                        traveller.setChineseName(CommonHelp.transToTC(table.getRow(11+(7*i)).getCell(1).getText()));
-                        traveller.setGender(CommonHelp.transToTC(table.getRow(11+(7*i)).getCell(3).getText()));
-                        traveller.setBirthDate(CommonHelp.dateFormatFix(table.getRow(11+(7*i)).getCell(5).getText()));
-                        traveller.setEnglishName(table.getRow(12+(7*i)).getCell(1).getText());
-                        traveller.setPassportNo(table.getRow(12+(7*i)).getCell(3).getText());
-                        traveller.setPassportExpiryDate(CommonHelp.dateFormatFix(table.getRow(12+(7*i)).getCell(5).getText()));
-                        traveller.setPersonId(table.getRow(13+(7*i)).getCell(1).getText());
-                        traveller.setEducation(CommonHelp.transToTC(table.getRow(14+(7*i)).getCell(1).getText()));
-                        traveller.setOccupationDesc(CommonHelp.transToTC(table.getRow(14+(7*i)).getCell(3).getText()));
-                        traveller.setAddress(CommonHelp.transToTC(table.getRow(15+(7*i)).getCell(3).getText()));
-                        traveller.setLivingCity(CommonHelp.transToTC(table.getRow(15+(7*i)).getCell(3).getText()));
-
-                        if(!traveller.isValidTraveller()){ break; }
-                        if(i == 0){
-                            this.travellerModel.addElement(traveller);
-                            mainTravellerName = traveller.getChineseName();
-                            continue;
-                        }
-                        traveller.setRelative(mainTravellerName);
-                        traveller.setRelativeTitle(CommonHelp.transToTC(table.getRow(16+(7*i)).getCell(1).getText()));
-                        traveller.setPartnerOfTaiwan(CommonHelp.transToTC(table.getRow(16+(7*i)).getCell(3).getText()));
-
-                        this.travellerModel.addElement(traveller);
-                    }
-                }catch(IndexOutOfBoundsException e){
-//                    System.out.println("table資料已讀完，這個錯誤是正常的。");
-//                    e.printStackTrace();
-                }
-                this.travelgroup.setGroupCount((short)this.travellerModel.size());
-                this.travelgroup.setPermitApplyCount(Integer.toString(this.travellerModel.size()));
             }
+            XWPFDocument doc = new XWPFDocument(new FileInputStream(file));
+            List<XWPFTable> tableList = doc.getTables();
+
+            if(tableList == null){
+                CommonHelp.logger.log(Level.WARN, String.format("[%s] Word文件找不到資料表格！", this.getTourName()));
+                this.errOfResolvingList.add(new ErrMsg("Word文件找不到資料表格！", 0)); return;
+            }
+            /*
+            * 印出所有Table資料，確認用。
+            *
+            XWPFTable xwpfTable = tableList.get(0);
+            List<XWPFTableRow> row = xwpfTable.getRows();
+            int rowidx = 0, colidx = 0;
+            for (XWPFTableRow xwpfTableRow : row) {
+                System.out.println("row " + rowidx);
+                rowidx++; colidx = 0;
+                List<XWPFTableCell> cell = xwpfTableRow.getTableCells();
+                for (XWPFTableCell xwpfTableCell : cell) {
+                    if(xwpfTableCell!=null){
+                        System.out.println("column " + colidx + ", text: " + xwpfTableCell.getText());
+                        colidx++;
+                    }
+                }
+            }
+            */
+            XWPFTable table = tableList.get(0);
+            try{
+                this.travelgroup.setTourStartDate(table.getRow(0).getCell(2).getText());
+                this.travelgroup.setContactNameOfMainland(table.getRow(4).getCell(1).getText());
+                this.travelgroup.setContactTitleOfMainland(table.getRow(4).getCell(3).getText());
+                this.travelgroup.setContactMobileNoOfMainland(table.getRow(5).getCell(1).getText());
+                this.travelgroup.setContactGenderOfMainland(table.getRow(5).getCell(3).getText());
+                this.travelgroup.setContactTelNoOfMainland(table.getRow(5).getCell(5).getText());
+                this.travelgroup.setContactAddressOfMainland(table.getRow(6).getCell(1).getText());
+            }catch(Exception e){
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s][TravelGroup] 資料解析有誤！", this.getTourName()), e);
+            }
+            
+            Traveller traveller = null;
+            String mainTravellerName = null;
+            for(int i = 0; i < this.applyPeopleFolderQty; i++){
+                traveller = new Traveller();
+                traveller.setSeqNo((short)i);
+                try{
+                    traveller.setChineseName(table.getRow(11+7*i).getCell(1).getText());
+                    traveller.setGender(table.getRow(11+7*i).getCell(3).getText());
+                    traveller.setBirthDate(table.getRow(11+7*i).getCell(5).getText());
+                    traveller.setEnglishName(table.getRow(12+7*i).getCell(1).getText());
+                    traveller.setPassportNo(table.getRow(12+7*i).getCell(3).getText());
+                    traveller.setPassportExpiryDate(table.getRow(12+7*i).getCell(5).getText());
+                    traveller.setPersonId(table.getRow(13+7*i).getCell(1).getText());
+                    traveller.setEducation(traveller.getEducationIdx(table.getRow(14+7*i).getCell(1).getText()));
+                    traveller.setOccupationDesc(table.getRow(14+7*i).getCell(3).getText());
+                    traveller.setAddress(table.getRow(15+7*i).getCell(3).getText());
+                    traveller.setLivingCity(traveller.getLivingCityCode(table.getRow(15+7*i).getCell(3).getText()));
+
+//                    if(!traveller.isValidTraveller()){ continue; }
+                    if(i == 0){
+                        this.travellerList.add(traveller);
+                        mainTravellerName = traveller.getChineseName();
+                        continue;
+                    }
+                    traveller.setRelative(mainTravellerName);
+                    traveller.setRelativeTitle(table.getRow(16+7*i).getCell(1).getText());
+                    traveller.setPartnerOfTaiwan(table.getRow(16+7*i).getCell(3).getText());
+                }catch(IndexOutOfBoundsException e){
+                    //@modify
+                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
+                }catch (Exception e) {
+                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
+                }
+                this.travellerList.add(traveller);
+            }
+            
+//            this.travelgroup.setGroupCount((short)this.travellerList.size());
+//            this.travelgroup.setPermitApplyCount(Integer.toString(this.travellerList.size()));
+            
         } catch(FileFormatException e) {
-            e.printStackTrace();
-            this.processErrList.add("請選擇正確的檔案格式 - Microsotf Word。\n詳細:\n" + e.getMessage());
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 請選擇正確的檔案格式 - Microsotf Word", this.getTourName()));
+            this.errOfResolvingList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            this.processErrList.add("找不到檔案！\n詳細:\n" + e.getMessage());
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到文件！", this.getTourName()));
+            this.errOfResolvingList.add(new ErrMsg("找不到文件！", 0));
         } catch (IOException e) {
-            e.printStackTrace();
-            this.processErrList.add("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            this.processErrList.add("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage());
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
+        } catch (Exception e) {
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
         }
     }
     
@@ -349,31 +387,32 @@ public class ApplyData {
     }
     
     private boolean mappingProcess(boolean oneMoreChance){
-        boolean re = false;
-        for(int i = 0; i < this.travellerModel.size(); i++){
-            Traveller traveller = (Traveller)this.travellerModel.get(i);
-            if(traveller.getAttachList().size() != 0 && !oneMoreChance){ continue; }
-            for(ApplyAttach aa : this.applyAttachList){
+        boolean isAnyHaventAttach = false;
+        for(int i = 0; i < this.travellerList.size(); i++){
+            Traveller traveller = this.travellerList.get(i);
+            if(!traveller.getAttachList().isEmpty()){ continue; }
+            List<ApplyAttach> restApplyAttachList = this.getRestApplyAttachList();
+            for(ApplyAttach aa : restApplyAttachList){
                 boolean found = false;
-                if(aa.getBelongTo().indexOf(traveller.getChineseName()) >=0 ){
+                if(!traveller.getChineseName().isEmpty() && aa.getBelongTo().indexOf(traveller.getChineseName()) >=0){
                     found = true;
                 }else if(i == 0 && aa.getBelongTo().indexOf("主") >= 0){
                     found = true;
-                }else if(this.applyAttachList.size() == 1){
+                }else if(restApplyAttachList.size() == 1){
                     found = true;
                 }
                 if(found){
                     traveller.setAttachList(aa.getAttachList());
-                    this.applyAttachList.remove(aa);
+                    aa.setMappingStatus(true);
                     break;
                 }
             }
-            if(traveller.getAttachList().size() == 0){
-                re = true;
+            if(traveller.getAttachList().isEmpty()){
+                isAnyHaventAttach = true;
             }
         }
         
-        if(re){
+        if(isAnyHaventAttach){
             if(oneMoreChance){
                 return this.mappingProcess(false);
             }else{
@@ -384,106 +423,109 @@ public class ApplyData {
         return true;
     }
     
-    public void allDataProcess(){
+    public void handleApplyData(){
+        this.handleApplyData(false);
+    }
+    
+    public void handleApplyData(boolean isReloadDoc){
         try{
+            if(isReloadDoc){
+                this.initDocData();
+            }else{
+                this.getFolderFile();
+            }
+            
+            if(this.applyDoc == null){
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到申請文件", this.getTourName()));
+                return;
+            }
+            if(this.applyDoc.getName().endsWith(".doc")){
+                this.word2003Resolve(this.applyDoc);
+            }else if(this.applyDoc.getName().endsWith(".docx")){
+                this.word2007Resolve(this.applyDoc);
+            }else{
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 檔案格式錯誤: %s", this.getTourName(), this.applyDoc.getName()));
+                return;
+            }
 
-        this.getFolderFile();
-        
-        if(this.applyDoc == null){
-            this.processErrList.add("找不到申請文件，請手動選擇。");
-            return;
-        }
-        if(this.applyDoc.getName().endsWith(".doc")){
-            this.word2003Resolve(this.applyDoc);
-            if(this.travellerModel.size() == 0){ this.word2003Resolve(this.applyDoc, true); }
-        }else if(this.applyDoc.getName().endsWith(".docx")){
-            this.word2007Resolve(this.applyDoc);
-        }else{
-            this.processErrList.add("請選擇正確的檔案格式 - Microsotf Word。");
-            return;
-        }
+            if(this.travellerList.isEmpty()){
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 無法解析申請資料，旅客人數為0", this.getTourName()));
+                return;
+            }
 
-        if(this.travellerModel.size() == 0){
-            this.processErrList.add("無法解析申請資料。如果你使用的是Word2003版本，可以嘗試轉成2007以上版本。");
-            return;
-        }
-        
-        if(this.applyAttachList.size() == 0 || !this.mappingProcess()){
-            this.processErrList.add("找不到可以附加的圖片，請手動選擇。");
-        }
-        
-        if(travellerModel.size() != this.applyPeopleFolder){
-            this.processErrList.add("申請文件解析出的申請人數(" + travellerModel.size() + ")與申請人資料夾數(" + this.applyPeopleFolder + ")不一致，請確認。");
-        }
+            if(this.applyAttachList.isEmpty() || !this.mappingProcess()){
+                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到附加圖片資料，或圖片資料無法與旅客資料對應。  無附件旅客: %s; 待認領附件: %s", this.getTourName(), this.getTravellerNamesOfNoAttach(), this.getRestApplyFolderNames()));
+            }
+
+            if(this.travellerList.size() != this.applyPeopleFolderQty){
+                String m = String.format("[%s] 申請文件解析出的申請人數(%s)與申請人資料夾數(%s)不一致，請確認。", this.getTourName(), this.travellerList.size(), this.applyPeopleFolderQty);
+                m += String.format("旅客: %s; 申請人資料夾: %s", this.getTravellerNames(), this.getApplyFolderNames());
+                CommonHelp.logger.log(Level.ERROR, m);
+            }
         
         }catch(Exception e){
-            e.printStackTrace();
+            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
         }
     }
     
-    public void justDocProcess(){
-        this.initData();
-        
-        if(this.applyDoc.getName().endsWith(".doc")){
-            this.word2003Resolve(this.applyDoc);
-            if(this.travellerModel.size() == 0){ this.word2003Resolve(this.applyDoc, true); }
-        }else if(this.applyDoc.getName().endsWith(".docx")){
-            this.word2007Resolve(this.applyDoc);
-        }else{
-            this.processErrList.add("請選擇正確的檔案格式 - Microsotf Word。");
-            return;
-        }
+    public List<ErrMsg> getErrMsgOfResolving(){
+        return this.errOfResolvingList;
+    }
+    
+    public void clearErrMsgOfResolving(){
+        this.errOfResolvingList = new ArrayList<ErrMsg>();
+    }
+    
+    public List<ErrMsg> getErrMsgList(){
+        List<ErrMsg> errMsgList = new ArrayList<ErrMsg>();
 
-        if(this.travellerModel.size() == 0){
-            this.processErrList.add("無法解析申請資料。如果你使用的是Word2003版本，可以嘗試轉成2007以上版本。");
-            return;
-        }
-        
-        this.processErrList.add("請手動選擇附件。");
-    }
-    
-    public List<String> getErrMsgList(){
-        List<String> errMsgList = new ArrayList<String>();
-        if(this.getTourName() == null || this.getTourName().isEmpty()){
-            errMsgList.add("請輸入行程名稱。");
-        }
-        
         if(this.applyDoc == null){
-            errMsgList.add("找不到申請文件，請手動選擇。");
+            errMsgList.add(new ErrMsg("找不到申請文件，請手動選擇。", 0));
             return errMsgList;
         }
         
         String fn = this.applyDoc.getName().toLowerCase();
         if(!fn.endsWith(".doc") && !fn.endsWith(".docx")){
-            errMsgList.add("請選擇正確的檔案格式 - Microsotf Word。");
+            errMsgList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
             return errMsgList;
         }
 
-        if(this.travellerModel.size() == 0){
-            errMsgList.add("無法解析申請資料。如果你使用的是Word2003版本，可以嘗試轉成2007以上版本。");
-            return errMsgList;
+        if(travellerList.size() < this.applyPeopleFolderQty){
+            errMsgList.add(new ErrMsg(String.format("申請文件解析出的申請人數(%s)與申請人資料夾數(%s)不一致，請確認。", this.travellerList.size(), this.applyPeopleFolderQty), 1));
         }
         
-        for(int i = 0; i < travellerModel.size(); i++){
-            Traveller traveller = (Traveller)travellerModel.get(i);
-            if(traveller.getAttachList().size() == 0){
-                errMsgList.add("請手動選擇附加圖片。");
-            }else if(!traveller.isSetHeadShot()){
-                errMsgList.add("請設定 " + traveller.getChineseName() + " 的大頭照。");
-            }
-        }
-                
-        if(travellerModel.size() < this.applyPeopleFolder){
-            errMsgList.add("申請文件解析出的申請人數(" + travellerModel.size() + ")與申請人資料夾數(" + this.applyPeopleFolder + ")不一致，請確認。");
-        }
+        errMsgList.addAll(this.travelgroup.getErrMsgList());
         
         return errMsgList;
     }
     
     public boolean isPass(){
-        if(this.processErrList.size() != 0){ return false; }
-        if(this.getErrMsgList().size() != 0){ return false; }
+//        if(!this.errOfResolvingList.isEmpty()){ return false; }
+//        if(!this.getErrMsgList().isEmpty()){ return false; }
+        if(this.travelgroup.getValidateStatus() == 2){ return false; }
+        for(Traveller traveller : travellerList){
+            if(traveller.getValidateStatus() == 2){ return false; }
+        }
         return true;
+    }
+    
+    public int getValidateStatus(){
+        int tgv = this.travelgroup.getValidateStatus();
+        
+        int trv = 0;
+        for(Traveller traveller : travellerList){
+            int v = traveller.getValidateStatus();
+            if(v == 2){ trv = 2; break;
+            }else if(v == 1){ trv = 1; }
+        }
+        
+        if(tgv == 2 || trv == 2){
+            return 2;
+        }else if(tgv == 1 || trv == 1){
+            return 1;
+        }else{
+            return 0;
+        }
     }
     
     /*

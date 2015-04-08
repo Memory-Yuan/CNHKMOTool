@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.ImageIcon;
+import org.apache.logging.log4j.Level;
 
 public class Traveller {
     private String id;                  //@必填
@@ -22,12 +24,12 @@ public class Traveller {
     private String englishName;
     private String gender;              //可能要自己填@
     private String birthDate;
-    private Byte birthPlaceCode = 4;    //??(填4)
+    private Integer birthPlaceCode = 4;    //??(填4)
     private Short birthPlace1;          //出生地 省(市) 可能要自己填@
     private String birthPlace2;         //出生地 縣(市) 可能要自己填@
-    private Byte education;             //教育程度 可能要自己填@
+    private Integer education;             //教育程度 可能要自己填@
 //    private String educationDesc;       //(不用填)
-    private Byte occupation = 16;            //職業類別 可能要自己填@
+    private Integer occupation;            //職業類別 可能要自己填@
     private String occupationDesc;      //職業
     private String address;             //居住地
 //    private String twAddress;           //在臺緊急連絡親友地址
@@ -58,7 +60,6 @@ public class Traveller {
     private String livingCity;              //@居住城市 可能要自己填
     
     private List<Attach> attachList = new ArrayList<Attach>();
-//    private TravelTourGroup travelTourGroup;
   
   public String getId()
   {
@@ -125,6 +126,16 @@ public class Traveller {
     this.applyQualification = paramString;
   }
   
+  public int getApplyQualificationIdxByCode(){
+      String[] aqArr = {"B", "C", "A", "D", "F"};
+      return Arrays.asList(aqArr).indexOf(this.applyQualification);
+  }
+  
+  public String getApplyQualificationCodeByIdx(int i){
+      String[] aqArr = {"B", "C", "A", "D", "F"};
+      return aqArr[i];
+  }
+  
   public String getApplyType()
   {
     return this.applyType;
@@ -177,12 +188,12 @@ public class Traveller {
   
   public String getChineseName()
   {
-    return this.chineseName;
+    return this.chineseName == null? "" : this.chineseName;
   }
   
   public void setChineseName(String paramString)
   {
-    this.chineseName = paramString.trim();
+    this.chineseName = CommonHelp.transToTC(paramString.trim());
   }
   
   public String getEnglishName()
@@ -202,12 +213,29 @@ public class Traveller {
   
   public void setGender(String paramString)
   {
-    if(paramString.trim().equals("女")){
+      String g = CommonHelp.transToTC(paramString.trim());
+    if(g.equals("女")){
       this.gender = "1";
-    }else if(paramString.trim().equals("男")){
+    }else if(g.equals("男")){
       this.gender = "0";
+    }else if(g.equals("1")){
+      this.gender = "1";
+    }else if(g.equals("0")){
+      this.gender = "0";
+    }else{
+        this.gender = null;
     }
   }
+  
+//  public String getGenderIdx(String paramString){
+//      if(paramString.trim().equals("女")){
+//          return "1";
+//      }else if(paramString.trim().equals("男")){
+//          return "0";
+//      }else{
+//          return null;
+//      }
+//  }
   
   public String getGenderMean(){
       if(this.gender == null){
@@ -224,17 +252,17 @@ public class Traveller {
   
   public void setBirthDate(String paramString)
   {
-    this.birthDate = paramString.trim();
+    this.birthDate = CommonHelp.dateFormatFix(paramString.trim());
   }
   
-  public Byte getBirthPlaceCode()
+  public Integer getBirthPlaceCode()
   {
     return this.birthPlaceCode;
   }
   
-//  public void setBirthPlaceCode(Byte paramByte)
+//  public void setBirthPlaceCode(Integer paramInteger)
 //  {
-//    this.birthPlaceCode = paramByte;
+//    this.birthPlaceCode = paramInteger;
 //  }
   
   public Short getBirthPlace1()
@@ -257,44 +285,25 @@ public class Traveller {
     this.birthPlace2 = paramString;
   }
   
-  public Byte getEducation()
+  public Integer getEducation()
   {
     return this.education;
   }
   
-  public void setEducation(String paramString)
+  public void setEducation(int paramInteger)
   {
-      switch(paramString.trim()){
-          case "博士":
-              this.education = 1;
-              break;
-          case "碩士":
-              this.education = 2;
-              break;
-          case "大學":
-              this.education = 3;
-              break;
-          case "專科":
-              this.education = 4;
-              break;
-          case "五專":
-              this.education = 5;
-              break;
-          case "高中":
-              this.education = 6;
-              break;
-          case "國中":
-              this.education = 7;
-              break;
-          case "國小":
-              this.education = 8;
-              break;
-          case "無":
-              this.education = 9;
-              break;
+      if(paramInteger == 0 || paramInteger == -1){
+          this.education = null;
+      }else{
+          this.education = paramInteger;
       }
   }
 
+  public Integer getEducationIdx(String s){
+      String[] eduList = {"", "博士", "碩士", "大學", "專科", "五專", "高中", "國中", "國小", "無"};
+      return Arrays.asList(eduList).indexOf(CommonHelp.transToTC(s.trim()));
+  }
+  
   public String getEducationMean(){
       if(this.education == null){
           return "";
@@ -312,14 +321,18 @@ public class Traveller {
 //  {
 //    this.educationDesc = paramString;
 //  }
-  public Byte getOccupation()
+  public Integer getOccupation()
   {
     return this.occupation;
   }
   
-  public void setOccupation(Byte paramByte)
+  public void setOccupation(Integer paramInteger)
   {
-    this.occupation = paramByte;
+    if(paramInteger == 0){
+        this.occupation = null;
+    }else{
+        this.occupation = paramInteger;
+    }
   }
   
   public String getOccupationDesc()
@@ -329,7 +342,7 @@ public class Traveller {
   
   public void setOccupationDesc(String paramString)
   {
-    this.occupationDesc = paramString.trim();
+    this.occupationDesc = CommonHelp.transToTC(paramString.trim());
     if(this.occupationDesc.equals("")){ this.occupation = 17; }
   }
   
@@ -340,7 +353,7 @@ public class Traveller {
   
   public void setAddress(String paramString)
   {
-    this.address = paramString.trim();
+    this.address = CommonHelp.transToTC(paramString.trim());
   }
   
 //  public String getTwAddress()
@@ -420,10 +433,13 @@ public class Traveller {
   
   public void setPartnerOfTaiwan(String paramString)
   {
-    if(paramString.trim().equals("是")){
+    String is =  CommonHelp.transToTC(paramString.trim());
+    if(is.equals("是")){
         this.partnerOfTaiwan = "1";
-    }else if(paramString.trim().equals("否")){
+    }else if(is.equals("否")){
         this.partnerOfTaiwan = "0";
+    }else{
+        this.partnerOfTaiwan = null;
     }
   }
   
@@ -551,7 +567,7 @@ public class Traveller {
   
   public void setPassportExpiryDate(String paramString)
   {
-    this.passportExpiryDate = paramString.trim();
+    this.passportExpiryDate = CommonHelp.dateFormatFix(paramString.trim());
   }
   
 //  public String getCnLeaderExpiryDate()
@@ -581,7 +597,7 @@ public class Traveller {
   
   public void setRelativeTitle(String paramString)
   {
-    this.relativeTitle = paramString.trim();
+    this.relativeTitle = CommonHelp.transToTC(paramString.trim());
   }
   
 //  public Date getRevokeDate()
@@ -609,26 +625,40 @@ public class Traveller {
     return this.livingCity;
   }
   
-  public void setLivingCity(String paramString)
+  public void setLivingCity(Integer paramInteger)
   {
-      String[] liveCityArr = {"北京", "上海", "廈門", "天津", "重慶", "南京", "廣州", "杭州", "成都", "濟南", "西安", "福州", "深圳" };
-      String lc = paramString.trim();
-      if(lc.length() >= 0){
-          for(int i = 0; i < liveCityArr.length; i++){
-              if(lc.indexOf(liveCityArr[i]) >= 0){
-                  this.livingCity = "F" + (i+1);
-              }
-          }
+      if(paramInteger == 0){
+          this.livingCity = null;
+      }else{
+          this.livingCity = "F" + paramInteger;
       }
+      
   }
 
-  public String getLiningCityMean(){
+  public String getLivingCityMean(){
       if(this.livingCity == null){
           return "無";
       }
       String[] liveCityArr = {"北京", "上海", "廈門", "天津", "重慶", "南京", "廣州", "杭州", "成都", "濟南", "西安", "福州", "深圳" };
-      int idx = Integer.valueOf(this.livingCity.substring(1));
-      return liveCityArr[idx];
+      return liveCityArr[getLivingCityIdx()];
+  }
+  
+  public Integer getLivingCityIdx(){
+      if(this.livingCity == null){return null;}
+      return Integer.valueOf(this.livingCity.substring(1)) - 1;
+  }
+  
+  public Integer getLivingCityCode(String s){
+      String[] liveCityArr = {"北京", "上海", "廈門", "天津", "重慶", "南京", "廣州", "杭州", "成都", "濟南", "西安", "福州", "深圳" };
+      String lc = CommonHelp.transToTC(s.trim());
+      if(lc.length() >= 0){
+          for(int i = 0; i < liveCityArr.length; i++){
+              if(lc.indexOf(liveCityArr[i]) >= 0){
+                  return i+1;
+              }
+          }
+      }
+      return 0;
   }
   
   public List<Attach> getAttachList(){
@@ -671,7 +701,7 @@ public class Traveller {
             Object value = fields[i].get(this);
             String type = ((Class) fields[i].getType()).getSimpleName();
             
-            if(value == null || name.equals("attachList")){ 
+            if(value == null || isExclude(name)){
                 continue;
             }
 
@@ -689,16 +719,106 @@ public class Traveller {
             objClass.getSimpleName(), nameSb.toString(), valueSb.toString());
 
     } catch(Exception e) {
-        e.printStackTrace();
+        CommonHelp.logger.log(Level.ERROR, String.format("[Traveller][%s] 建立insertSQL失敗。", this.chineseName), e);
         return null;
     }
     return insertStr;
   }
   
-  public boolean isPass(){
-      if(this.attachList.size() == 0){ return false; }
-      if(!this.isSetHeadShot()){ return false; }
-      return true;
+  private boolean isExclude(String s){
+      String[] exList = {"attachList"};
+      for(String ex : exList){
+          if(s.equals(ex)){
+              return true;
+          }
+      }
+      return false;
+  }
+  
+  public List<ErrMsg> getErrMsgList(){
+      List<ErrMsg> errList = new ArrayList<ErrMsg>();
+      
+      if(this.attachList.isEmpty()){ errList.add(new ErrMsg("請選擇附件。", 1));
+      }else if(!this.isSetHeadShot()){ errList.add(new ErrMsg("請設定大頭照。", 1)); }
+      
+      if(this.chineseName == null || this.chineseName.isEmpty()){ errList.add(new ErrMsg("中文姓名未填寫。", 1));
+      }else if(this.chineseName.length() > 40){
+          errList.add(new ErrMsg("中文姓名格式有誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 中文姓名格式有誤: \"%s\"。", this.chineseName));
+      }
+      
+      if(this.englishName == null || this.englishName.isEmpty()){ errList.add(new ErrMsg("英文姓名未填寫。", 1));
+      }else if(this.englishName.length() > 50){
+          errList.add(new ErrMsg("英文姓名格式有誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 英文姓名格式有誤: \"%s\"。", this.englishName));
+      }
+      
+      if(this.birthDate == null || this.birthDate.isEmpty()){ errList.add(new ErrMsg("出生年月日未填寫。", 1));
+      }else if(!this.birthDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
+          errList.add(new ErrMsg("出生年月日格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 出生年月日格式有誤: \"%s\"。", this.birthDate));
+      }
+      
+      if(this.personId == null || this.personId.isEmpty()){ errList.add(new ErrMsg("身分證號未填寫。", 1));
+      }else if(!this.personId.matches("^\\w{18}$")){
+          errList.add(new ErrMsg("身分證號格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 身分證號格式有誤: \"%s\"。", this.personId));
+      }
+      
+      if(this.passportNo == null || this.passportNo.isEmpty()){ errList.add(new ErrMsg("通行證號未填寫。", 1));
+      }else if(!this.passportNo.matches("^T\\d{8}$")){
+          errList.add(new ErrMsg("通行證號格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 通行證號格式有誤: \"%s\"。", this.passportNo));
+      }
+      
+      if(this.passportExpiryDate == null || this.passportExpiryDate.isEmpty()){ errList.add(new ErrMsg("通行證有效期未填寫。", 1));
+      }else if(!this.passportExpiryDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
+          errList.add(new ErrMsg("通行證有效期格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 通行證有效期格式有誤: \"%s\"。", this.passportExpiryDate));
+      }
+      
+      if(this.gender == null){ errList.add(new ErrMsg("性別未選擇。", 1)); }
+      if(this.education == null){ errList.add(new ErrMsg("教育程度未選擇。", 1)); }
+      if(this.occupation == null){ errList.add(new ErrMsg("職業類別未選擇。", 1)); }
+      if(this.occupationDesc == null || this.occupationDesc.isEmpty()){ errList.add(new ErrMsg("職業未填寫。", 1));
+      }else if(this.occupationDesc.length() > 40){
+          errList.add(new ErrMsg("職業格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 職業格式有誤: \"%s\"。", this.occupationDesc));
+      }
+      
+      if(this.livingCity == null){ errList.add(new ErrMsg("請選擇居住地。", 1)); }
+      if(this.address == null || this.address.isEmpty()){ errList.add(new ErrMsg("地址未填寫。", 1));
+      }else if(this.address.length() > 128){
+          errList.add(new ErrMsg("地址格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 地址格式有誤: \"%s\"。", this.address));
+      }
+      
+      if(this.partnerOfTaiwan == null){ errList.add(new ErrMsg("是否為台灣人民之配偶未選擇。", 1)); }
+      
+      if(this.seqNo != 0){
+          if(this.kinsfolk == null || this.kinsfolk.isEmpty()){ errList.add(new ErrMsg("隨行親友姓名未填寫。", 1));
+          }else if(this.kinsfolk.length() > 20){
+              errList.add(new ErrMsg("隨行親友姓名格式錯誤。", 0));
+              CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 隨行親友姓名格式有誤: \"%s\"。", this.kinsfolk));
+          }
+          
+          if(this.relativeTitle == null || this.relativeTitle.isEmpty()){ errList.add(new ErrMsg("隨行親友稱謂未填寫。", 1));
+          }else if(this.relativeTitle.length() > 16){
+              errList.add(new ErrMsg("隨行親友稱謂格式錯誤。", 0));
+              CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 隨行親友稱謂格式有誤: \"%s\"。", this.relativeTitle));
+          }
+      }
+      
+      return errList;
+  }
+  
+  public int getValidateStatus(){
+      int vs = 0;
+      for(ErrMsg m : this.getErrMsgList()){
+          if(m.getType() == 0){ return 2;
+          }else if(m.getType() == 1){ vs = 1; }
+      }
+      return vs;
   }
   
   public boolean isSetHeadShot(){
@@ -706,6 +826,15 @@ public class Traveller {
           if(a.getType().equals("1")){ return true; }
       }
       return false;
+  }
+  
+  public ImageIcon getHeadShot(){
+      for(Attach a : this.attachList){
+          if(a.getType().equals("1")){
+              return a.getImageIcon();
+          }
+      }
+      return null;
   }
   
 }

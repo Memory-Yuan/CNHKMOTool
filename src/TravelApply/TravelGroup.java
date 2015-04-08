@@ -1,8 +1,12 @@
 package TravelApply;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import org.apache.logging.log4j.Level;
 
 public class TravelGroup {
 //    private static final long serialVersionUID;
@@ -97,13 +101,8 @@ public class TravelGroup {
     private String contactMobileNoOfMainland;   //緊急聯絡人-手機
     private String contactAddressOfMainland;    //緊急聯絡人-地址
     private String contactTitleOfMainland;      //緊急聯絡人-稱謂
-//    private Set<TravelTourAttach> travelTourAttachs;
-//    private Set<TravelTour> travelTours;
-//    private Set<Traveller> travellers;
-//    private static Object transients;
-//    private static Object mapping;
-//    private static Object constraints;
-//    private static Object hasMany;
+    
+    private List<Traveller> travellerList = new ArrayList<Traveller>();
 
 //  public String getTourGroupId()
 //  {
@@ -206,7 +205,12 @@ public class TravelGroup {
   
   public void setTourStartDate(String paramString)
   {
-    this.tourStartDate = paramString.trim();
+      try{
+        String sDate = CommonHelp.dateFormatFix(paramString.trim());
+        String eDate = CommonHelp.calculateTourDate(sDate, 14);
+        this.tourStartDate = sDate;
+        this.tourEndDate = eDate;
+      }catch (ParseException e) {}
   }
   
   public String getTourEndDate()
@@ -304,9 +308,9 @@ public class TravelGroup {
     return this.groupCount;
   }
   
-  public void setGroupCount(Short paramShort)
+  public void setGroupCount(int paramInt)
   {
-    this.groupCount = paramShort;
+    this.groupCount = (short)paramInt;
   }
 //  
 //  public String getGuideName()
@@ -654,9 +658,9 @@ public class TravelGroup {
     return this.permitApplyCount;
   }
   
-  public void setPermitApplyCount(String paramString)
+  public void setPermitApplyCount(int paramImt)
   {
-    this.permitApplyCount = paramString;
+    this.permitApplyCount = Integer.toString(paramImt);
   }
   
 //  public String getApproveCount()
@@ -966,7 +970,7 @@ public class TravelGroup {
   
   public void setContactNameOfMainland(String paramString)
   {
-    this.contactNameOfMainland = paramString.trim();
+    this.contactNameOfMainland = CommonHelp.transToTC(paramString.trim());
   }
   
   public String getContactGenderOfMainland()
@@ -976,11 +980,18 @@ public class TravelGroup {
   
   public void setContactGenderOfMainland(String paramString)
   {
-      if(paramString.trim().equals("女")){
-          this.contactGenderOfMainland = "1";
-      }else{
-          this.contactGenderOfMainland = "0";
-      }
+      String g = CommonHelp.transToTC(paramString.trim());
+    if(g.equals("女")){
+        this.contactGenderOfMainland = "1";
+    }else if(g.equals("男")){
+        this.contactGenderOfMainland = "0";
+    }else if(g.equals("1")){
+        this.contactGenderOfMainland = "1";
+    }else if(g.equals("0")){
+        this.contactGenderOfMainland = "0";
+    }else{
+        this.contactGenderOfMainland = null;
+    }
   }
   
   public String getContactGenderOfMainlandMean()
@@ -1019,7 +1030,7 @@ public class TravelGroup {
   
   public void setContactAddressOfMainland(String paramString)
   {
-    this.contactAddressOfMainland = paramString.trim();
+    this.contactAddressOfMainland = CommonHelp.transToTC(paramString.trim());
   }
   
   public String getContactTitleOfMainland()
@@ -1029,7 +1040,15 @@ public class TravelGroup {
   
   public void setContactTitleOfMainland(String paramString)
   {
-    this.contactTitleOfMainland = paramString.trim();
+    this.contactTitleOfMainland = CommonHelp.transToTC(paramString.trim());
+  }
+  
+  public List<Traveller> getTravellerList(){
+      return this.travellerList;
+  }
+  
+  public void setTravellerList(List<Traveller> lt){
+      this.travellerList = lt;
   }
   
   public String getInsertStr(){
@@ -1045,8 +1064,7 @@ public class TravelGroup {
             Object value = field.get(this);
             String type = ((Class) field.getType()).getSimpleName();
             
-            if(value == null){ 
-//                System.out.println(name + " is NULL.");
+            if(value == null || isExclude(name)){
                 continue;
             }
             
@@ -1064,10 +1082,84 @@ public class TravelGroup {
             objClass.getSimpleName(), nameSb.toString(), valueSb.toString());
 
     } catch(Exception e) {
+        CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup][%s] 建立insertSQL失敗。", this.tourName), e);
         e.printStackTrace();
         return null;
     }
     return insertStr;
   }
+  
+  private boolean isExclude(String s){
+      String[] exList = {"travellerList", "logger"};
+      for(String ex : exList){
+          if(s.equals(ex)){
+              return true;
+          }
+      }
+      return false;
+  }
 
+  public List<ErrMsg> getErrMsgList(){
+      List<ErrMsg> errList = new ArrayList<ErrMsg>();
+      if(this.travellerList.isEmpty()){ errList.add(new ErrMsg("旅客人數為0。", 0)); }
+      
+      if(this.tourName == null || this.tourName.isEmpty()){ errList.add(new ErrMsg("行程名稱未填寫。", 1));
+      }else if(this.tourName.length() > 100){
+          errList.add(new ErrMsg("行程名稱格式有誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 行程名稱格式有誤: \"%s\"。", this.tourName));
+      }
+      
+      if(this.tourStartDate == null || this.tourStartDate.isEmpty()){ errList.add(new ErrMsg("入境日期未填寫。", 1));
+      }else if(!this.tourStartDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
+          errList.add(new ErrMsg("入境日期格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 入境日期格式錯誤: \"%s\"。", this.tourStartDate));
+      }
+      
+      if(this.contactNameOfMainland == null || this.contactNameOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人姓名未填寫。", 1));
+      }else if(this.contactNameOfMainland.length() > 127){
+          errList.add(new ErrMsg("緊急聯絡人姓名格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人姓名格式錯誤: \"%s\"。", this.contactNameOfMainland));
+      }
+      
+      if(this.contactTitleOfMainland == null || this.contactTitleOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人關係未填寫。", 1));
+      }else if(this.contactTitleOfMainland.length() > 127){
+          errList.add(new ErrMsg("緊急聯絡人關係格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人關係格式錯誤: \"%s\"。", this.contactTitleOfMainland));
+      }
+      
+      if(this.contactGenderOfMainland == null){ errList.add(new ErrMsg("緊急聯絡人性別未填寫。", 1)); }
+      
+      if(this.contactMobileNoOfMainland == null || this.contactMobileNoOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人手機未填寫。", 1));
+      }else if(this.contactMobileNoOfMainland.length() > 127){
+          errList.add(new ErrMsg("緊急聯絡人手機格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人手機格式錯誤: \"%s\"。", this.contactMobileNoOfMainland));
+      }
+      
+      if(this.contactTelNoOfMainland == null || this.contactTelNoOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人電話未填寫。", 1));
+      }else if(this.contactTelNoOfMainland.length() > 127){
+          errList.add(new ErrMsg("緊急聯絡人電話格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人電話格式錯誤: \"%s\"。", this.contactTelNoOfMainland));
+      }
+      
+      if(this.contactAddressOfMainland == null || this.contactAddressOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人地址未填寫。", 1));
+      }else if(this.contactAddressOfMainland.length() > 127){
+          errList.add(new ErrMsg("緊急聯絡人地址格式錯誤。", 0));
+          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人地址格式錯誤: \"%s\"。", this.contactAddressOfMainland));
+      }
+      return errList;
+  }
+  
+  /**
+   * 回傳此TravelGroup的資料驗證結果。
+   * @return 0: OK, 1: warning, 2: error
+   */
+  public int getValidateStatus(){
+      int vs = 0;
+      for(ErrMsg m : this.getErrMsgList()){
+          if(m.getType() == 0){ return 2;
+          }else if(m.getType() == 1){ vs = 1; }
+      }
+      return vs;
+  }
+  
 }

@@ -4,10 +4,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import taobe.tec.jcc.JChineseConvertor;
 
 public class CommonHelp {
     public CommonHelp(){}
+    
+    public static Logger logger = LogManager.getLogger();
+    
     public static String transToTC(String str){
         String result = null;
         try{
@@ -68,5 +73,6 @@ public class CommonHelp {
             name = name.substring(0, pos);
         }
         return name;
+        
     }
 }

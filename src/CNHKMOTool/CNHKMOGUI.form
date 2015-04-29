@@ -1086,7 +1086,6 @@
                                           <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="trEducationComboBox" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                           <Component id="travellerSaveBtn" min="-2" max="-2" attributes="0"/>

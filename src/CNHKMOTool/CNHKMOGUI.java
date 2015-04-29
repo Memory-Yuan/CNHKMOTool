@@ -1288,9 +1288,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         initAllArea();
     }//GEN-LAST:event_clearAllBtnActionPerformed
 
-    /**
-     * 將所有附件的類型都設為2(一般附件)。
-     */
     private void resetHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetHeadShotActionPerformed
         if (!(selectedNode instanceof TravellerNode)) {
             CommonHelp.logger.log(Level.ERROR, String.format("resetHeadShotAction，錯誤的selectedNode: %s", selectedNode.getClass()));
@@ -1299,17 +1296,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         if (attachJList.getModel().getSize() <= 0) { return; }
         
         Traveller tr = (Traveller) selectedNode.getUserObject();
-        List<Attach> la = tr.getAttachList();
-        for (Attach a : la) {
-            a.setType("2");
-        }
-
+        tr.resetHeadShot();
         setAttachJList();
     }//GEN-LAST:event_resetHeadShotActionPerformed
 
-    /**
-     * 先將所有附件的類型都設為2(一般附件)，再將選擇附件的類型設為1(大頭照)。
-     */
     private void setToHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setToHeadShotActionPerformed
         if (attachJList.getSelectedIndices().length == 0) {
             showMessage("請選擇照片。", "warning");
@@ -1324,11 +1314,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             return;
         }
         Traveller tr = (Traveller) selectedNode.getUserObject();
-        List<Attach> la = tr.getAttachList();
-        for (Attach a : la) {
-            a.setType("2");
-        }
-
+        tr.resetHeadShot();
+        
         Attach attach = (Attach) attachJList.getSelectedValue();
         attach.setType("1");
 
@@ -1352,8 +1339,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         if (attachJList.getSelectedIndices().length == 0) { return; }
         Traveller tr = (Traveller) selectedNode.getUserObject();
-        List<Attach> la = tr.getAttachList();
-        la.removeAll(attachJList.getSelectedValuesList());
+        tr.removeAttachs(attachJList.getSelectedValuesList());
         setAttachJList();
     }//GEN-LAST:event_removeAttachBtnActionPerformed
 
@@ -2283,29 +2269,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
 
     private void addAttach(List<File> files) {
-        addAttach(files, true);
-        setAttachJList();
-    }
-
-    private void addAttach(List<File> files, boolean reOnce) {
         Traveller tr = (Traveller) selectedNode.getUserObject();
-        try{
-            List<Attach> la = tr.getAttachList();
-            for (File file : files) {
-                if (file.isDirectory() && reOnce) {
-                    addAttach(Arrays.asList(file.listFiles()), false);
-                } else {
-                    String fn = file.getName().toLowerCase();
-                    if (fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")) {
-                        Attach a = new Attach();
-                        a.setFile(file);
-                        la.add(a);
-                    }
-                }
-            }
-        }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] addAttach失敗。", tr.getChineseName()), e);
-        }
+        tr.addAttach(files);
+        setAttachJList();
     }
 
     private void addDoc(File file) {
@@ -2369,8 +2335,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
                 if (node instanceof TravellerNode) {
                     ApplyData ad = (ApplyData)((DefaultMutableTreeNode)node.getParent()).getUserObject();
-                    ad.getTravelgroup().getTravellerList().remove((Traveller)node.getUserObject());
-                    resetSeqNo(ad.getTravelgroup().getTravellerList());
+                    ad.getTravelgroup().removeTraveller((Traveller)node.getUserObject());
+                    ad.getTravelgroup().resetSeqNo();
                 }
                 applyDataTreeModel.removeNodeFromParent(node);
             }
@@ -2381,14 +2347,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
 
-    private void resetSeqNo(List<Traveller> ltr){
-        int i = 0;
-        for(Traveller tr : ltr){
-            tr.setSeqNo((short)i);
-            i++;
-        }
-    }
-    
     /**
      *
      * @param type 1: ApplyDataNode, 2: TravellerNode

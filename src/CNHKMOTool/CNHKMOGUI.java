@@ -1,6 +1,6 @@
 /**
- * CNHKMOTool v1.4.1
- * 因應文件格式變更，修改讀取方式
+ * CNHKMOTool v1.4.2
+ * 修改JFileChooser，從原本的每次新創改成共用一個
  * 
  */
 package CNHKMOTool;
@@ -286,7 +286,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         myFileChooser.setFileFilter(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.1");
+        setTitle("CNHKMOTool-v1.4.2");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -1282,15 +1282,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             CommonHelp.logger.log(Level.ERROR, String.format("selectApplyDocBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("請選擇申請資料");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setMultiSelectionEnabled(false);
+        myFileChooser.resetChoosableFileFilters();
+        myFileChooser.setDialogTitle("請選擇申請資料");
+        myFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        myFileChooser.setMultiSelectionEnabled(false);
         FileFilter ff = new ExtensionFileFilter("Microsoft Word file(2003以上版本)", new String[]{"DOC", "DOCX"});
-        fileChooser.setFileFilter(ff);
-        int status = fileChooser.showOpenDialog(this);
+        myFileChooser.setFileFilter(ff);
+        int status = myFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-            addDoc(fileChooser.getSelectedFile());
+            addDoc(myFileChooser.getSelectedFile());
         }
     }//GEN-LAST:event_selectApplyDocBtnActionPerformed
 
@@ -1302,15 +1302,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitActionPerformed
 
     private void selectFolderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectFolderBtnActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("請選擇資料夾");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fileChooser.setMultiSelectionEnabled(true);
+        myFileChooser.resetChoosableFileFilters();
+        myFileChooser.setDialogTitle("請選擇資料夾");
+        myFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        myFileChooser.setMultiSelectionEnabled(true);
         FileFilter ff = new ExtensionFileFilter("檔案資料夾", new String[]{});
-        fileChooser.setFileFilter(ff);
-        int status = fileChooser.showOpenDialog(this);
+        myFileChooser.setFileFilter(ff);
+        int status = myFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-            File[] files = fileChooser.getSelectedFiles();
+            File[] files = myFileChooser.getSelectedFiles();
             initMainArea(); //@modify
             setAllDisable();
             statusLabel.setText("讀取中...");
@@ -1387,15 +1387,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             CommonHelp.logger.log(Level.ERROR, String.format("selectAttachBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("請選擇附件");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        fileChooser.setMultiSelectionEnabled(true);
+        myFileChooser.resetChoosableFileFilters();
+        myFileChooser.setDialogTitle("請選擇附件");
+        myFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        myFileChooser.setMultiSelectionEnabled(true);
 //        FileFilter ff = new ExtensionFileFilter("圖片或資料夾(jpg, jpeg, png)", new String[] {});
-//        fileChooser.setFileFilter(ff);
-        int status = fileChooser.showOpenDialog(this);
+//        myFileChooser.setFileFilter(ff);
+        int status = myFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-            File[] files = fileChooser.getSelectedFiles();
+            File[] files = myFileChooser.getSelectedFiles();
             addAttach(Arrays.asList(files));
         }
     }//GEN-LAST:event_selectAttachBtnActionPerformed
@@ -1405,17 +1405,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_imageCheckBoxMouseClicked
 
     private void batchSelectFolderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batchSelectFolderBtnActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("請選擇資料夾");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fileChooser.setMultiSelectionEnabled(true);
+        myFileChooser.resetChoosableFileFilters();
+        myFileChooser.setDialogTitle("請選擇資料夾");
+        myFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        myFileChooser.setMultiSelectionEnabled(true);
         FileFilter ff = new ExtensionFileFilter("檔案資料夾", new String[]{});
-        fileChooser.setFileFilter(ff);
-        int status = fileChooser.showOpenDialog(this);
+        myFileChooser.setFileFilter(ff);
+        int status = myFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-//            initAllArea(); @modify
             initMainArea();
-            File[] files = fileChooser.getSelectedFiles();
+            File[] files = myFileChooser.getSelectedFiles();
             setAllDisable();
             statusLabel.setText("讀取中...");
             SwingWorker rfworker = new RootFolderWorker(files);

@@ -126,6 +126,11 @@ public class TravelGroup {
     }
 
     public void setTourStartDate(String paramString){
+        if(paramString.trim() == null || paramString.trim().isEmpty()){
+            this.tourStartDate = null;
+            this.tourEndDate = null;
+            return;
+        }
         try{
             String sDate = CommonHelp.dateFormatFix(paramString.trim());
             String eDate = CommonHelp.calculateTourDate(sDate, 14);
@@ -240,7 +245,7 @@ public class TravelGroup {
     public void resetSeqNo(){
       int i = 0;
       for(Traveller tr : this.travellerList){
-          tr.setSeqNo((short)i);
+          tr.setSeqNo(i);
           i++;
       }
     }

@@ -80,8 +80,8 @@ public class Traveller {
         return this.seqNo;
     }
 
-    public void setSeqNo(Short paramShort){
-        this.seqNo = paramShort;
+    public void setSeqNo(int paramShort){
+        this.seqNo = (short)paramShort;
     }
 
     public String getPassportNo()
@@ -172,6 +172,40 @@ public class Traveller {
         this.birthDate = CommonHelp.dateFormatFix(paramString.trim());
     }
 
+    public Short getBirthPlace1(){
+        return this.birthPlace1;
+    }
+    
+    public Integer getBirthPlace1Idx(String s){
+        String placeStr = "請選擇, 台北, 高雄, 廣州, 上海, 南京, 漢口, 重慶, 青島, 天津, 北京, 西安, 大連, 瀋陽, 哈爾濱, 台灣, 福建, 廣東, 廣西, 雲南, 貴州, 海南, 江蘇, 浙江, 安徽, 江西, 湖南, 湖北, 四川, 山東, 山西, 河南, 河北, 陜西, 甘肅, 遼寧, 遼北, 安東, 吉林, 松江, 合江, 嫩江, 黑龍江, 興安, 熱河, 察哈爾, 綏遠, 寧夏, 蒙古, 新疆, 青海, 西康, 西藏";
+        String[] placeArr = placeStr.split(", ");
+        String bp = CommonHelp.transToTC(s.trim());
+        if(bp.length() >= 0){
+            for(int i = 0; i < placeArr.length; i++){
+                if(bp.indexOf(placeArr[i]) >= 0){
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public void setBirthPlace1(int i){
+        if(i == 0){
+            this.birthPlace1 = null;
+        }else{
+            this.birthPlace1 = (short)i;
+        }
+    }
+    
+    public String getBirthPlace2(){
+        return this.birthPlace2;
+    }
+    
+    public void setBirthPlace2(String paramString){
+        this.birthPlace2 = CommonHelp.transToTC(paramString.trim());
+    }
+    
     public Integer getEducation(){
         return this.education;
     }
@@ -215,7 +249,7 @@ public class Traveller {
 
     public void setOccupationDesc(String paramString){
         this.occupationDesc = CommonHelp.transToTC(paramString.trim());
-        if(this.occupationDesc.equals("")){ this.occupation = 17; }
+//        if(this.occupationDesc.equals("")){ this.occupation = 17; }
     }
 
     public String getAddress(){
@@ -471,13 +505,20 @@ public class Traveller {
             CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 職業格式有誤: \"%s\"。", this.occupationDesc));
         }
 
-        if(this.livingCity == null){ errList.add(new ErrMsg("請選擇居住地。", 1)); }
+        if(this.livingCity == null){ errList.add(new ErrMsg("居住地未選擇。", 1)); }
         if(this.address == null || this.address.isEmpty()){ errList.add(new ErrMsg("地址未填寫。", 1));
         }else if(this.address.length() > 128){
             errList.add(new ErrMsg("地址格式錯誤。", 0));
             CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 地址格式有誤: \"%s\"。", this.address));
         }
 
+        if(this.birthPlace1 == null){ errList.add(new ErrMsg("出生地-省(市)未選擇。", 1)); }
+        if(this.birthPlace2 == null || this.birthPlace2.isEmpty()){ errList.add(new ErrMsg("出生地-縣(市)未填寫。", 1));
+        }else if(this.birthPlace2.length() > 128){
+            errList.add(new ErrMsg("出生地-縣(市)格式錯誤。", 0));
+            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 出生地-縣(市)格式錯誤。: \"%s\"。", this.birthPlace2));
+        }
+        
         if(this.partnerOfTaiwan == null){ errList.add(new ErrMsg("是否為台灣人民之配偶未選擇。", 1)); }
 
         if(this.seqNo != 0){

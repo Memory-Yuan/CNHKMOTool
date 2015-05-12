@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.Level;
 import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.hwpf.usermodel.Table;
-//import org.apache.poi.hwpf.usermodel.TableCell;
+import org.apache.poi.hwpf.usermodel.TableCell;
+import org.apache.poi.hwpf.usermodel.TableIterator;
 //import org.apache.poi.hwpf.usermodel.TableRow;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-//import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 //import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 
@@ -53,7 +53,7 @@ public class ApplyData {
     private List<ApplyAttach> applyAttachList;
     private List<ErrMsg> errOfResolvingList;
     private int applyPeopleFolderQty;
-    private final String HeadShotName = "1 照片.jpg";
+    private final String HeadShotName = "HeadShot.jpg";
     
     private FileFilter hiddenFilter = new FileFilter() {
         @Override
@@ -185,176 +185,85 @@ public class ApplyData {
         }
     }
     
-    private void word2003Resolve(File file){
-        try{
-            if(!file.getName().endsWith(".doc")) {
-                throw new FileFormatException();
-            }
-            
-            POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-            HWPFDocument doc = new HWPFDocument(fs);
-            Range range = doc.getRange();
-            Table table = null;
-
-            for (int i=0; i<range.numParagraphs(); i++) {
-                Paragraph par = range.getParagraph(i);
-                if(par.isInTable()){
-                    table = range.getTable(par);
-                    break;
-                }
-            }
-            if(table == null){
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s] Word文件找不到資料表格！", this.getTourName()));
-                this.errOfResolvingList.add(new ErrMsg("Word文件找不到資料表格！", 0)); return;
-            }
-            /*
-            *   印出所有Table資料，確認用。
-            *
-            for (int rowIdx=0; rowIdx<table.numRows(); rowIdx++) {
-                TableRow row = table.getRow(rowIdx);
-                System.out.println("row "+rowIdx);
-                for (int colIdx=0; colIdx<row.numCells(); colIdx++) {
-                    TableCell cell = row.getCell(colIdx);
-                    System.out.println("column: "+colIdx+", text: "+cell.getParagraph(0).text());
-                }
-            }
-            */
-            try{
-                this.travelgroup.setTourStartDate(table.getRow(0).getCell(2).getParagraph(0).text());
-                this.travelgroup.setContactNameOfMainland(table.getRow(4).getCell(1).getParagraph(0).text());
-                this.travelgroup.setContactTitleOfMainland(table.getRow(4).getCell(3).getParagraph(0).text());
-                this.travelgroup.setContactMobileNoOfMainland(table.getRow(5).getCell(1).getParagraph(0).text());
-                this.travelgroup.setContactGenderOfMainland(table.getRow(5).getCell(3).getParagraph(0).text());
-                this.travelgroup.setContactTelNoOfMainland(table.getRow(5).getCell(5).getParagraph(0).text());
-                this.travelgroup.setContactAddressOfMainland(table.getRow(6).getCell(1).getParagraph(0).text());
-            }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s][TravelGroup] 資料解析有誤！", this.getTourName()), e);
-            }
-
-            Traveller traveller = null;
-            String mainTravellerName = null;
-            for(int i = 0; i < this.applyPeopleFolderQty; i++){
-                traveller = new Traveller();
-                traveller.setSeqNo((short)i);
-                try{
-                    traveller.setChineseName(table.getRow(11+7*i).getCell(1).getParagraph(0).text());
-                    traveller.setGender(table.getRow(11+7*i).getCell(3).getParagraph(0).text());
-                    traveller.setBirthDate(table.getRow(11+7*i).getCell(5).getParagraph(0).text());
-                    traveller.setEnglishName(table.getRow(12+7*i).getCell(1).getParagraph(0).text());
-                    traveller.setPassportNo(table.getRow(12+7*i).getCell(3).getParagraph(0).text());
-                    traveller.setPassportExpiryDate(table.getRow(12+7*i).getCell(5).getParagraph(0).text());
-                    traveller.setPersonId(table.getRow(13+7*i).getCell(1).getParagraph(0).text());
-                    traveller.setEducation(traveller.getEducationIdx(table.getRow(14+7*i).getCell(1).getParagraph(0).text()));
-                    traveller.setOccupationDesc(table.getRow(14+7*i).getCell(3).getParagraph(0).text());
-                    traveller.setAddress(table.getRow(15+7*i).getCell(3).getParagraph(0).text());
-                    traveller.setLivingCity(traveller.getLivingCityCode(table.getRow(15+7*i).getCell(3).getParagraph(0).text()));
-
-//                    if(!traveller.isValidTraveller()){ continue; }
-                    if(i == 0){
-                        this.travellerList.add(traveller);
-                        mainTravellerName = traveller.getChineseName();
-                        continue;
-                    }
-                    traveller.setRelative(mainTravellerName);
-                    traveller.setRelativeTitle(table.getRow(16+7*i).getCell(1).getParagraph(0).text());
-                    traveller.setPartnerOfTaiwan(table.getRow(16+7*i).getCell(3).getParagraph(0).text());
-                }catch(IndexOutOfBoundsException e){
-                    //@modify
-                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
-                }catch (Exception e) {
-                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
-                }
-                this.travellerList.add(traveller);
-            }
-            
-//            this.travelgroup.setGroupCount((short)this.travellerList.size());
-//            this.travelgroup.setPermitApplyCount(Integer.toString(this.travellerList.size()));
-            
-        } catch(FileFormatException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 請選擇正確的檔案格式 - Microsotf Word", this.getTourName()));
-            this.errOfResolvingList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
-        } catch (FileNotFoundException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到文件！", this.getTourName()));
-            this.errOfResolvingList.add(new ErrMsg("找不到文件！", 0));
-        } catch (IOException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
-            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
-        } catch (Exception e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
-            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
+    private String getCellContent(Object obj, int r, int c){
+        if(obj instanceof Table){
+            return ((Table)obj).getRow(r) .getCell(c).getParagraph(0).text();
+        }else{
+            return ((XWPFTable)obj).getRow(r) .getCell(c).getText();
         }
     }
     
-    public void word2007Resolve(File file){
+    private void wordResolve(File file, String docType){
         try{
-            if(!file.getName().endsWith(".docx")) {
+            if(!(file.getName().endsWith(".doc") || file.getName().endsWith(".docx"))) {
                 throw new FileFormatException();
             }
-            XWPFDocument doc = new XWPFDocument(new FileInputStream(file));
-            List<XWPFTable> tableList = doc.getTables();
-
-            if(tableList == null){
+            
+            List<Object> tableList = new ArrayList<Object>();            
+            if(docType.equals("doc")){
+                POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
+                HWPFDocument doc = new HWPFDocument(fs);
+                Range range = doc.getRange();
+                TableIterator it = new TableIterator(range);
+                while(it.hasNext()){
+                    tableList.add(it.next());
+                }
+            }else if(docType.equals("docx")){
+                XWPFDocument doc = new XWPFDocument(new FileInputStream(file));
+                tableList.addAll(doc.getTables());
+            }
+            if(tableList.isEmpty()){
                 CommonHelp.logger.log(Level.WARN, String.format("[%s] Word文件找不到資料表格！", this.getTourName()));
                 this.errOfResolvingList.add(new ErrMsg("Word文件找不到資料表格！", 0)); return;
             }
-            /*
-            * 印出所有Table資料，確認用。
-            *
-            XWPFTable xwpfTable = tableList.get(0);
-            List<XWPFTableRow> row = xwpfTable.getRows();
-            int rowidx = 0, colidx = 0;
-            for (XWPFTableRow xwpfTableRow : row) {
-                System.out.println("row " + rowidx);
-                rowidx++; colidx = 0;
-                List<XWPFTableCell> cell = xwpfTableRow.getTableCells();
-                for (XWPFTableCell xwpfTableCell : cell) {
-                    if(xwpfTableCell!=null){
-                        System.out.println("column " + colidx + ", text: " + xwpfTableCell.getText());
-                        colidx++;
-                    }
-                }
-            }
-            */
-            XWPFTable table = tableList.get(0);
-            try{
-                this.travelgroup.setTourStartDate(table.getRow(0).getCell(2).getText());
-                this.travelgroup.setContactNameOfMainland(table.getRow(4).getCell(1).getText());
-                this.travelgroup.setContactTitleOfMainland(table.getRow(4).getCell(3).getText());
-                this.travelgroup.setContactMobileNoOfMainland(table.getRow(5).getCell(1).getText());
-                this.travelgroup.setContactGenderOfMainland(table.getRow(5).getCell(3).getText());
-                this.travelgroup.setContactTelNoOfMainland(table.getRow(5).getCell(5).getText());
-                this.travelgroup.setContactAddressOfMainland(table.getRow(6).getCell(1).getText());
-            }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s][TravelGroup] 資料解析有誤！", this.getTourName()), e);
-            }
             
-            Traveller traveller = null;
+            Traveller traveller;
             String mainTravellerName = null;
-            for(int i = 0; i < this.applyPeopleFolderQty; i++){
+            int rowBase, rowAdj;
+            for(int i = 0; i < tableList.size(); i++){
+                Object tableObj = tableList.get(i);
                 traveller = new Traveller();
-                traveller.setSeqNo((short)i);
-                try{
-                    traveller.setChineseName(table.getRow(11+7*i).getCell(1).getText());
-                    traveller.setGender(table.getRow(11+7*i).getCell(3).getText());
-                    traveller.setBirthDate(table.getRow(11+7*i).getCell(5).getText());
-                    traveller.setEnglishName(table.getRow(12+7*i).getCell(1).getText());
-                    traveller.setPassportNo(table.getRow(12+7*i).getCell(3).getText());
-                    traveller.setPassportExpiryDate(table.getRow(12+7*i).getCell(5).getText());
-                    traveller.setPersonId(table.getRow(13+7*i).getCell(1).getText());
-                    traveller.setEducation(traveller.getEducationIdx(table.getRow(14+7*i).getCell(1).getText()));
-                    traveller.setOccupationDesc(table.getRow(14+7*i).getCell(3).getText());
-                    traveller.setAddress(table.getRow(15+7*i).getCell(3).getText());
-                    traveller.setLivingCity(traveller.getLivingCityCode(table.getRow(15+7*i).getCell(3).getText()));
-
-//                    if(!traveller.isValidTraveller()){ continue; }
-                    if(i == 0){
-                        this.travellerList.add(traveller);
-                        mainTravellerName = traveller.getChineseName();
-                        continue;
+                if(i == 0){ continue; }
+                if(i == 1){
+                    try{
+                        this.travelgroup.setTourStartDate               (getCellContent(tableObj, 0, 2));
+                        this.travelgroup.setContactNameOfMainland       (getCellContent(tableObj, 6, 2));
+                        this.travelgroup.setContactTitleOfMainland      (getCellContent(tableObj, 7, 2));
+                        this.travelgroup.setContactGenderOfMainland     (getCellContent(tableObj, 8, 2));
+                        this.travelgroup.setContactMobileNoOfMainland   (getCellContent(tableObj, 9, 2));
+                        this.travelgroup.setContactTelNoOfMainland      (getCellContent(tableObj, 10, 2));
+                        this.travelgroup.setContactAddressOfMainland    (getCellContent(tableObj, 11, 2));
+                    }catch(Exception e){
+                        CommonHelp.logger.log(Level.ERROR, String.format("[%s][TravelGroup] 資料解析有誤！", this.getTourName()), e);
                     }
-                    traveller.setRelative(mainTravellerName);
-                    traveller.setRelativeTitle(table.getRow(16+7*i).getCell(1).getText());
-                    traveller.setPartnerOfTaiwan(table.getRow(16+7*i).getCell(3).getText());
+                    rowBase = 15;
+                    rowAdj = 2;
+                }else{
+                    rowBase = i == 2 ? 5 : 2;
+                    rowAdj = 0;
+                }
+                
+                try{
+                    traveller.setSeqNo(i-1);
+                    traveller.setChineseName        (getCellContent(tableObj, 0+rowBase, 2));
+                    traveller.setBirthDate          (getCellContent(tableObj, 1+rowBase, 2));
+                    traveller.setPassportNo         (getCellContent(tableObj, 2+rowBase, 2));
+                    traveller.setGender             (getCellContent(tableObj, 3+rowBase, 2));
+                    traveller.setAddress            (getCellContent(tableObj, 4+rowBase+rowAdj, 2));
+                    traveller.setLivingCity         (traveller.getLivingCityCode(traveller.getAddress()));
+                    traveller.setEnglishName        (getCellContent(tableObj, 5+rowBase+rowAdj, 2));
+                    traveller.setPassportExpiryDate (getCellContent(tableObj, 6+rowBase+rowAdj, 2));
+                    traveller.setPersonId           (getCellContent(tableObj, 7+rowBase+rowAdj, 2));
+                    traveller.setBirthPlace2        (getCellContent(tableObj, 8+rowBase+rowAdj, 2));
+                    traveller.setEducation          (traveller.getEducationIdx(getCellContent(tableObj, 9+rowBase+rowAdj, 2)));
+                    //手機 table.getRow(10+rowBase+rowAdj)
+                    if(i == 1){
+                        mainTravellerName = traveller.getChineseName();
+                        traveller.setOccupationDesc (getCellContent(tableObj, 4+rowBase, 2));
+                    }else{
+                        traveller.setRelative       (mainTravellerName);
+                        traveller.setRelativeTitle  (getCellContent(tableObj, 11+rowBase+rowAdj, 2));
+                    }
                 }catch(IndexOutOfBoundsException e){
                     //@modify
                     CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
@@ -362,11 +271,22 @@ public class ApplyData {
                     CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
                 }
                 this.travellerList.add(traveller);
+                if(this.travellerList.size() >= applyPeopleFolderQty){ break; }
+                
+                /*
+                *   印出所有Table資料，確認用。
+                *
+                System.out.println("table " + i);
+                for (int rowIdx=0; rowIdx<table.numRows(); rowIdx++) {
+                    TableRow row = table.getRow(rowIdx);
+                    System.out.println("row "+rowIdx);
+                    for (int colIdx=0; colIdx<row.numCells(); colIdx++) {
+                        TableCell cell = row.getCell(colIdx);
+                        System.out.println("column: "+colIdx+", text: "+cell.getParagraph(0).text());
+                    }
+                }
+                */
             }
-            
-//            this.travelgroup.setGroupCount((short)this.travellerList.size());
-//            this.travelgroup.setPermitApplyCount(Integer.toString(this.travellerList.size()));
-            
         } catch(FileFormatException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[%s] 請選擇正確的檔案格式 - Microsotf Word", this.getTourName()));
             this.errOfResolvingList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
@@ -440,9 +360,9 @@ public class ApplyData {
                 return;
             }
             if(this.applyDoc.getName().endsWith(".doc")){
-                this.word2003Resolve(this.applyDoc);
+                this.wordResolve(this.applyDoc, "doc");
             }else if(this.applyDoc.getName().endsWith(".docx")){
-                this.word2007Resolve(this.applyDoc);
+                this.wordResolve(this.applyDoc, "docx");
             }else{
                 CommonHelp.logger.log(Level.ERROR, String.format("[%s] 檔案格式錯誤: %s", this.getTourName(), this.applyDoc.getName()));
                 return;
@@ -490,7 +410,7 @@ public class ApplyData {
             return errMsgList;
         }
 
-        if(travellerList.size() < this.applyPeopleFolderQty){
+        if(travellerList.size() != this.applyPeopleFolderQty){
             errMsgList.add(new ErrMsg(String.format("申請文件解析出的申請人數(%s)與申請人資料夾數(%s)不一致，請確認。", this.travellerList.size(), this.applyPeopleFolderQty), 1));
         }
         

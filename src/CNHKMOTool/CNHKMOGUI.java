@@ -1,16 +1,7 @@
 /**
- * CNHKMOTool v1.4.0
- * 1.修改新增附件不會顯示圖片的BUG
- * 2.預設大頭照
- * 3.可以拖曳的方式新增
- * 4.將申請列表改成樹狀圖，方便顯示各旅客大頭照
- * 5.將錯誤記載在log檔案裡
- * 6.詳細紀錄word解析錯誤點
- * 7.新增單一旅客
- * 8.設定為主申請人
- * 9.可以手動配對未被配對到的附件資料夾
- * 10.申請資料格式檢查
- * 11.錯誤提示改進
+ * CNHKMOTool v1.4.1
+ * 因應文件格式變更，修改讀取方式
+ * 
  */
 package CNHKMOTool;
 
@@ -81,6 +72,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         expandAlljMenuItem = new javax.swing.JMenuItem();
         collapsejMenuItem = new javax.swing.JMenuItem();
         collapseAlljMenuItem = new javax.swing.JMenuItem();
+        myFileChooser = new javax.swing.JFileChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
@@ -105,6 +97,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         selectFolderBtn = new javax.swing.JButton();
         removeApplyDataBtn = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         loadingPanel = new javax.swing.JPanel();
         applyDataPanel = new javax.swing.JPanel();
@@ -138,7 +131,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         tgTourEndDateText = new javax.swing.JTextField();
         applyDataSaveBtn = new javax.swing.JButton();
         travellerPanel = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        travellerDetailPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         trChineseNameText = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -170,6 +163,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trApplyQualificationComboBox = new javax.swing.JComboBox();
         jLabel24 = new javax.swing.JLabel();
         trOccupationComboBox = new javax.swing.JComboBox();
+        jLabel22 = new javax.swing.JLabel();
+        trBirthPlace1ComboBox = new javax.swing.JComboBox();
+        trBirthPlace2Text = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         travellerErrMsg = new javax.swing.JTextArea();
         attachFilePanel = new javax.swing.JPanel();
@@ -285,8 +283,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         });
         treejPopupMenu.add(collapseAlljMenuItem);
 
+        myFileChooser.setFileFilter(null);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.0");
+        setTitle("CNHKMOTool-v1.4.1");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -473,6 +473,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -490,12 +497,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(refreshTreeBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(removeApplyDataBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(removeApplyDataBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(applyDataCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton7)))
                 .addContainerGap())
         );
@@ -509,7 +519,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
                         .addComponent(applyDataCountLabel))
-                    .addComponent(jButton7))
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton7)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(selectFolderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
@@ -532,7 +544,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
         loadingPanelLayout.setVerticalGroup(
             loadingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 623, Short.MAX_VALUE)
+            .addGap(0, 624, Short.MAX_VALUE)
         );
 
         mainPanel.add(loadingPanel, "loadingCard");
@@ -783,7 +795,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         travellerPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "資料", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("新細明體", 0, 13))); // NOI18N
+        travellerDetailPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "資料", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("新細明體", 0, 13))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel7.setText("中文姓名");
@@ -873,141 +885,168 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trOccupationComboBox.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         trOccupationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "請選擇", "軍", "公", "教", "私", "商", "農", "工", "醫", "宗", "演", "新聞", "漁", "輪", "學", "自", "其他", "無", "警" }));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jLabel22.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        jLabel22.setText("出生地");
+
+        trBirthPlace1ComboBox.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        trBirthPlace1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "請選擇", "台北", "高雄", "廣州", "上海", "南京", "漢口", "重慶", "青島", "天津", "北京", "西安", "大連", "瀋陽", "哈爾濱", "台灣", "福建", "廣東", "廣西", "雲南", "貴州", "海南", "江蘇", "浙江", "安徽", "江西", "湖南", "湖北", "四川", "山東", "山西", "河南", "河北", "陜西", "甘肅", "遼寧", "遼北", "安東", "吉林", "松江", "合江", "嫩江", "黑龍江", "興安", "熱河", "察哈爾", "綏遠", "寧夏", "蒙古", "新疆", "青海", "西康", "西藏" }));
+
+        trBirthPlace2Text.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+
+        jLabel26.setText("省(市)");
+
+        jLabel27.setText("縣(市)");
+
+        javax.swing.GroupLayout travellerDetailPanelLayout = new javax.swing.GroupLayout(travellerDetailPanel);
+        travellerDetailPanel.setLayout(travellerDetailPanelLayout);
+        travellerDetailPanelLayout.setHorizontalGroup(
+            travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel23))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(trGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel21)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(trEducationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(travellerSaveBtn)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(trLivingCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(trAddressText))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(trOccupationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(trOccupationDescText, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel20)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(trPersonIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(trChineseNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel18)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(trPassportNoText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel11)
-                                            .addComponent(jLabel12))
-                                        .addGap(13, 13, 13))
-                                    .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(trPersonIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(trChineseNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel18)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(trEnglishNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(trBirthDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(trPassportExpiryDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel28)
+                                .addComponent(trPassportNoText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, travellerDetailPanelLayout.createSequentialGroup()
+                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel12))
+                                .addGap(13, 13, 13))
+                            .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(trEnglishNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(trBirthDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(trPassportExpiryDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel28)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(trApplyQualificationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(trRelativeLabel)
+                                .addGap(12, 12, 12)
+                                .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(trRelativeTitleLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel24)
+                                    .addComponent(jLabel23)
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                        .addComponent(trBirthPlace1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(trApplyQualificationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(trRelativeLabel)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(trRelativeTitleLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel25)
+                                        .addComponent(jLabel26)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(trBirthPlace2Text, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(trPartnerOfTaiwanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                        .addComponent(jLabel27))
+                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                        .addComponent(trGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel21)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(trEducationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(travellerSaveBtn)
+                                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                                .addComponent(trOccupationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(trOccupationDescText, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                                .addComponent(trLivingCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(trAddressText))))))
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel25)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(trPartnerOfTaiwanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        travellerDetailPanelLayout.setVerticalGroup(
+            travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trApplyQualificationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(trChineseNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trEnglishNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trPersonIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trBirthDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trPassportNoText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trPassportExpiryDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trEducationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(trOccupationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trOccupationDescText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(trLivingCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(trPartnerOfTaiwanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(trBirthPlace1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(trBirthPlace2Text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(trPartnerOfTaiwanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(trRelativeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trRelativeTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(travellerSaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1121,7 +1160,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(attachFilePanelLayout.createSequentialGroup()
                         .addComponent(selectAttachBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                         .addComponent(removeAttachBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1176,7 +1215,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(travellerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane7)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(travellerDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(travellerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(attachFilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1193,10 +1232,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(travellerPanelLayout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12))))
+                        .addComponent(travellerDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane7)
+                        .addContainerGap())))
         );
 
         mainPanel.add(travellerPanel, "travellerCard");
@@ -1479,6 +1518,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 //                ApplyData applyData = (ApplyData)node.getUserObject();
 //                System.out.println(applyData.getTravelgroup().getTravellerList().size());
 //        }
+        
+        
+        myFileChooser.resetChoosableFileFilters();
+        myFileChooser.setDialogTitle("請選擇測試資料");
+        myFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        myFileChooser.setMultiSelectionEnabled(false);
+        FileFilter ff = new ExtensionFileFilter("test", new String[]{"txt", "rar"});
+        myFileChooser.setFileFilter(ff);
+        int status = myFileChooser.showOpenDialog(this);
+        if (status == JFileChooser.APPROVE_OPTION) {
+            System.out.println("123");
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void applyDataSaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyDataSaveBtnActionPerformed
@@ -1505,36 +1556,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         applyDataTree.repaint();
         checkErrMsg();
     }//GEN-LAST:event_applyDataSaveBtnActionPerformed
-
-    private void travellerSaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_travellerSaveBtnActionPerformed
-        if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("travellerSaveBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
-            return;
-        }
-        Traveller tr = (Traveller) selectedNode.getUserObject();
-        try{
-            tr.setApplyQualification(tr.getApplyQualificationCodeByIdx(trApplyQualificationComboBox.getSelectedIndex()));
-            tr.setChineseName(trChineseNameText.getText());
-            tr.setEnglishName(trEnglishNameText.getText());
-            tr.setBirthDate(trBirthDateText.getText());
-            tr.setPersonId(trPersonIdText.getText());
-            tr.setPassportNo(trPassportNoText.getText());
-            tr.setPassportExpiryDate(trPassportExpiryDateText.getText());
-            tr.setGender(trGenderComboBox.getSelectedItem().toString());
-            tr.setEducation(trEducationComboBox.getSelectedIndex());
-            tr.setOccupation(trOccupationComboBox.getSelectedIndex());
-            tr.setOccupationDesc(trOccupationDescText.getText());
-            tr.setLivingCity(tr.getLivingCityCode(trLivingCityComboBox.getSelectedItem().toString()));
-            tr.setAddress(trAddressText.getText());
-            tr.setPartnerOfTaiwan(trPartnerOfTaiwanComboBox.getSelectedItem().toString());
-            tr.setRelative(trRelativeText.getText());
-            tr.setRelativeTitle(trRelativeTitleText.getText());
-        }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller][%s] travellerSave失敗。",tr.getChineseName()), e);
-        }
-        applyDataTree.repaint();
-        checkErrMsg();
-    }//GEN-LAST:event_travellerSaveBtnActionPerformed
     /**
      * @modify認領附件，
      * @param evt 
@@ -1597,7 +1618,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }else{ return; }
         
         Traveller traveller = new Traveller();
-        traveller.setSeqNo((short)ad.getTravelgroup().getTravellerList().size());
+        traveller.setSeqNo(ad.getTravelgroup().getTravellerList().size());
         ad.getTravelgroup().getTravellerList().add(traveller);
         
         TravellerNode trn = new TravellerNode();
@@ -1616,7 +1637,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             return;
         }
         Traveller traveller = (Traveller) selectedNode.getUserObject();
-//        traveller.setSeqNo((short)0);
+//        traveller.setSeqNo(0);
         ApplyData ad = (ApplyData)((DefaultMutableTreeNode)selectedNode.getParent()).getUserObject();
         List<Traveller> travellerList = ad.getTravelgroup().getTravellerList();
 //        List<Traveller> newTravellerList = new ArrayList<Traveller>();
@@ -1626,16 +1647,61 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         int i = 1;
         for(Traveller tr : travellerList){
             if(tr == traveller){
-                tr.setSeqNo((short)0);
+                tr.setSeqNo(0);
                 continue;
             }
-            tr.setSeqNo((short)i);
+            tr.setSeqNo(i);
             i++;
         }
 //        newTravellerList.addAll(travellerList);
 //        applyDataTree.updateUI();
         applyDataTree.repaint();
     }//GEN-LAST:event_asMainMenuItemActionPerformed
+
+    private void travellerSaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_travellerSaveBtnActionPerformed
+        if (!(selectedNode instanceof TravellerNode)) {
+            CommonHelp.logger.log(Level.ERROR, String.format("travellerSaveBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            return;
+        }
+        Traveller tr = (Traveller) selectedNode.getUserObject();
+        try{
+            tr.setApplyQualification(tr.getApplyQualificationCodeByIdx(trApplyQualificationComboBox.getSelectedIndex()));
+            tr.setChineseName(trChineseNameText.getText());
+            tr.setEnglishName(trEnglishNameText.getText());
+            tr.setBirthDate(trBirthDateText.getText());
+            tr.setPersonId(trPersonIdText.getText());
+            tr.setPassportNo(trPassportNoText.getText());
+            tr.setPassportExpiryDate(trPassportExpiryDateText.getText());
+            tr.setGender(trGenderComboBox.getSelectedItem().toString());
+            tr.setEducation(trEducationComboBox.getSelectedIndex());
+            tr.setOccupation(trOccupationComboBox.getSelectedIndex());
+            tr.setOccupationDesc(trOccupationDescText.getText());
+            tr.setBirthPlace1(trBirthPlace1ComboBox.getSelectedIndex());
+            tr.setBirthPlace2(trBirthPlace2Text.getText());
+            tr.setLivingCity(tr.getLivingCityCode(trLivingCityComboBox.getSelectedItem().toString()));
+            tr.setAddress(trAddressText.getText());
+            tr.setPartnerOfTaiwan(trPartnerOfTaiwanComboBox.getSelectedItem().toString());
+            tr.setRelative(trRelativeText.getText());
+            tr.setRelativeTitle(trRelativeTitleText.getText());
+        }catch(Exception e){
+            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller][%s] travellerSave失敗。",tr.getChineseName()), e);
+        }
+        applyDataTree.repaint();
+        checkErrMsg();
+    }//GEN-LAST:event_travellerSaveBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        myFileChooser.resetChoosableFileFilters();
+        myFileChooser.setDialogTitle("請選擇測試2資料");
+        myFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        myFileChooser.setMultiSelectionEnabled(true);
+        FileFilter ff = new ExtensionFileFilter("檔案資料夾", new String[]{});
+        myFileChooser.setFileFilter(ff);
+        int status = myFileChooser.showOpenDialog(this);
+        if (status == JFileChooser.APPROVE_OPTION) {
+            System.out.println("456");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1721,6 +1787,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea guideContent;
     private javax.swing.JPanel guidePanel;
     private static javax.swing.JCheckBox imageCheckBox;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1736,9 +1803,12 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
@@ -1751,7 +1821,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -1764,6 +1833,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JPanel loadingPanel;
     private javax.swing.JPanel mainPanel;
     private java.awt.CardLayout mainCards;
+    private javax.swing.JFileChooser myFileChooser;
     private javax.swing.JButton refreshTreeBtn;
     private javax.swing.JButton removeAllAttachBtn;
     private javax.swing.JButton removeApplyDataBtn;
@@ -1786,6 +1856,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextField trAddressText;
     private javax.swing.JComboBox trApplyQualificationComboBox;
     private javax.swing.JTextField trBirthDateText;
+    private javax.swing.JComboBox trBirthPlace1ComboBox;
+    private javax.swing.JTextField trBirthPlace2Text;
     private javax.swing.JTextField trChineseNameText;
     private javax.swing.JComboBox trEducationComboBox;
     private javax.swing.JTextField trEnglishNameText;
@@ -1801,6 +1873,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextField trRelativeText;
     private javax.swing.JLabel trRelativeTitleLabel;
     private javax.swing.JTextField trRelativeTitleText;
+    private javax.swing.JPanel travellerDetailPanel;
     private javax.swing.JTextArea travellerErrMsg;
     private javax.swing.JPanel travellerPanel;
     private javax.swing.JButton travellerSaveBtn;
@@ -1988,9 +2061,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             trEnglishNameText.setText(tr.getEnglishName());
             trGenderComboBox.setSelectedIndex(tr.getGender() == null ? 0 : Integer.valueOf(tr.getGender()) + 1);
             trLivingCityComboBox.setSelectedIndex(tr.getLivingCityIdx() == null ? 0 : tr.getLivingCityIdx() + 1);
-            trEducationComboBox.setSelectedIndex(tr.getEducation() == null ? 0 : tr.getEducation());
             trOccupationComboBox.setSelectedIndex(tr.getOccupation() == null ? 0 : tr.getOccupation());
             trOccupationDescText.setText(tr.getOccupationDesc());
+            trBirthPlace1ComboBox.setSelectedIndex(tr.getBirthPlace1() == null ? 0 : tr.getBirthPlace1());
+            trBirthPlace2Text.setText(tr.getBirthPlace2());
             String pot = tr.getPartnerOfTaiwan();
             int potidx;
             if (pot == null) {

@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import taobe.tec.jcc.JChineseConvertor;
@@ -74,5 +76,16 @@ public class CommonHelp {
         }
         return name;
         
+    }
+    
+    public static void logErrMsgList(List<ErrMsg> errList){
+        for(ErrMsg m : errList){
+            if(m.getType() == 0){
+                logger.log(
+                        Level.ERROR,
+                        String.format("%s %s %s", m.getTag(), m.getMsg(), m.getPlusMsg())
+                );
+            }
+        }
     }
 }

@@ -155,7 +155,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="CNHKMOTool-v1.4.2"/>
+    <Property name="title" type="java.lang.String" value="CNHKMOTool-v1.4.3"/>
     <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
@@ -419,8 +419,6 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="applyDataCountLabel" min="-2" pref="19" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jButton7" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -439,10 +437,7 @@
                           <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="applyDataCountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                          <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jButton7" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -551,14 +546,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jButton1"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -1189,11 +1176,6 @@
                                               </Group>
                                           </Group>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="trPartnerOfTaiwanComboBox" min="-2" max="-2" attributes="0"/>
-                                      </Group>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -1252,29 +1234,22 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="trBirthPlace1ComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="jLabel22" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="trBirthPlace2Text" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="jLabel27" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel25" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="trPartnerOfTaiwanComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="trBirthPlace1ComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="jLabel22" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="trBirthPlace2Text" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="jLabel27" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel26" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="trRelativeLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="trRelativeTitleLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="trRelativeText" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="trRelativeTitleText" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="travellerSaveBtn" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1410,14 +1385,6 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel25">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="&#x65b0;&#x7d30;&#x660e;&#x9ad4;" size="13" style="0"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="&#x70ba;&#x81fa;&#x7063;&#x4eba;&#x6c11;&#x4e4b;&#x914d;&#x5076;"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="trRelativeLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1515,20 +1482,6 @@
                         <StringItem index="11" value="&#x897f;&#x5b89;"/>
                         <StringItem index="12" value="&#x798f;&#x5dde;"/>
                         <StringItem index="13" value="&#x6df1;&#x5733;"/>
-                      </StringArray>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JComboBox" name="trPartnerOfTaiwanComboBox">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="&#x65b0;&#x7d30;&#x660e;&#x9ad4;" size="13" style="0"/>
-                    </Property>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="3">
-                        <StringItem index="0" value="&#x8acb;&#x9078;&#x64c7;"/>
-                        <StringItem index="1" value="&#x662f;"/>
-                        <StringItem index="2" value="&#x5426;"/>
                       </StringArray>
                     </Property>
                   </Properties>

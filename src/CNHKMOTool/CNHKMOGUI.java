@@ -1,7 +1,9 @@
 /**
- * CNHKMOTool v1.4.2
- * 修改JFileChooser，從原本的每次新創改成共用一個
- * 
+ * CNHKMOTool v1.4.3
+ * 拿掉「是否為台灣人民配偶」
+ * 修改紀錄Log時有些地方會重複多次的問題
+ * 職業判斷
+ * 出生地判斷
  */
 package CNHKMOTool;
 
@@ -97,7 +99,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         selectFolderBtn = new javax.swing.JButton();
         removeApplyDataBtn = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         loadingPanel = new javax.swing.JPanel();
         applyDataPanel = new javax.swing.JPanel();
@@ -149,7 +150,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trOccupationDescText = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         trAddressText = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
         trRelativeLabel = new javax.swing.JLabel();
         trRelativeTitleText = new javax.swing.JTextField();
         trRelativeTitleLabel = new javax.swing.JLabel();
@@ -158,7 +158,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trGenderComboBox = new javax.swing.JComboBox();
         trEducationComboBox = new javax.swing.JComboBox();
         trLivingCityComboBox = new javax.swing.JComboBox();
-        trPartnerOfTaiwanComboBox = new javax.swing.JComboBox();
         jLabel28 = new javax.swing.JLabel();
         trApplyQualificationComboBox = new javax.swing.JComboBox();
         jLabel24 = new javax.swing.JLabel();
@@ -286,7 +285,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         myFileChooser.setFileFilter(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.2");
+        setTitle("CNHKMOTool-v1.4.3");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -473,13 +472,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -504,8 +496,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(applyDataCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton7)))
                 .addContainerGap())
         );
@@ -519,9 +509,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
                         .addComponent(applyDataCountLabel))
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton7)
-                        .addComponent(jButton1)))
+                    .addComponent(jButton7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(selectFolderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
@@ -840,9 +828,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         trAddressText.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
 
-        jLabel25.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
-        jLabel25.setText("為臺灣人民之配偶");
-
         trRelativeLabel.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         trRelativeLabel.setText("隨行親友姓名");
 
@@ -869,9 +854,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         trLivingCityComboBox.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         trLivingCityComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "請選擇", "北京", "上海", "廈門", "天津", "重慶", "南京", "廣州", "杭州", "成都", "濟南", "西安", "福州", "深圳" }));
-
-        trPartnerOfTaiwanComboBox.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
-        trPartnerOfTaiwanComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "請選擇", "是", "否" }));
 
         jLabel28.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel28.setText("申請資格");
@@ -978,11 +960,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                                             .addGroup(travellerDetailPanelLayout.createSequentialGroup()
                                                 .addComponent(trLivingCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(trAddressText))))))
-                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel25)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(trPartnerOfTaiwanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(trAddressText)))))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1029,24 +1007,19 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addComponent(trAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(trBirthPlace1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(trBirthPlace2Text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(trPartnerOfTaiwanComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(trBirthPlace1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(trBirthPlace2Text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(trRelativeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trRelativeTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(travellerSaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1279,7 +1252,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void selectApplyDocBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectApplyDocBtnActionPerformed
         if (!(selectedNode instanceof ApplyDataNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("selectApplyDocBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[selectApplyDocBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         myFileChooser.resetChoosableFileFilters();
@@ -1329,7 +1302,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void resetHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetHeadShotActionPerformed
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("resetHeadShotAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[resetHeadShotAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         if (attachJList.getModel().getSize() <= 0) { return; }
@@ -1349,7 +1322,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
 
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("setToHeadShotAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[setToHeadShotAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         Traveller tr = (Traveller) selectedNode.getUserObject();
@@ -1363,7 +1336,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void removeAllAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllAttachBtnActionPerformed
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("removeAllAttachBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[removeAllAttachBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         Traveller tr = (Traveller) selectedNode.getUserObject();
@@ -1373,7 +1346,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void removeAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAttachBtnActionPerformed
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("removeAttachBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[removeAttachBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         if (attachJList.getSelectedIndices().length == 0) { return; }
@@ -1384,7 +1357,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void selectAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAttachBtnActionPerformed
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("selectAttachBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[selectAttachBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         myFileChooser.resetChoosableFileFilters();
@@ -1517,23 +1490,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 //                ApplyData applyData = (ApplyData)node.getUserObject();
 //                System.out.println(applyData.getTravelgroup().getTravellerList().size());
 //        }
-        
-        
-        myFileChooser.resetChoosableFileFilters();
-        myFileChooser.setDialogTitle("請選擇測試資料");
-        myFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        myFileChooser.setMultiSelectionEnabled(false);
-        FileFilter ff = new ExtensionFileFilter("test", new String[]{"txt", "rar"});
-        myFileChooser.setFileFilter(ff);
-        int status = myFileChooser.showOpenDialog(this);
-        if (status == JFileChooser.APPROVE_OPTION) {
-            System.out.println("123");
-        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void applyDataSaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyDataSaveBtnActionPerformed
         if (!(selectedNode instanceof ApplyDataNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("applyDataSaveBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[applyDataSaveBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         
@@ -1550,7 +1511,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             tg.setContactTelNoOfMainland(contactTelNoText.getText());
             tg.setContactAddressOfMainland(contactAddressText.getText());
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup][%s] applyDataSave失敗。",tg.getTourName() ), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[applyDataSave][TravelGroup] applyDataSave失敗。 path: %s", ad.getApplyFolder().getAbsolutePath()), e);
         }
         applyDataTree.repaint();
         checkErrMsg();
@@ -1570,7 +1531,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
 
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("selectRestAttachBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[selectRestAttachBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         
@@ -1632,7 +1593,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private void asMainMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asMainMenuItemActionPerformed
 
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("asMainMenuItemAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[asMainMenuItemAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         Traveller traveller = (Traveller) selectedNode.getUserObject();
@@ -1659,7 +1620,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void travellerSaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_travellerSaveBtnActionPerformed
         if (!(selectedNode instanceof TravellerNode)) {
-            CommonHelp.logger.log(Level.ERROR, String.format("travellerSaveBtnAction，錯誤的selectedNode: %s", selectedNode.getClass()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[travellerSaveBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
             return;
         }
         Traveller tr = (Traveller) selectedNode.getUserObject();
@@ -1679,28 +1640,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             tr.setBirthPlace2(trBirthPlace2Text.getText());
             tr.setLivingCity(tr.getLivingCityCode(trLivingCityComboBox.getSelectedItem().toString()));
             tr.setAddress(trAddressText.getText());
-            tr.setPartnerOfTaiwan(trPartnerOfTaiwanComboBox.getSelectedItem().toString());
             tr.setRelative(trRelativeText.getText());
             tr.setRelativeTitle(trRelativeTitleText.getText());
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller][%s] travellerSave失敗。",tr.getChineseName()), e);
+            ApplyData ad = (ApplyData)((DefaultMutableTreeNode)selectedNode.getParent()).getUserObject();
+            CommonHelp.logger.log(Level.ERROR, String.format("[travellerSave][Traveller][%s] travellerSave失敗。 path: %s", tr.getChineseName(), ad.getApplyFolder().getAbsolutePath()), e);
         }
         applyDataTree.repaint();
         checkErrMsg();
     }//GEN-LAST:event_travellerSaveBtnActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        myFileChooser.resetChoosableFileFilters();
-        myFileChooser.setDialogTitle("請選擇測試2資料");
-        myFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        myFileChooser.setMultiSelectionEnabled(true);
-        FileFilter ff = new ExtensionFileFilter("檔案資料夾", new String[]{});
-        myFileChooser.setFileFilter(ff);
-        int status = myFileChooser.showOpenDialog(this);
-        if (status == JFileChooser.APPROVE_OPTION) {
-            System.out.println("456");
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1786,7 +1734,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea guideContent;
     private javax.swing.JPanel guidePanel;
     private static javax.swing.JCheckBox imageCheckBox;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1805,7 +1752,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
@@ -1864,7 +1810,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox trLivingCityComboBox;
     private javax.swing.JComboBox trOccupationComboBox;
     private javax.swing.JTextField trOccupationDescText;
-    private javax.swing.JComboBox trPartnerOfTaiwanComboBox;
     private javax.swing.JTextField trPassportExpiryDateText;
     private javax.swing.JTextField trPassportNoText;
     private javax.swing.JTextField trPersonIdText;
@@ -1950,7 +1895,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trOccupationDescText.setText("");
         trLivingCityComboBox.setSelectedIndex(0);
         trAddressText.setText("");
-        trPartnerOfTaiwanComboBox.setSelectedIndex(0);
         trRelativeText.setText("");
         trRelativeTitleText.setText("");
         attachListModel.removeAllElements();
@@ -2012,9 +1956,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             contactTelNoText.setText(tg.getContactTelNoOfMainland());
             contactTitleText.setText(tg.getContactTitleOfMainland());
         } catch (NumberFormatException e) {
-            CommonHelp.logger.log(Level.WARN, String.format("[%s]", ad.getTourName()), e);
+            CommonHelp.logger.log(Level.WARN, String.format("[setSingleApplyArea] path: %s", ad.getApplyFolder().getAbsolutePath()), e);
         } catch (Exception e) {
-            CommonHelp.logger.log(Level.WARN, String.format("[%s]", ad.getTourName()), e);
+            CommonHelp.logger.log(Level.WARN, String.format("[setSingleApplyArea] path: %s", ad.getApplyFolder().getAbsolutePath()), e);
         }
     }
 
@@ -2064,16 +2008,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             trOccupationDescText.setText(tr.getOccupationDesc());
             trBirthPlace1ComboBox.setSelectedIndex(tr.getBirthPlace1() == null ? 0 : tr.getBirthPlace1());
             trBirthPlace2Text.setText(tr.getBirthPlace2());
-            String pot = tr.getPartnerOfTaiwan();
-            int potidx;
-            if (pot == null) {
-                potidx = 0;
-            } else if (pot == "0") {
-                potidx = 2;
-            } else {
-                potidx = 1;
-            }
-            trPartnerOfTaiwanComboBox.setSelectedIndex(potidx);
             trPassportExpiryDateText.setText(tr.getPassportExpiryDate());
             trPassportNoText.setText(tr.getPassportNo());
             trPersonIdText.setText(tr.getPersonId());
@@ -2091,7 +2025,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 trRelativeTitleText.setText(tr.getRelativeTitle());
             }
         }catch(Exception e){
-            CommonHelp.logger.log(Level.WARN, String.format("[%s]", tr.getChineseName()), e);
+            ApplyData ad = (ApplyData)((DefaultMutableTreeNode)selectedNode.getParent()).getUserObject();
+            CommonHelp.logger.log(Level.WARN, String.format("[setTravellerDetail][%s] path: %s", tr.getChineseName(), ad.getApplyFolder().getAbsolutePath()), e);
         }
     }
 
@@ -2285,27 +2220,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 st.executeUpdate(insertStr);
             }
         } catch (IOException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] insert失敗。", travelgroup.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             return travelgroup.getTourName() + " - " + e.getMessage();
-//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
-//            return false;
         } catch (SQLException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] insert失敗。", travelgroup.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             return travelgroup.getTourName() + " - " + e.getMessage();
-//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
-//            return false;
         } catch (ParseException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] insert失敗。", travelgroup.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             return travelgroup.getTourName() + " - " + e.getMessage();
-//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
-//            return false;
         } catch (Exception e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] insert失敗。", travelgroup.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             return travelgroup.getTourName() + " - " + e.getMessage();
-//            showMessage("出現錯誤，請再試一次，或聯絡工程師來為你解決。\n詳細:\n" + e.getMessage() , "warning");
-//            return false;
         }
-
         return "";
     }
 
@@ -2361,7 +2287,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 drsworker.execute();
             }
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] addDoc失敗。", file.getName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("addDoc失敗。 path: %s", file.getAbsolutePath()), e);
         }
     }
 
@@ -2379,7 +2305,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 applyDataTreeModel.insertNodeInto(trn, adn, adn.getChildCount());
             }
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] addNode失敗。", f.getName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("addNode失敗。 path: %s", f.getAbsolutePath()), e);
         }
     }
 
@@ -2842,19 +2768,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Void doInBackground() {
             if (!(selectedNode instanceof TravellerNode)) {
-                CommonHelp.logger.log(Level.ERROR, String.format("AttachListLoadWorker，錯誤的selectedNode: %s", selectedNode.getClass()));
+                CommonHelp.logger.log(Level.ERROR, String.format("[AttachListLoadWorker] 錯誤的selectedNode: %s", selectedNode.getClass()));
                 return null;
             }
             try{
                 Traveller tr = (Traveller) selectedNode.getUserObject();
-                List<Attach> la = tr.getAttachList();
                 attachListModel.removeAllElements();
-                for (Attach a : la) {
+                for (Attach a : tr.getAttachList()) {
                     attachListModel.addElement(a);
                 }
                 if(this.isAlone){ checkErrMsg(); }
             }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, "AttachListLoadWorker，錯誤", e);
+                CommonHelp.logger.log(Level.ERROR, "[AttachListLoadWorker] 錯誤", e);
             }
             return null;
         }
@@ -2885,7 +2810,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Void doInBackground() {
             if (!(selectedNode instanceof TravellerNode)) {
-                CommonHelp.logger.log(Level.ERROR, String.format("RestApplyAttachListLoadWorker，錯誤的selectedNode: %s", selectedNode.getClass()));
+                CommonHelp.logger.log(Level.ERROR, String.format("[RestApplyAttachListLoadWorker] 錯誤的selectedNode: %s", selectedNode.getClass()));
                 return null;
             }
             try{
@@ -2897,7 +2822,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 }
                 if(this.isAlone){ checkErrMsg(); }
             }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, "RestApplyAttachListLoadWorker，錯誤", e);
+                CommonHelp.logger.log(Level.ERROR, "[RestApplyAttachListLoadWorker] 錯誤", e);
             }
             return null;
         }
@@ -2943,7 +2868,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     showMessage("有資料出錯，可能需要手工處理該筆資料：\n" + err, "warning");
                 }
             }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, "SubmitWorker，錯誤", e);
+                CommonHelp.logger.log(Level.ERROR, "[SubmitWorker] 錯誤", e);
             }
             return null;
         }
@@ -2961,7 +2886,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         public void drop(DropTargetDropEvent event) {
             attachScrollPane.setBorder(null);
             if (!(selectedNode instanceof TravellerNode)) {
-                CommonHelp.logger.log(Level.ERROR, String.format("AttachDataDragDropListener，錯誤的selectedNode: %s", selectedNode.getClass()));
+                CommonHelp.logger.log(Level.ERROR, String.format("[AttachDataDragDropListener] 錯誤的selectedNode: %s", selectedNode.getClass()));
                 return;
             }
             event.acceptDrop(DnDConstants.ACTION_COPY);
@@ -2974,7 +2899,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         addAttach(files);
                     }
                 } catch (Exception e) {
-                    CommonHelp.logger.log(Level.ERROR, "AttachDataDragDropListener，錯誤", e);
+                    CommonHelp.logger.log(Level.ERROR, "[AttachDataDragDropListener] 錯誤", e);
                 }
             }
             event.dropComplete(true);
@@ -3006,7 +2931,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         public void drop(DropTargetDropEvent event) {
             applyDocPanel.setBorder(null);
             if (!(selectedNode instanceof ApplyDataNode)) {
-                CommonHelp.logger.log(Level.ERROR, String.format("DocDataDragDropListener，錯誤的selectedNode: %s", selectedNode.getClass()));
+                CommonHelp.logger.log(Level.ERROR, String.format("[DocDataDragDropListener] 錯誤的selectedNode: %s", selectedNode.getClass()));
                 return;
             }
             event.acceptDrop(DnDConstants.ACTION_COPY);
@@ -3021,7 +2946,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         }
                     }
                 } catch (Exception e) {
-                    CommonHelp.logger.log(Level.ERROR, "DocDataDragDropListener，錯誤", e);
+                    CommonHelp.logger.log(Level.ERROR, "[DocDataDragDropListener] 錯誤", e);
                 }
             }
             event.dropComplete(true);

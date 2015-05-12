@@ -23,6 +23,7 @@ import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 
 public class ApplyData {
     public ApplyData(File f){
+        CommonHelp.logger.log(Level.INFO, String.format("Start---------------------------------------- path: %s", f.getAbsolutePath()));
         this.applyFolder = f;
         this.initData();
         this.handleApplyData();
@@ -213,7 +214,7 @@ public class ApplyData {
                 tableList.addAll(doc.getTables());
             }
             if(tableList.isEmpty()){
-                CommonHelp.logger.log(Level.WARN, String.format("[%s] Word文件找不到資料表格！", this.getTourName()));
+                CommonHelp.logger.log(Level.WARN, String.format("[wordResolve] Word文件找不到資料表格！ path: %s", this.applyDoc.getAbsolutePath()));
                 this.errOfResolvingList.add(new ErrMsg("Word文件找不到資料表格！", 0)); return;
             }
             
@@ -234,8 +235,9 @@ public class ApplyData {
                         this.travelgroup.setContactTelNoOfMainland      (getCellContent(tableObj, 10, 2));
                         this.travelgroup.setContactAddressOfMainland    (getCellContent(tableObj, 11, 2));
                     }catch(Exception e){
-                        CommonHelp.logger.log(Level.ERROR, String.format("[%s][TravelGroup] 資料解析有誤！", this.getTourName()), e);
+                        CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][TravelGroup] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
                     }
+                    
                     rowBase = 15;
                     rowAdj = 2;
                 }else{
@@ -255,20 +257,22 @@ public class ApplyData {
                     traveller.setPassportExpiryDate (getCellContent(tableObj, 6+rowBase+rowAdj, 2));
                     traveller.setPersonId           (getCellContent(tableObj, 7+rowBase+rowAdj, 2));
                     traveller.setBirthPlace2        (getCellContent(tableObj, 8+rowBase+rowAdj, 2));
+                    traveller.setBirthPlace1        (traveller.getBirthPlace1Idx(traveller.getBirthPlace2()));
                     traveller.setEducation          (traveller.getEducationIdx(getCellContent(tableObj, 9+rowBase+rowAdj, 2)));
                     //手機 table.getRow(10+rowBase+rowAdj)
                     if(i == 1){
                         mainTravellerName = traveller.getChineseName();
                         traveller.setOccupationDesc (getCellContent(tableObj, 4+rowBase, 2));
+                        traveller.setOccupation     (traveller.getOccupationId(traveller.getOccupationDesc()));
                     }else{
                         traveller.setRelative       (mainTravellerName);
                         traveller.setRelativeTitle  (getCellContent(tableObj, 11+rowBase+rowAdj, 2));
                     }
                 }catch(IndexOutOfBoundsException e){
                     //@modify
-                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
+                    CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][Traveller] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
                 }catch (Exception e) {
-                    CommonHelp.logger.log(Level.ERROR, String.format("[%s][Traveller] 資料解析有誤！", this.getTourName()), e);
+                    CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][Traveller] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
                 }
                 this.travellerList.add(traveller);
                 if(this.travellerList.size() >= applyPeopleFolderQty){ break; }
@@ -288,16 +292,16 @@ public class ApplyData {
                 */
             }
         } catch(FileFormatException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 請選擇正確的檔案格式 - Microsotf Word", this.getTourName()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] 請選擇正確的檔案格式 - Microsotf Word. path: %s", this.applyDoc.getAbsolutePath()));
             this.errOfResolvingList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
         } catch (FileNotFoundException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到文件！", this.getTourName()));
+            CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] 找不到文件！ path: %s", this.applyFolder.getAbsolutePath()));
             this.errOfResolvingList.add(new ErrMsg("找不到文件！", 0));
         } catch (IOException e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] path: %s", this.applyFolder.getAbsolutePath()), e);
             this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
         } catch (Exception e) {
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] path: %s", this.applyFolder.getAbsolutePath()), e);
             this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
         }
     }
@@ -356,7 +360,7 @@ public class ApplyData {
             }
             
             if(this.applyDoc == null){
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到申請文件", this.getTourName()));
+                CommonHelp.logger.log(Level.ERROR, String.format("[handleApplyData] 找不到申請文件。 path: %s", this.applyFolder.getAbsolutePath()));
                 return;
             }
             if(this.applyDoc.getName().endsWith(".doc")){
@@ -364,27 +368,35 @@ public class ApplyData {
             }else if(this.applyDoc.getName().endsWith(".docx")){
                 this.wordResolve(this.applyDoc, "docx");
             }else{
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 檔案格式錯誤: %s", this.getTourName(), this.applyDoc.getName()));
+                CommonHelp.logger.log(Level.ERROR, String.format("[handleApplyData] 檔案格式錯誤。 path: %s", this.applyDoc.getAbsolutePath()));
                 return;
             }
 
-            if(this.travellerList.isEmpty()){
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 無法解析申請資料，旅客人數為0", this.getTourName()));
-                return;
+            CommonHelp.logErrMsgList(this.travelgroup.getErrMsgList());
+            for(Traveller tr : this.travellerList){
+                CommonHelp.logErrMsgList(tr.getErrMsgList());
             }
+            
+            if(this.travellerList.isEmpty()){ return; }
 
             if(this.applyAttachList.isEmpty() || !this.mappingProcess()){
-                CommonHelp.logger.log(Level.ERROR, String.format("[%s] 找不到附加圖片資料，或圖片資料無法與旅客資料對應。  無附件旅客: %s; 待認領附件: %s", this.getTourName(), this.getTravellerNamesOfNoAttach(), this.getRestApplyFolderNames()));
+                CommonHelp.logger.log(
+                        Level.ERROR,
+                        String.format(
+                                "[handleApplyData] 找不到附加圖片資料，或圖片資料無法與旅客資料對應。 無附件旅客: %s; 待認領附件: %s; path: %s",
+                                this.getTravellerNamesOfNoAttach(), this.getRestApplyFolderNames(), this.applyFolder.getAbsolutePath()
+                        )
+                );
             }
 
             if(this.travellerList.size() != this.applyPeopleFolderQty){
-                String m = String.format("[%s] 申請文件解析出的申請人數(%s)與申請人資料夾數(%s)不一致，請確認。", this.getTourName(), this.travellerList.size(), this.applyPeopleFolderQty);
-                m += String.format("旅客: %s; 申請人資料夾: %s", this.getTravellerNames(), this.getApplyFolderNames());
+                String m = String.format("[handleApplyData] 申請文件解析出的申請人數(%s)與申請人資料夾數(%s)不一致，請確認。", this.getTourName(), this.travellerList.size(), this.applyPeopleFolderQty);
+                m += String.format(" 旅客: %s; 申請人資料夾: %s; path: %s", this.getTravellerNames(), this.getApplyFolderNames(), this.applyFolder.getAbsolutePath());
                 CommonHelp.logger.log(Level.ERROR, m);
             }
         
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("[%s]", this.getTourName()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("[handleApplyData] path: %s", this.applyFolder.getAbsolutePath()), e);
         }
     }
     

@@ -3,7 +3,7 @@
     <Appenders>
         <RandomAccessFile name="FILE" fileName="CNHKMOTool.log">
             <PatternLayout>
-                <Pattern>[%d{DEFAULT}][%-5level][%t] - %msg%n: %throwable{5}%n</Pattern>
+                <Pattern>[%d{DEFAULT}][%-5level][%t] - %msg%n: %throwable{15}%n</Pattern>
             </PatternLayout>
         </RandomAccessFile>
         <Console name="STDOUT" target="SYSTEM_OUT">
@@ -13,7 +13,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="WARN">
+        <Root level="INFO">
             <AppenderRef ref="FILE" />
             <AppenderRef ref="STDOUT" />
         </Root>

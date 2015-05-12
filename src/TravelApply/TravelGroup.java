@@ -300,50 +300,45 @@ public class TravelGroup {
 
     public List<ErrMsg> getErrMsgList(){
         List<ErrMsg> errList = new ArrayList<ErrMsg>();
-        if(this.travellerList.isEmpty()){ errList.add(new ErrMsg("旅客人數為0。", 0)); }
+        if(this.travellerList.isEmpty()){
+            errList.add(new ErrMsg("無法解析申請資料，旅客人數為0。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourName)));
+        }
 
         if(this.tourName == null || this.tourName.isEmpty()){ errList.add(new ErrMsg("行程名稱未填寫。", 1));
         }else if(this.tourName.length() > 100){
-            errList.add(new ErrMsg("行程名稱格式有誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 行程名稱格式有誤: \"%s\"。", this.tourName));
+            errList.add(new ErrMsg("行程名稱格式有誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourName)));
         }
 
         if(this.tourStartDate == null || this.tourStartDate.isEmpty()){ errList.add(new ErrMsg("入境日期未填寫。", 1));
         }else if(!this.tourStartDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-            errList.add(new ErrMsg("入境日期格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 入境日期格式錯誤: \"%s\"。", this.tourStartDate));
+            errList.add(new ErrMsg("入境日期格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourStartDate)));
         }
 
         if(this.contactNameOfMainland == null || this.contactNameOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人姓名未填寫。", 1));
         }else if(this.contactNameOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人姓名格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人姓名格式錯誤: \"%s\"。", this.contactNameOfMainland));
+            errList.add(new ErrMsg("緊急聯絡人姓名格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactNameOfMainland)));
         }
 
         if(this.contactTitleOfMainland == null || this.contactTitleOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人關係未填寫。", 1));
         }else if(this.contactTitleOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人關係格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人關係格式錯誤: \"%s\"。", this.contactTitleOfMainland));
+            errList.add(new ErrMsg("緊急聯絡人關係格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactTitleOfMainland)));
         }
 
         if(this.contactGenderOfMainland == null){ errList.add(new ErrMsg("緊急聯絡人性別未填寫。", 1)); }
 
         if(this.contactMobileNoOfMainland == null || this.contactMobileNoOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人手機未填寫。", 1));
         }else if(this.contactMobileNoOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人手機格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人手機格式錯誤: \"%s\"。", this.contactMobileNoOfMainland));
+            errList.add(new ErrMsg("緊急聯絡人手機格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactMobileNoOfMainland)));
         }
 
         if(this.contactTelNoOfMainland == null || this.contactTelNoOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人電話未填寫。", 1));
         }else if(this.contactTelNoOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人電話格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人電話格式錯誤: \"%s\"。", this.contactTelNoOfMainland));
+            errList.add(new ErrMsg("緊急聯絡人電話格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactTelNoOfMainland)));
         }
 
         if(this.contactAddressOfMainland == null || this.contactAddressOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人地址未填寫。", 1));
         }else if(this.contactAddressOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人地址格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup] 緊急聯絡人地址格式錯誤: \"%s\"。", this.contactAddressOfMainland));
+            errList.add(new ErrMsg("緊急聯絡人地址格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactAddressOfMainland)));
         }
         return errList;
     }

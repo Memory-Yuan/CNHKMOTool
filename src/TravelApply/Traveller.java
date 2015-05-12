@@ -4,7 +4,10 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import org.apache.logging.log4j.Level;
 
@@ -177,14 +180,15 @@ public class Traveller {
     }
     
     public Integer getBirthPlace1Idx(String s){
+        String bp = CommonHelp.transToTC(s.trim());
+        if(bp == "" || bp.isEmpty()){
+            return 0;
+        }
         String placeStr = "請選擇, 台北, 高雄, 廣州, 上海, 南京, 漢口, 重慶, 青島, 天津, 北京, 西安, 大連, 瀋陽, 哈爾濱, 台灣, 福建, 廣東, 廣西, 雲南, 貴州, 海南, 江蘇, 浙江, 安徽, 江西, 湖南, 湖北, 四川, 山東, 山西, 河南, 河北, 陜西, 甘肅, 遼寧, 遼北, 安東, 吉林, 松江, 合江, 嫩江, 黑龍江, 興安, 熱河, 察哈爾, 綏遠, 寧夏, 蒙古, 新疆, 青海, 西康, 西藏";
         String[] placeArr = placeStr.split(", ");
-        String bp = CommonHelp.transToTC(s.trim());
-        if(bp.length() >= 0){
-            for(int i = 0; i < placeArr.length; i++){
-                if(bp.indexOf(placeArr[i]) >= 0){
-                    return i;
-                }
+        for(int i = 0; i < placeArr.length; i++){
+            if(bp.indexOf(placeArr[i]) >= 0){
+                return i;
             }
         }
         return 0;
@@ -243,6 +247,43 @@ public class Traveller {
         }
     }
 
+    public Integer getOccupationId(String s){
+        String occuDesc = CommonHelp.transToTC(s.trim());
+        if(occuDesc == "" || occuDesc.isEmpty()){
+            return 17;
+        }
+        
+        HashMap occuMap = new HashMap();
+        occuMap.put(14, "學生");
+
+        for (Object key : occuMap.keySet()) {
+            String val = (String)occuMap.get(key);
+            if(occuDesc.indexOf(val) >= 0){
+                return (int)key;
+            }
+        }
+        return 0;
+            
+//<option value="1">軍</option>
+//<option value="2">公</option>
+//<option value="3">教</option>
+//<option value="4">私</option>
+//<option value="5">商</option>
+//<option value="6">農</option>
+//<option value="7">工</option>
+//<option value="8">醫</option>
+//<option value="9">宗</option>
+//<option value="10">演</option>
+//<option value="11">新聞</option>
+//<option value="12">漁</option>
+//<option value="13">輪</option>
+//<option value="14">學</option>
+//<option value="15">自</option>
+//<option value="16">其他</option>
+//<option value="17">無</option>
+//<option value="18">警</option>
+    }
+    
     public String getOccupationDesc(){
         return this.occupationDesc;
     }
@@ -462,38 +503,32 @@ public class Traveller {
 
         if(this.chineseName == null || this.chineseName.isEmpty()){ errList.add(new ErrMsg("中文姓名未填寫。", 1));
         }else if(this.chineseName.length() > 40){
-            errList.add(new ErrMsg("中文姓名格式有誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 中文姓名格式有誤: \"%s\"。", this.chineseName));
+            errList.add(new ErrMsg("中文姓名格式有誤。", 0, "[Traveller]", String.format("\"%s\"", this.chineseName)));
         }
 
         if(this.englishName == null || this.englishName.isEmpty()){ errList.add(new ErrMsg("英文姓名未填寫。", 1));
         }else if(this.englishName.length() > 50){
-            errList.add(new ErrMsg("英文姓名格式有誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 英文姓名格式有誤: \"%s\"。", this.englishName));
+            errList.add(new ErrMsg("英文姓名格式有誤。", 0, "[Traveller]", String.format("\"%s\"", this.englishName)));
         }
 
         if(this.birthDate == null || this.birthDate.isEmpty()){ errList.add(new ErrMsg("出生年月日未填寫。", 1));
         }else if(!this.birthDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-            errList.add(new ErrMsg("出生年月日格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 出生年月日格式有誤: \"%s\"。", this.birthDate));
+            errList.add(new ErrMsg("出生年月日格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthDate)));
         }
 
         if(this.personId == null || this.personId.isEmpty()){ errList.add(new ErrMsg("身分證號未填寫。", 1));
         }else if(!this.personId.matches("^\\w{18}$")){
-            errList.add(new ErrMsg("身分證號格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 身分證號格式有誤: \"%s\"。", this.personId));
+            errList.add(new ErrMsg("身分證號格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.personId)));
         }
 
         if(this.passportNo == null || this.passportNo.isEmpty()){ errList.add(new ErrMsg("通行證號未填寫。", 1));
         }else if(!this.passportNo.matches("^T\\d{8}$")){
-            errList.add(new ErrMsg("通行證號格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 通行證號格式有誤: \"%s\"。", this.passportNo));
+            errList.add(new ErrMsg("通行證號格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.passportNo)));
         }
 
         if(this.passportExpiryDate == null || this.passportExpiryDate.isEmpty()){ errList.add(new ErrMsg("通行證有效期未填寫。", 1));
         }else if(!this.passportExpiryDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-            errList.add(new ErrMsg("通行證有效期格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 通行證有效期格式有誤: \"%s\"。", this.passportExpiryDate));
+            errList.add(new ErrMsg("通行證有效期格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.passportExpiryDate)));
         }
 
         if(this.gender == null){ errList.add(new ErrMsg("性別未選擇。", 1)); }
@@ -501,37 +536,30 @@ public class Traveller {
         if(this.occupation == null){ errList.add(new ErrMsg("職業類別未選擇。", 1)); }
         if(this.occupationDesc == null || this.occupationDesc.isEmpty()){ errList.add(new ErrMsg("職業未填寫。", 1));
         }else if(this.occupationDesc.length() > 40){
-            errList.add(new ErrMsg("職業格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 職業格式有誤: \"%s\"。", this.occupationDesc));
+            errList.add(new ErrMsg("職業格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.occupationDesc)));
         }
 
         if(this.livingCity == null){ errList.add(new ErrMsg("居住地未選擇。", 1)); }
         if(this.address == null || this.address.isEmpty()){ errList.add(new ErrMsg("地址未填寫。", 1));
         }else if(this.address.length() > 128){
-            errList.add(new ErrMsg("地址格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 地址格式有誤: \"%s\"。", this.address));
+            errList.add(new ErrMsg("地址格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.address)));
         }
 
         if(this.birthPlace1 == null){ errList.add(new ErrMsg("出生地-省(市)未選擇。", 1)); }
         if(this.birthPlace2 == null || this.birthPlace2.isEmpty()){ errList.add(new ErrMsg("出生地-縣(市)未填寫。", 1));
         }else if(this.birthPlace2.length() > 128){
-            errList.add(new ErrMsg("出生地-縣(市)格式錯誤。", 0));
-            CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 出生地-縣(市)格式錯誤。: \"%s\"。", this.birthPlace2));
+            errList.add(new ErrMsg("出生地-縣(市)格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthPlace2)));
         }
-        
-        if(this.partnerOfTaiwan == null){ errList.add(new ErrMsg("是否為台灣人民之配偶未選擇。", 1)); }
 
         if(this.seqNo != 0){
             if(this.kinsfolk == null || this.kinsfolk.isEmpty()){ errList.add(new ErrMsg("隨行親友姓名未填寫。", 1));
             }else if(this.kinsfolk.length() > 20){
-                errList.add(new ErrMsg("隨行親友姓名格式錯誤。", 0));
-                CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 隨行親友姓名格式有誤: \"%s\"。", this.kinsfolk));
+                errList.add(new ErrMsg("隨行親友姓名格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.kinsfolk)));
             }
 
             if(this.relativeTitle == null || this.relativeTitle.isEmpty()){ errList.add(new ErrMsg("隨行親友稱謂未填寫。", 1));
             }else if(this.relativeTitle.length() > 16){
-                errList.add(new ErrMsg("隨行親友稱謂格式錯誤。", 0));
-                CommonHelp.logger.log(Level.ERROR, String.format("[Traveller] 隨行親友稱謂格式有誤: \"%s\"。", this.relativeTitle));
+                errList.add(new ErrMsg("隨行親友稱謂格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.relativeTitle)));
             }
         }
 

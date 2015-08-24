@@ -42,6 +42,7 @@ public class ApplyData {
     private void initDocData(){
         this.travelgroup = new TravelGroup();
         this.travellerList = this.travelgroup.getTravellerList();
+        this.resetApplyAttachListStatus();
         this.errOfResolvingList = new ArrayList<ErrMsg>();
         this.status = 0;
     }
@@ -54,6 +55,7 @@ public class ApplyData {
     private List<ApplyAttach> applyAttachList;
     private List<ErrMsg> errOfResolvingList;
     private int applyPeopleFolderQty;
+    private String savingErr;
     private final String HeadShotName = "HeadShot.jpg";
     
     private FileFilter hiddenFilter = new FileFilter() {
@@ -109,6 +111,12 @@ public class ApplyData {
             if(!aa.isMapping()){ rest.add(aa); }
         }
         return rest;
+    }
+    
+    private void resetApplyAttachListStatus(){
+        for(ApplyAttach aa : this.applyAttachList){
+            aa.setMappingStatus(false);
+        }
     }
     
     public String getTravellerNames(){
@@ -215,7 +223,7 @@ public class ApplyData {
             }
             if(tableList.isEmpty()){
                 CommonHelp.logger.log(Level.WARN, String.format("[wordResolve] Word文件找不到資料表格！ path: %s", this.applyDoc.getAbsolutePath()));
-                this.errOfResolvingList.add(new ErrMsg("Word文件找不到資料表格！", 0)); return;
+                this.errOfResolvingList.add(new ErrMsg("*Word文件找不到資料表格！", 0)); return;
             }
             
             Traveller traveller;
@@ -293,16 +301,16 @@ public class ApplyData {
             }
         } catch(FileFormatException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] 請選擇正確的檔案格式 - Microsotf Word. path: %s", this.applyDoc.getAbsolutePath()));
-            this.errOfResolvingList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
+            this.errOfResolvingList.add(new ErrMsg("*請選擇正確的檔案格式 - Microsotf Word。", 0));
         } catch (FileNotFoundException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] 找不到文件！ path: %s", this.applyFolder.getAbsolutePath()));
-            this.errOfResolvingList.add(new ErrMsg("找不到文件！", 0));
+            this.errOfResolvingList.add(new ErrMsg("*找不到文件！", 0));
         } catch (IOException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] path: %s", this.applyFolder.getAbsolutePath()), e);
-            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
+            this.errOfResolvingList.add(new ErrMsg("*出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
         } catch (Exception e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] path: %s", this.applyFolder.getAbsolutePath()), e);
-            this.errOfResolvingList.add(new ErrMsg("出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
+            this.errOfResolvingList.add(new ErrMsg("*出現錯誤，請再試一次，或聯絡工程師來為你解決。", 0));
         }
     }
     
@@ -354,7 +362,9 @@ public class ApplyData {
     public void handleApplyData(boolean isReloadDoc){
         try{
             if(isReloadDoc){
+                String tn = this.getTourName();
                 this.initDocData();
+                if(tn != null && !tn.isEmpty()){ this.setTourName(tn); }
             }else{
                 this.getFolderFile();
             }
@@ -412,13 +422,13 @@ public class ApplyData {
         List<ErrMsg> errMsgList = new ArrayList<ErrMsg>();
 
         if(this.applyDoc == null){
-            errMsgList.add(new ErrMsg("找不到申請文件，請手動選擇。", 0));
+            errMsgList.add(new ErrMsg("*找不到申請文件，請手動選擇。", 0));
             return errMsgList;
         }
         
         String fn = this.applyDoc.getName().toLowerCase();
         if(!fn.endsWith(".doc") && !fn.endsWith(".docx")){
-            errMsgList.add(new ErrMsg("請選擇正確的檔案格式 - Microsotf Word。", 0));
+            errMsgList.add(new ErrMsg("*請選擇正確的檔案格式 - Microsotf Word。", 0));
             return errMsgList;
         }
 
@@ -431,16 +441,30 @@ public class ApplyData {
         return errMsgList;
     }
     
+    public String getSavingErr(){
+        return this.savingErr;
+    }
+    
+    public void setSavingErr(String s){
+        this.savingErr = s;
+    }
+    
     public boolean isPass(){
 //        if(!this.errOfResolvingList.isEmpty()){ return false; }
 //        if(!this.getErrMsgList().isEmpty()){ return false; }
-        if(this.travelgroup.getValidateStatus() == 2){ return false; }
-        for(Traveller traveller : travellerList){
-            if(traveller.getValidateStatus() == 2){ return false; }
-        }
-        return true;
+//        if(this.travelgroup.getValidateStatus() == 2){ return false; }
+//        for(Traveller traveller : travellerList){
+//            if(traveller.getValidateStatus() == 2){ return false; }
+//        }
+//        return true;
+        
+        return (this.getValidateStatus() != 2);
     }
     
+    /**
+     * 回傳此ApplyData的資料驗證結果。
+     * @return 0: OK, 1: warning, 2: error
+     */
     public int getValidateStatus(){
         int tgv = this.travelgroup.getValidateStatus();
         

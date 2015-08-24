@@ -1,9 +1,12 @@
 /**
- * CNHKMOTool v1.4.3
- * 拿掉「是否為台灣人民配偶」
- * 修改紀錄Log時有些地方會重複多次的問題
- * 職業判斷
- * 出生地判斷
+ * CNHKMOTool v1.4.4
+ * Bug修復
+ *      重選DOC時，tree沒有被選到，且成員沒有重設
+ * 程式重構
+ * 保險串接
+ *      有些資料要改成必填
+ *      tree顯示問題
+ * 儲存之後暫定不能修改
  */
 package CNHKMOTool;
 
@@ -86,6 +89,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         closeLinkBtn = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         dbStatusLabel = new javax.swing.JLabel();
+        insuranceApply = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         applyDataTreeScrollPane = new javax.swing.JScrollPane();
         rootNode = new DefaultMutableTreeNode("root");
@@ -98,7 +102,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         batchSelectFolderBtn = new javax.swing.JButton();
         selectFolderBtn = new javax.swing.JButton();
         removeApplyDataBtn = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
         loadingPanel = new javax.swing.JPanel();
         applyDataPanel = new javax.swing.JPanel();
@@ -285,7 +288,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         myFileChooser.setFileFilter(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.3");
+        setTitle("CNHKMOTool-v1.4.4");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -348,6 +351,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         dbStatusLabel.setFont(new java.awt.Font("新細明體", 1, 13)); // NOI18N
         dbStatusLabel.setText("0");
 
+        insuranceApply.setFont(new java.awt.Font("新細明體", 0, 16)); // NOI18N
+        insuranceApply.setText("保險申請");
+        insuranceApply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insuranceApplyActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -364,8 +375,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dbStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(dbStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(showGuideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -374,8 +384,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(closeLinkBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(clearAllBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(clearAllBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(212, 212, 212)
+                .addComponent(insuranceApply)
+                .addGap(18, 18, 18)
                 .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -386,6 +398,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(insuranceApply, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -465,13 +480,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("test");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -482,21 +490,22 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(applyDataTreeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(batchSelectFolderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(batchSelectFolderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(refreshTreeBtn)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(removeApplyDataBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(applyDataCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectFolderBtn))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(refreshTreeBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(removeApplyDataBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(applyDataCountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton7)))
+                        .addComponent(selectFolderBtn)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -505,12 +514,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(applyDataTreeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
-                        .addComponent(applyDataCountLabel))
-                    .addComponent(jButton7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(applyDataCountLabel))
+                .addGap(14, 14, 14)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(selectFolderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                     .addComponent(batchSelectFolderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
@@ -1244,8 +1251,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
-        setBottomAreaDisable();
-        setAllDisable();
+        mainCards.show(mainPanel, "loadingCard");
+        setAllAreaEnabled(false);
         SwingWorker smworker = new SubmitWorker();
         smworker.execute();
     }//GEN-LAST:event_submitActionPerformed
@@ -1285,7 +1292,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         if (status == JFileChooser.APPROVE_OPTION) {
             File[] files = myFileChooser.getSelectedFiles();
             initMainArea(); //@modify
-            setAllDisable();
+            setAllAreaEnabled(false);
             statusLabel.setText("讀取中...");
             SwingWorker fworker = new FolderWorker(files);
             fworker.execute();
@@ -1309,7 +1316,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.resetHeadShot();
-        setAttachJList();
+        loadTravellerData(tr);
     }//GEN-LAST:event_resetHeadShotActionPerformed
 
     private void setToHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setToHeadShotActionPerformed
@@ -1331,7 +1338,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         Attach attach = (Attach) attachJList.getSelectedValue();
         attach.setType("1");
 
-        setAttachJList();
+        loadTravellerData(tr);
     }//GEN-LAST:event_setToHeadShotActionPerformed
 
     private void removeAllAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllAttachBtnActionPerformed
@@ -1341,7 +1348,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.setAttachList(new ArrayList<Attach>());
-        setAttachJList();
+        loadTravellerData(tr);
     }//GEN-LAST:event_removeAllAttachBtnActionPerformed
 
     private void removeAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAttachBtnActionPerformed
@@ -1352,7 +1359,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         if (attachJList.getSelectedIndices().length == 0) { return; }
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.removeAttachs(attachJList.getSelectedValuesList());
-        setAttachJList();
+        loadTravellerData(tr);
     }//GEN-LAST:event_removeAttachBtnActionPerformed
 
     private void selectAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAttachBtnActionPerformed
@@ -1388,7 +1395,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         if (status == JFileChooser.APPROVE_OPTION) {
             initMainArea();
             File[] files = myFileChooser.getSelectedFiles();
-            setAllDisable();
+            setAllAreaEnabled(false);
             statusLabel.setText("讀取中...");
             SwingWorker rfworker = new RootFolderWorker(files);
             rfworker.execute();
@@ -1427,17 +1434,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         selectedNode = (DefaultMutableTreeNode) applyDataTree.getLastSelectedPathComponent();
         if (selectedNode instanceof ApplyDataNode) {
             ApplyData applyData = (ApplyData) selectedNode.getUserObject();
-            mainCards.show(mainPanel, "loadingCard");
-            setAllDisable();
-            statusLabel.setText("讀取中...");
-            SwingWorker sadlworker = new SingleApplyDataLoadWorker(applyData);
-            sadlworker.execute();
+            loadApplyData(applyData);
         } else if (selectedNode instanceof TravellerNode) {
-            mainCards.show(mainPanel, "loadingCard");
-            setAllDisable();
-            statusLabel.setText("讀取中...");
-            SwingWorker trdlworker = new TravellerDataLoadWorker();
-            trdlworker.execute();
+            Traveller traveller = (Traveller) selectedNode.getUserObject();
+            loadTravellerData(traveller);
         }
     }//GEN-LAST:event_applyDataTreeValueChanged
 
@@ -1482,16 +1482,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         collapseTree();
     }//GEN-LAST:event_collapseAlljMenuItemActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-//        applyDataTree.updateUI();
-//        refreshTree();
-//        for (int i = 0; i < rootNode.getChildCount(); i++) {
-//                DefaultMutableTreeNode node = (DefaultMutableTreeNode) applyDataTreeModel.getChild(rootNode, i);
-//                ApplyData applyData = (ApplyData)node.getUserObject();
-//                System.out.println(applyData.getTravelgroup().getTravellerList().size());
-//        }
-    }//GEN-LAST:event_jButton7ActionPerformed
-
     private void applyDataSaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyDataSaveBtnActionPerformed
         if (!(selectedNode instanceof ApplyDataNode)) {
             CommonHelp.logger.log(Level.ERROR, String.format("[applyDataSaveBtnAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
@@ -1513,15 +1503,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }catch(Exception e){
             CommonHelp.logger.log(Level.ERROR, String.format("[applyDataSave][TravelGroup] applyDataSave失敗。 path: %s", ad.getApplyFolder().getAbsolutePath()), e);
         }
-        applyDataTree.repaint();
-        checkErrMsg();
+        loadApplyData(ad);
     }//GEN-LAST:event_applyDataSaveBtnActionPerformed
+    
     /**
      * @modify認領附件，
      * @param evt 
      */
     private void selectRestAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectRestAttachBtnActionPerformed
-        //
+
         if (restApplyAttachList.getSelectedIndices().length == 0) {
             showMessage("請選擇附件資料夾。", "warning");
             return;
@@ -1542,8 +1532,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         aa.setMappingStatus(true);
         
-        setAttachJList();
-        setRestApplyAttachList();
+        loadTravellerData(tr);
     }//GEN-LAST:event_selectRestAttachBtnActionPerformed
 
     private void expandjMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expandjMenuItemActionPerformed
@@ -1647,8 +1636,34 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             CommonHelp.logger.log(Level.ERROR, String.format("[travellerSave][Traveller][%s] travellerSave失敗。 path: %s", tr.getChineseName(), ad.getApplyFolder().getAbsolutePath()), e);
         }
         applyDataTree.repaint();
-        checkErrMsg();
+        loadTravellerData(tr);
     }//GEN-LAST:event_travellerSaveBtnActionPerformed
+
+    private void insuranceApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insuranceApplyActionPerformed
+        mainCards.show(mainPanel, "loadingCard");
+        setAllAreaEnabled(false);
+        SwingWorker insworker = new InsuranceWorker();
+        insworker.execute();
+//        ApplyData ad;
+//        if (selectedNode instanceof ApplyDataNode) {
+//            ad = (ApplyData) selectedNode.getUserObject();
+//        } else if (selectedNode instanceof TravellerNode) {
+//            ad = (ApplyData)((DefaultMutableTreeNode)selectedNode.getParent()).getUserObject();
+//        } else {
+//            CommonHelp.logger.log(Level.ERROR, String.format("[insuranceApplyAction] 錯誤的selectedNode: %s", selectedNode.getClass()));
+//            return;
+//        }
+//        
+//        TravelGroup tg = ad.getTravelgroup();
+//        Insurance ins = new Insurance();
+//        
+//        try{
+//            ins.createXml(tg);
+//            ins.postXml();
+//        }catch(Exception e){
+//            CommonHelp.logger.log(Level.ERROR, String.format("[insurance][TravelGroup] insurance失敗。 path: %s", ad.getApplyFolder().getAbsolutePath()), e);
+//        }
+    }//GEN-LAST:event_insuranceApplyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1734,7 +1749,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea guideContent;
     private javax.swing.JPanel guidePanel;
     private static javax.swing.JCheckBox imageCheckBox;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton insuranceApply;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1845,9 +1860,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             return file.isDirectory();
         }
     };
-
+    
     private void initAllArea() {
         submit.setEnabled(false);
+        insuranceApply.setEnabled(false);
         mainCards.show(mainPanel, "loadingCard");
         initApplyTree();
         initMainArea();
@@ -1863,7 +1879,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void initMainArea() {
         initApplyDataArea();
-        initTravellerArea();
+        initTravellerDataArea();
     }
 
     private void initApplyDataArea() {
@@ -1881,7 +1897,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         applyErrMsg.setText("");
     }
 
-    private void initTravellerArea() {
+    private void initTravellerDataArea(){
+        initTravellerDetailArea();
+        initTravellerAttachArea();
+        travellerErrMsg.setText("");
+    }
+    
+    private void initTravellerDetailArea() {
         trApplyQualificationComboBox.setSelectedIndex(0);
         trChineseNameText.setText("");
         trEnglishNameText.setText("");
@@ -1897,6 +1919,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trAddressText.setText("");
         trRelativeText.setText("");
         trRelativeTitleText.setText("");
+    }
+    
+    private void initTravellerAttachArea(){
         attachListModel.removeAllElements();
         attachCountLabel.setText("0");
         restApplyAttachListModel.removeAllElements();
@@ -1938,15 +1963,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
 
     /**
-     * 在變換applyDataJTree的選擇的元素時，會啟動， 主要就是顯示右方區域資料
+     * 將資料載入ApplyDataArea
+     * @param applyData 
      */
-    private void setSingleApplyArea(ApplyData ad) {
+    private void setApplyDataArea(ApplyData applyData) {
         try {
             initApplyDataArea();
-            folderPath.setText(ad.getApplyFolder().getAbsolutePath());
-            applyDocPath.setText(ad.getApplyDoc() == null ? "" : ad.getApplyDoc().getAbsolutePath());
-            tourNameText.setText(ad.getTourName());
-            TravelGroup tg = ad.getTravelgroup();
+            folderPath.setText(applyData.getApplyFolder().getAbsolutePath());
+            applyDocPath.setText(applyData.getApplyDoc() == null ? "" : applyData.getApplyDoc().getAbsolutePath());
+            tourNameText.setText(applyData.getTourName());
+            TravelGroup tg = applyData.getTravelgroup();
             tgTourStartDateText.setText(tg.getTourStartDate());
             tgTourEndDateText.setText(tg.getTourEndDate());
             contactAddressText.setText(tg.getContactAddressOfMainland());
@@ -1956,45 +1982,40 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             contactTelNoText.setText(tg.getContactTelNoOfMainland());
             contactTitleText.setText(tg.getContactTitleOfMainland());
         } catch (NumberFormatException e) {
-            CommonHelp.logger.log(Level.WARN, String.format("[setSingleApplyArea] path: %s", ad.getApplyFolder().getAbsolutePath()), e);
+            CommonHelp.logger.log(Level.WARN, String.format("[setApplyDataArea] path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
         } catch (Exception e) {
-            CommonHelp.logger.log(Level.WARN, String.format("[setSingleApplyArea] path: %s", ad.getApplyFolder().getAbsolutePath()), e);
+            CommonHelp.logger.log(Level.WARN, String.format("[setApplyDataArea] path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
         }
     }
 
     /**
      * 更新附件區域。
      */
-    private void setAttachJList() {
-        setAttachJList(true);
-    }
-
-    private void setAttachJList(boolean isAlone) {
-        if (isAlone) {
-            setAllDisable();
-            mainCards.show(mainPanel, "loadingCard");
-            statusLabel.setText("讀取中...");
+    private void setAttachJList(Traveller tr) {
+        try{
+            attachListModel.removeAllElements();
+            for (Attach a : tr.getAttachList()) {
+                attachListModel.addElement(a);
+            }
+            attachCountLabel.setText(String.valueOf(attachJList.getModel().getSize()));
+        }catch(Exception e){
+            CommonHelp.logger.log(Level.ERROR, "[setAttachJList] 錯誤", e);
         }
-        SwingWorker allworker = new AttachListLoadWorker(isAlone);
-        allworker.execute();
     }
 
-    private void setRestApplyAttachList() {
-        setRestApplyAttachList(true);
-    }
-
-    private void setRestApplyAttachList(boolean isAlone) {
-        if (isAlone) {
-            setAllDisable();
-            mainCards.show(mainPanel, "loadingCard");
-            statusLabel.setText("讀取中...");
+    private void setRestApplyAttachList(ApplyData applyData) {
+        try{
+            List<ApplyAttach> laa = applyData.getRestApplyAttachList();
+            restApplyAttachListModel.removeAllElements();
+            for (ApplyAttach aa : laa) {
+                restApplyAttachListModel.addElement(aa);
+            }
+        }catch(Exception e){
+            CommonHelp.logger.log(Level.ERROR, "[setRestApplyAttachList] 錯誤", e);
         }
-        SwingWorker raallworker = new RestApplyAttachListLoadWorker(isAlone);
-        raallworker.execute();
     }
 
-    private void setTravellerDetail() {
-        Traveller tr = (Traveller) selectedNode.getUserObject();
+    private void setTravellerDetail(Traveller tr) {
         try{
             trApplyQualificationComboBox.setSelectedIndex(tr.getApplyQualificationIdxByCode());
             trAddressText.setText(tr.getAddress());
@@ -2030,89 +2051,120 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
 
-    private void setTreeAreaDisable() {
-        applyDataTree.setEnabled(false);
-        batchSelectFolderBtn.setEnabled(false);
-        selectFolderBtn.setEnabled(false);
-        removeApplyDataBtn.setEnabled(false);
-        refreshTreeBtn.setEnabled(false);
+    private void setErrMsg(ApplyData applyData){
+        try{
+            applyErrMsg.setText("");
+            List<ErrMsg> reml = applyData.getErrMsgOfResolving();
+            List<ErrMsg> eml = applyData.getErrMsgList();
+            String savingErr = applyData.getSavingErr();
+            if(!reml.isEmpty()) {
+                for(ErrMsg m : reml) {
+                    applyErrMsg.append("[資料解析]" + m.getMsg() + "\n");
+                }
+                applyData.clearErrMsgOfResolving();
+            }
+            if(!eml.isEmpty()){
+                for(ErrMsg m : eml) {
+                    applyErrMsg.append("[資料解析]" + m.getMsg() + "\n");
+                }
+            }
+            if(savingErr != null && !savingErr.isEmpty()){
+                applyErrMsg.append("[資料儲存]" + savingErr + "\n");
+            }
+        } catch (Exception e){
+            CommonHelp.logger.log(Level.ERROR, "[setErrMsg][ApplyData] 錯誤", e);
+        }
+    }
+    
+    private void setErrMsg(Traveller traveller){
+        try{
+            travellerErrMsg.setText("");
+            List<ErrMsg> eml = traveller.getErrMsgList();
+            String insuranceErr = traveller.getInsurance().getErr();
+            if(!eml.isEmpty()){
+                for(ErrMsg m : eml) {
+                    travellerErrMsg.append("[資料解析]" + m.getMsg() + "\n");
+                }
+            }
+            if(insuranceErr != null && !insuranceErr.isEmpty()){
+                travellerErrMsg.append("[保險申請]" + insuranceErr + "\n");
+            }
+        } catch (Exception e) {
+            CommonHelp.logger.log(Level.ERROR, "[setErrMsg][Traveller] 錯誤", e);
+        }
+    }
+    
+    private void setTreeAreaEnabled(boolean b) {
+        applyDataTree.setEnabled(b);
+        batchSelectFolderBtn.setEnabled(b);
+        selectFolderBtn.setEnabled(b);
+        removeApplyDataBtn.setEnabled(b);
+        refreshTreeBtn.setEnabled(b);
     }
 
-    private void setTreeAreaEnable() {
-        applyDataTree.setEnabled(true);
-        batchSelectFolderBtn.setEnabled(true);
-        selectFolderBtn.setEnabled(true);
-        removeApplyDataBtn.setEnabled(true);
-        refreshTreeBtn.setEnabled(true);
+    private void setMainAreaEnabled(boolean b){
+        setApplyDataAreaEnabled(b);
+        setTravellerDataAreaEnabled(b);
+    }
+    
+    private void setApplyDataAreaEnabled(boolean b) {
+        selectApplyDocBtn.setEnabled(b);
+        applyDataSaveBtn.setEnabled(b);
+        docDropTarget.setActive(b);
     }
 
-    private void setApplyDataAreaDisable() {
-        setAttachAreaDisable();
-        tourNameText.setEnabled(false);
-        selectApplyDocBtn.setEnabled(false);
-        applyDataSaveBtn.setEnabled(false);
-        docDropTarget.setActive(false);
+    private void setTravellerDataAreaEnabled(boolean b){
+        travellerSaveBtn.setEnabled(b);
+        setAttachAreaEnabled(b);
     }
-
-    private void setApplyDataAreaEnable() {
-        setAttachAreaEnable();
-        tourNameText.setEnabled(true);
-        selectApplyDocBtn.setEnabled(true);
-        applyDataSaveBtn.setEnabled(true);
-        docDropTarget.setActive(true);
+    
+    private void setAttachAreaEnabled(boolean b) {
+        selectAttachBtn.setEnabled(b);
+        setToHeadShot.setEnabled(b);
+        resetHeadShot.setEnabled(b);
+        removeAttachBtn.setEnabled(b);
+        removeAllAttachBtn.setEnabled(b);
+        attachJList.setEnabled(b);
+        attachDropTarget.setActive(b);
+        selectRestAttachBtn.setEnabled(b);
     }
-
-    private void setAttachAreaDisable() {
-        selectAttachBtn.setEnabled(false);
-        setToHeadShot.setEnabled(false);
-        resetHeadShot.setEnabled(false);
-        removeAttachBtn.setEnabled(false);
-        removeAllAttachBtn.setEnabled(false);
-        attachJList.setEnabled(false);
-        attachDropTarget.setActive(false);
+    
+    private void setBottomAreaEnabled(boolean b) {
+        createLinkBtn.setEnabled(b);
+        closeLinkBtn.setEnabled(b);
+        clearAllBtn.setEnabled(b);
+        submit.setEnabled(b);
+        exit.setEnabled(b);
+        insuranceApply.setEnabled(b);
     }
-
-    private void setAttachAreaEnable() {
-        selectAttachBtn.setEnabled(true);
-        setToHeadShot.setEnabled(true);
-        resetHeadShot.setEnabled(true);
-        removeAttachBtn.setEnabled(true);
-        removeAllAttachBtn.setEnabled(true);
-        attachJList.setEnabled(true);
-        attachDropTarget.setActive(true);
+    
+    private void setAllAreaEnabled(boolean b) {
+        setTreeAreaEnabled(b);
+        setMainAreaEnabled(b);
+        setBottomAreaEnabled(b);
     }
-
-    private void setBottomAreaDisable() {
-        createLinkBtn.setEnabled(false);
-        closeLinkBtn.setEnabled(false);
-        clearAllBtn.setEnabled(false);
-        submit.setEnabled(false);
-        exit.setEnabled(false);
-    }
-
-    private void setBottomAreaEnable() {
-        createLinkBtn.setEnabled(false);
-        closeLinkBtn.setEnabled(false);
-        clearAllBtn.setEnabled(false);
-        exit.setEnabled(false);
-    }
-
-    private void setAllDisable() {
-        setTreeAreaDisable();
-        setApplyDataAreaDisable();
-        clearAllBtn.setEnabled(false);
-//        refreshBtn.setEnabled(false);
-    }
-
+    
     /**
      * 確認所有的component是否可被Enable
      */
     private void allEnableChk() {
-        setTreeAreaEnable();
-        setApplyDataAreaEnable();
+        setTreeAreaEnabled(true);
+        
         clearAllBtn.setEnabled(true);
         exit.setEnabled(true);
+        
+        if (selectedNode instanceof ApplyDataNode) {
+            ApplyData applyData = (ApplyData) selectedNode.getUserObject();
+            setMainAreaEnabled(applyData.getStatus() == 1? false : true);
+        } else if (selectedNode instanceof TravellerNode) {
+            ApplyData applyData = (ApplyData)((DefaultMutableTreeNode)selectedNode.getParent()).getUserObject();
+            setMainAreaEnabled(applyData.getStatus() == 1? false : true);
+        }
 
+        if (rootNode.getChildCount() > 0) {
+            insuranceApply.setEnabled(true);
+        }
+        
         try {
             if (this.conn == null || this.conn.isClosed()) {
                 createLinkBtn.setEnabled(true);
@@ -2122,8 +2174,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     submit.setEnabled(true);
                 }
             }
-        } catch (SQLException ignore) {
-        }
+        } catch (SQLException ignore) {}
 
         applyDataTree.updateUI();
         attachJList.updateUI();
@@ -2151,7 +2202,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
      * @param applyData
      * @return 儲存成功return true
      */
-    private String insertData(ApplyData applyData) {
+    private boolean insertData(ApplyData applyData) {
         TravelGroup travelgroup = applyData.getTravelgroup();
         List<Traveller> travellerList = travelgroup.getTravellerList();
         travelgroup.setApplyDate();
@@ -2219,58 +2270,30 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 //                System.out.println(insertStr);
                 st.executeUpdate(insertStr);
             }
+            return true;
         } catch (IOException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
-            return travelgroup.getTourName() + " - " + e.getMessage();
+            applyData.setSavingErr("儲存失敗。" + e.getMessage());
+            return false;
         } catch (SQLException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
-            return travelgroup.getTourName() + " - " + e.getMessage();
+            applyData.setSavingErr("儲存失敗。" + e.getMessage());
+            return false;
         } catch (ParseException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
-            return travelgroup.getTourName() + " - " + e.getMessage();
+            applyData.setSavingErr("儲存失敗。" + e.getMessage());
+            return false;
         } catch (Exception e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
-            return travelgroup.getTourName() + " - " + e.getMessage();
-        }
-        return "";
-    }
-
-    /**
-     * 確認每筆資料有無錯誤訊息，有就顯示在applyErrMsg
-     */
-    private void checkErrMsg() {
-        if(selectedNode instanceof ApplyDataNode) {
-            applyErrMsg.setText("");
-            ApplyData ad = (ApplyData) selectedNode.getUserObject();
-            List<ErrMsg> reml = ad.getErrMsgOfResolving();
-            List<ErrMsg> eml = ad.getErrMsgList();
-            if(!reml.isEmpty()) {
-                for(ErrMsg m : reml) {
-                    applyErrMsg.append(m.getMsg() + "\n");
-                }
-                ad.clearErrMsgOfResolving();
-            }
-            if(!eml.isEmpty()){
-                for(ErrMsg m : eml) {
-                    applyErrMsg.append(m.getMsg() + "\n");
-                }
-            }
-        }else if (selectedNode instanceof TravellerNode) {
-            travellerErrMsg.setText("");
-            Traveller tr = (Traveller) selectedNode.getUserObject();
-            List<ErrMsg> eml = tr.getErrMsgList();
-            if(!eml.isEmpty()){
-                for(ErrMsg m : eml) {
-                    travellerErrMsg.append(m.getMsg() + "\n");
-                }
-            }
+            applyData.setSavingErr("儲存失敗。" + e.getMessage());
+            return false;
         }
     }
 
     private void addAttach(List<File> files) {
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.addAttach(files);
-        setAttachJList();
+        loadTravellerData(tr);
     }
 
     private void addDoc(File file) {
@@ -2281,7 +2304,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 ad.setApplyDoc(file);
                 mainCards.show(mainPanel, "loadingCard");
                 initMainArea();
-                setAllDisable();
+                setAllAreaEnabled(false);
                 statusLabel.setText("讀取中...");
                 SwingWorker drsworker = new DocReSelectWorker(ad);
                 drsworker.execute();
@@ -2294,21 +2317,30 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private void addNode(File f) {
         try{
             ApplyData ad = new ApplyData(f);
-            ApplyDataNode adn = new ApplyDataNode();
-            adn.setUserObject(ad);
-            applyDataTreeModel.insertNodeInto(adn, rootNode, rootNode.getChildCount());
-
-            List<Traveller> travellerList = ad.getTravelgroup().getTravellerList();
-            for (Traveller tr : travellerList) {
-                TravellerNode trn = new TravellerNode();
-                trn.setUserObject(tr);
-                applyDataTreeModel.insertNodeInto(trn, adn, adn.getChildCount());
-            }
+            ApplyDataNode adNode = new ApplyDataNode();
+            adNode.setUserObject(ad);
+            applyDataTreeModel.insertNodeInto(adNode, rootNode, rootNode.getChildCount());
+            setChildNode(adNode);
         }catch(Exception e){
             CommonHelp.logger.log(Level.ERROR, String.format("addNode失敗。 path: %s", f.getAbsolutePath()), e);
         }
     }
 
+    private void setChildNode(ApplyDataNode adNode){
+        try{
+//            adNode.removeAllChildren();
+            ApplyData applyData = (ApplyData) adNode.getUserObject();
+            List<Traveller> travellerList = applyData.getTravelgroup().getTravellerList();
+            for (Traveller tr : travellerList) {
+                TravellerNode trNode = new TravellerNode();
+                trNode.setUserObject(tr);
+                applyDataTreeModel.insertNodeInto(trNode, adNode, adNode.getChildCount());
+            }
+        }catch(Exception e){
+            CommonHelp.logger.log(Level.ERROR, String.format("setNode失敗。"), e);
+        }
+    }
+    
     private void expandTree() {
         for (int i = 0; i < applyDataTree.getRowCount(); i++) {
             applyDataTree.expandRow(i);
@@ -2346,28 +2378,22 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
 
-    /**
-     *
-     * @param type 1: ApplyDataNode, 2: TravellerNode
-     * @return DefaultMutableTreeNode
-     */
-    private DefaultMutableTreeNode getSelNodeOf(int type) {
-        if (type == 1) {
-            if (selectedNode instanceof ApplyDataNode) {
-                return selectedNode;
-            } else if (selectedNode instanceof TravellerNode) {
-                return (DefaultMutableTreeNode) selectedNode.getParent();
-            }
-        } else {
-            if (selectedNode instanceof TravellerNode) {
-                return selectedNode;
-            } else {
-                return null;
-            }
-        }
-        return null;
+    private void loadApplyData(ApplyData applyData){
+        mainCards.show(mainPanel, "loadingCard");
+        setAllAreaEnabled(false);
+        statusLabel.setText("讀取中...");
+        SwingWorker sadlworker = new ApplyDataLoadWorker(applyData);
+        sadlworker.execute();
     }
-
+    
+    private void loadTravellerData(Traveller traveller){
+        mainCards.show(mainPanel, "loadingCard");
+        setAllAreaEnabled(false);
+        statusLabel.setText("讀取中...");
+        SwingWorker trdlworker = new TravellerDataLoadWorker(traveller);
+        trdlworker.execute();
+    }
+    
     class ExtensionFileFilter extends FileFilter {
 
         String description;
@@ -2501,18 +2527,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 boolean hasFocus) {
             super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-            String colorType = "";
+            String colorType = "", saveStatusStr = "未儲存", insStatusStr = "未申請";
             if (node instanceof ApplyDataNode) {
                 ApplyData applyData = (ApplyData) node.getUserObject();
-                int status = applyData.getStatus();
-                if (status == 1) {
-                    setText("[完成] " + applyData.getTourName());
+                int saveStatus = applyData.getStatus();
+                int insStatus = applyData.getTravelgroup().getInsuranceStatus();
+                if (saveStatus == 1) {
+                    saveStatusStr = "儲存完成";
                     colorType = "success";
-                } else if (status == 2) {
-                    setText("[失敗] " + applyData.getTourName());
+                } else if (saveStatus == 2) {
+                    saveStatusStr = "儲存失敗";
                     colorType = "danger";
                 } else {
-                    setText(applyData.getTourName());
                     int validStatus = applyData.getValidateStatus();
                     if (validStatus == 2) {
                         colorType = "danger";
@@ -2522,16 +2548,25 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         colorType = "";
                     }
                 }
+                if (insStatus == 1) {
+                    insStatusStr = "申請成功";
+                } else if (insStatus == 2) {
+                    insStatusStr = "申請失敗";
+                    colorType = "danger";
+                } else if(colorType.equals("success")) {
+                    colorType = "warning";
+                }
+                setText(String.format("[%s][%s]%s", saveStatusStr, insStatusStr, applyData.getTourName()));
             } else if (node instanceof TravellerNode) {
                 Traveller traveller = (Traveller) node.getUserObject();
                 ApplyData applyData = (ApplyData) ((ApplyDataNode) node.getParent()).getUserObject();
-                int status = applyData.getStatus();
+                int saveStatus = applyData.getStatus();
+                int insStatus = traveller.getInsurance().getStatus();
                 setIcon(traveller.getHeadShot());
-                String applyType = traveller.getSeqNo() == 0 ? "[主]" : "[隨]";
-                setText(applyType + " " + traveller.getChineseName());
-                if (status == 1) {
+                String applyType = traveller.getSeqNo() == 0 ? "主" : "隨";
+                if (saveStatus == 1) {
                     colorType = "success";
-                } else if (status == 2) {
+                } else if (saveStatus == 2) {
                     colorType = "danger";
                 } else {
                     int validStatus = traveller.getValidateStatus();
@@ -2543,6 +2578,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         colorType = "";
                     }
                 }
+                if (insStatus == 1) {
+                    insStatusStr = "申請成功";
+                } else if (insStatus == 2) {
+                    insStatusStr = "申請失敗";
+                    colorType = "danger";
+                } else if(colorType.equals("success")) {
+                    colorType = "warning";
+                }
+                
+                setText(String.format("[%s][%s]%s", insStatusStr, applyType, traveller.getChineseName()));
             }
             
             switch(colorType){
@@ -2680,18 +2725,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     /**
      * 載入申請資料的Worker
      */
-    public class SingleApplyDataLoadWorker extends SwingWorker<Void, Void> {
+    public class ApplyDataLoadWorker extends SwingWorker<Void, Void> {
 
         private ApplyData applyData;
 
-        public SingleApplyDataLoadWorker(ApplyData ad) {
+        public ApplyDataLoadWorker(ApplyData ad) {
             this.applyData = ad;
         }
 
         @Override
         public Void doInBackground() {
-            setSingleApplyArea(this.applyData);
-            checkErrMsg();
+            setApplyDataArea(this.applyData);
+            setErrMsg(this.applyData);
             return null;
         }
 
@@ -2708,13 +2753,20 @@ public class CNHKMOGUI extends javax.swing.JFrame {
      */
     public class TravellerDataLoadWorker extends SwingWorker<Void, Void> {
 
+        private Traveller traveller;
+        
+        public TravellerDataLoadWorker(Traveller tr){
+            this.traveller = tr;
+        }
+        
         @Override
         public Void doInBackground() {
-            initTravellerArea();
-            setTravellerDetail();
-            setAttachJList(false);
-            setRestApplyAttachList(false);
-            checkErrMsg();
+            initTravellerDataArea();
+            setTravellerDetail(this.traveller);
+            setAttachJList(this.traveller);
+            ApplyData ad = (ApplyData)((DefaultMutableTreeNode)selectedNode.getParent()).getUserObject();
+            setRestApplyAttachList(ad);
+            setErrMsg(this.traveller);
             return null;
         }
 
@@ -2741,99 +2793,22 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Void doInBackground() {
             this.applyData.handleApplyData(true);
-            setSingleApplyArea(this.applyData);
+            ApplyDataNode adn = (ApplyDataNode)selectedNode;
+            adn.removeAllChildren();
+            setChildNode(adn);
+            TreePath path = new TreePath(adn.getPath());
+            applyDataTree.setSelectionPath(path);
+            loadApplyData(applyData);
             return null;
         }
 
         @Override
         protected void done() {
-            applyDataTreeModel.nodeChanged(selectedNode);
+//            applyDataTreeModel.nodeChanged(selectedNode);
+            TreePath path = new TreePath(selectedNode.getPath());
+            applyDataTree.setSelectionPath(path);
             mainCards.show(mainPanel, "applyDataCard");
             statusLabel.setText("讀取完成");
-            allEnableChk();
-        }
-    }
-
-    /**
-     * 處理更新附件區域的Worker
-     */
-    public class AttachListLoadWorker extends SwingWorker<Void, Void> {
-
-        private boolean isAlone;
-
-        public AttachListLoadWorker(boolean is) {
-            this.isAlone = is;
-        }
-
-        @Override
-        public Void doInBackground() {
-            if (!(selectedNode instanceof TravellerNode)) {
-                CommonHelp.logger.log(Level.ERROR, String.format("[AttachListLoadWorker] 錯誤的selectedNode: %s", selectedNode.getClass()));
-                return null;
-            }
-            try{
-                Traveller tr = (Traveller) selectedNode.getUserObject();
-                attachListModel.removeAllElements();
-                for (Attach a : tr.getAttachList()) {
-                    attachListModel.addElement(a);
-                }
-                if(this.isAlone){ checkErrMsg(); }
-            }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, "[AttachListLoadWorker] 錯誤", e);
-            }
-            return null;
-        }
-
-        @Override
-        protected void done() {
-            attachCountLabel.setText(String.valueOf(attachJList.getModel().getSize()));
-            if (!this.isAlone) {
-                return;
-            }
-            statusLabel.setText("讀取完成。");
-            mainCards.show(mainPanel, "travellerCard");
-            allEnableChk();
-        }
-    }
-
-    /**
-     * 處理更新待認領附件區域的Worker
-     */
-    public class RestApplyAttachListLoadWorker extends SwingWorker<Void, Void> {
-
-        private boolean isAlone;
-
-        public RestApplyAttachListLoadWorker(boolean is) {
-            this.isAlone = is;
-        }
-
-        @Override
-        public Void doInBackground() {
-            if (!(selectedNode instanceof TravellerNode)) {
-                CommonHelp.logger.log(Level.ERROR, String.format("[RestApplyAttachListLoadWorker] 錯誤的selectedNode: %s", selectedNode.getClass()));
-                return null;
-            }
-            try{
-                ApplyData ad = (ApplyData) ((ApplyDataNode) selectedNode.getParent()).getUserObject();
-                List<ApplyAttach> laa = ad.getRestApplyAttachList();
-                restApplyAttachListModel.removeAllElements();
-                for (ApplyAttach aa : laa) {
-                    restApplyAttachListModel.addElement(aa);
-                }
-                if(this.isAlone){ checkErrMsg(); }
-            }catch(Exception e){
-                CommonHelp.logger.log(Level.ERROR, "[RestApplyAttachListLoadWorker] 錯誤", e);
-            }
-            return null;
-        }
-
-        @Override
-        protected void done() {
-            if (!this.isAlone) {
-                return;
-            }
-            statusLabel.setText("讀取完成。");
-            mainCards.show(mainPanel, "travellerCard");
             allEnableChk();
         }
     }
@@ -2846,26 +2821,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Void doInBackground() {
             try{
-                String err = "";
                 for (int i = 0; i < rootNode.getChildCount(); i++) {
                     DefaultMutableTreeNode node = (DefaultMutableTreeNode) applyDataTreeModel.getChild(rootNode, i);
                     ApplyData applyData = (ApplyData) node.getUserObject();
                     statusLabel.setText(String.format("處理中...(%d/%d筆)", i + 1, rootNode.getChildCount()));
-                    if (applyData.getStatus() != 0) {
+                    if (applyData.getStatus() != 0 || !applyData.isPass()) {
                         continue;
                     }
-                    if (applyData.isPass()) {
-                        String result = insertData(applyData);
-                        if (result.isEmpty()) {
-                            applyData.setStatus(1);
-                        } else {
-                            applyData.setStatus(2);
-                            err += result + "\n";
-                        }
-                    }
-                }
-                if (!err.isEmpty()) {
-                    showMessage("有資料出錯，可能需要手工處理該筆資料：\n" + err, "warning");
+                    boolean isOk = insertData(applyData);
+                    applyData.setStatus(isOk? 1 : 2);
                 }
             }catch(Exception e){
                 CommonHelp.logger.log(Level.ERROR, "[SubmitWorker] 錯誤", e);
@@ -2880,6 +2844,47 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 處理保單申請的Worker 過濾已申請完成及不及格的申請資料
+     */
+    public class InsuranceWorker extends SwingWorker<Void, Void> {
+
+        @Override
+        public Void doInBackground() {
+            try{
+                for (int i = 0; i < rootNode.getChildCount(); i++) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) applyDataTreeModel.getChild(rootNode, i);
+                    ApplyData applyData = (ApplyData) node.getUserObject();
+                    statusLabel.setText(String.format("處理中...(%d/%d筆)", i + 1, rootNode.getChildCount()));
+                    if (!applyData.isPass()) { continue; }
+                    System.out.println("處理: " + applyData.getTourName());
+                    TravelGroup tg = applyData.getTravelgroup();
+                    for(Traveller tr : tg.getTravellerList()){
+                        System.out.println("處理: " + tr.getChineseName());
+                        Insurance ins = tr.getInsurance();
+                        if(ins.getStatus() == 1){ continue; }
+                        if(!ins.createXML(tg, tr)){
+                            ins.setStatus(2);
+                            continue;
+                        }
+                        System.out.println("post...");
+                        boolean isOk = ins.postXML();
+                        ins.setStatus(isOk? 1 : 2);
+                    }
+                }
+            }catch(Exception e){
+                CommonHelp.logger.log(Level.ERROR, "[SubmitWorker] 錯誤", e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            allEnableChk();
+            statusLabel.setText("處理完畢");
+        }
+    }
+    
     public class AttachDataDragDropListener implements DropTargetListener {
 
         @Override

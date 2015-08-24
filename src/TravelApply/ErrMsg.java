@@ -16,7 +16,7 @@ public class ErrMsg {
     }
     
     private String msg;
-    private int type;   //0: err, 1:warning, 2:info
+    private int type;   //0: err, 1: warning, 2: info; type是err的話，該筆資料就不能通過
     private String tag;
     private String plusMsg;
     

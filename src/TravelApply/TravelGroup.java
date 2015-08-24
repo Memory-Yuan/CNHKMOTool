@@ -243,49 +243,49 @@ public class TravelGroup {
     }
 
     public void resetSeqNo(){
-      int i = 0;
-      for(Traveller tr : this.travellerList){
+        int i = 0;
+        for(Traveller tr : this.travellerList){
           tr.setSeqNo(i);
           i++;
-      }
+        }
     }
 
     public String getInsertStr(){
-      String insertStr = null;
-      try {
-          StringBuffer nameSb = new StringBuffer();
-          StringBuffer valueSb = new StringBuffer();
-          Class<?> objClass = this.getClass();
-          Field[] fields = objClass.getDeclaredFields();
-          int i = 1, fieldsLength = fields.length;
-          for(Field field : fields) {
-              String name = field.getName();
-              Object value = field.get(this);
-              String type = ((Class) field.getType()).getSimpleName();
+        String insertStr = null;
+        try {
+            StringBuffer nameSb = new StringBuffer();
+            StringBuffer valueSb = new StringBuffer();
+            Class<?> objClass = this.getClass();
+            Field[] fields = objClass.getDeclaredFields();
+            int i = 1, fieldsLength = fields.length;
+            for(Field field : fields) {
+                String name = field.getName();
+                Object value = field.get(this);
+                String type = ((Class) field.getType()).getSimpleName();
 
-              if(value == null || isExclude(name)){
-                  continue;
-              }
+                if(value == null || isExclude(name)){
+                    continue;
+                }
 
-              nameSb.append(name + ", ");
-              if(type.equals("String")){
-                  valueSb.append("'" + value.toString() + "', ");
-              }else{
-                  valueSb.append(value.toString() + ", ");
-              }
-              i++;
-          }
+                nameSb.append(name + ", ");
+                if(type.equals("String")){
+                    valueSb.append("'" + value.toString() + "', ");
+                }else{
+                    valueSb.append(value.toString() + ", ");
+                }
+                i++;
+            }
 
-          insertStr = String.format("insert into %s(%s CreateDate, LastUpdateTime) "
-              + "values(%s current_timestamp, current_timestamp)",
-              objClass.getSimpleName(), nameSb.toString(), valueSb.toString());
+            insertStr = String.format("insert into %s(%s CreateDate, LastUpdateTime) "
+                        + "values(%s current_timestamp, current_timestamp)",
+                        objClass.getSimpleName(), nameSb.toString(), valueSb.toString());
 
-      } catch(Exception e) {
-          CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup][%s] 建立insertSQL失敗。", this.tourName), e);
-          e.printStackTrace();
-          return null;
-      }
-      return insertStr;
+        } catch(Exception e) {
+            CommonHelp.logger.log(Level.ERROR, String.format("[TravelGroup][%s] 建立insertSQL失敗。", this.tourName), e);
+            e.printStackTrace();
+            return null;
+        }
+        return insertStr;
     }
 
     private boolean isExclude(String s){
@@ -301,44 +301,44 @@ public class TravelGroup {
     public List<ErrMsg> getErrMsgList(){
         List<ErrMsg> errList = new ArrayList<ErrMsg>();
         if(this.travellerList.isEmpty()){
-            errList.add(new ErrMsg("無法解析申請資料，旅客人數為0。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourName)));
+            errList.add(new ErrMsg("*無法解析申請資料，旅客人數為0。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourName)));
         }
 
-        if(this.tourName == null || this.tourName.isEmpty()){ errList.add(new ErrMsg("行程名稱未填寫。", 1));
+        if(this.tourName == null || this.tourName.isEmpty()){ errList.add(new ErrMsg("*行程名稱未填寫。", 0));
         }else if(this.tourName.length() > 100){
-            errList.add(new ErrMsg("行程名稱格式有誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourName)));
+            errList.add(new ErrMsg("*行程名稱格式有誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourName)));
         }
 
-        if(this.tourStartDate == null || this.tourStartDate.isEmpty()){ errList.add(new ErrMsg("入境日期未填寫。", 1));
+        if(this.tourStartDate == null || this.tourStartDate.isEmpty()){ errList.add(new ErrMsg("*入境日期未填寫。", 0));
         }else if(!this.tourStartDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-            errList.add(new ErrMsg("入境日期格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourStartDate)));
+            errList.add(new ErrMsg("*入境日期格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.tourStartDate)));
         }
 
         if(this.contactNameOfMainland == null || this.contactNameOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人姓名未填寫。", 1));
         }else if(this.contactNameOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人姓名格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactNameOfMainland)));
+            errList.add(new ErrMsg("*緊急聯絡人姓名格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactNameOfMainland)));
         }
 
         if(this.contactTitleOfMainland == null || this.contactTitleOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人關係未填寫。", 1));
         }else if(this.contactTitleOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人關係格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactTitleOfMainland)));
+            errList.add(new ErrMsg("*緊急聯絡人關係格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactTitleOfMainland)));
         }
 
         if(this.contactGenderOfMainland == null){ errList.add(new ErrMsg("緊急聯絡人性別未填寫。", 1)); }
 
         if(this.contactMobileNoOfMainland == null || this.contactMobileNoOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人手機未填寫。", 1));
         }else if(this.contactMobileNoOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人手機格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactMobileNoOfMainland)));
+            errList.add(new ErrMsg("*緊急聯絡人手機格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactMobileNoOfMainland)));
         }
 
         if(this.contactTelNoOfMainland == null || this.contactTelNoOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人電話未填寫。", 1));
         }else if(this.contactTelNoOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人電話格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactTelNoOfMainland)));
+            errList.add(new ErrMsg("*緊急聯絡人電話格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactTelNoOfMainland)));
         }
 
         if(this.contactAddressOfMainland == null || this.contactAddressOfMainland.isEmpty()){ errList.add(new ErrMsg("緊急聯絡人地址未填寫。", 1));
         }else if(this.contactAddressOfMainland.length() > 127){
-            errList.add(new ErrMsg("緊急聯絡人地址格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactAddressOfMainland)));
+            errList.add(new ErrMsg("*緊急聯絡人地址格式錯誤。", 0, "[TravelGroup]", String.format("\"%s\"", this.contactAddressOfMainland)));
         }
         return errList;
     }
@@ -355,5 +355,17 @@ public class TravelGroup {
         }
         return vs;
     }
-
+    
+    /**
+     * 取得整團保險狀態
+     * @return 0: 未申請，1: 成功，2: 失敗
+     */
+    public int getInsuranceStatus(){/**/
+        int is = 1;
+        for(Traveller tr : this.travellerList){
+            if(tr.getInsurance().getStatus() == 2){ return 2;
+            }else if(tr.getInsurance().getStatus() == 0){ is = 0; }
+        }
+        return is;
+    }
 }

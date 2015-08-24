@@ -24,7 +24,7 @@ public class Traveller {
     private String decideMark = "0";    //??(填0)
     private String chineseName;
     private String englishName;
-    private String gender;              //可能要自己填@
+    private String gender;              //0: 男, 1: 女，可能要自己填@
     private String birthDate;
     private Integer birthPlaceCode = 4; //??(填4)
     private Short birthPlace1;          //出生地 省(市) 可能要自己填@
@@ -45,6 +45,7 @@ public class Traveller {
     private String relativeTitle;       //隨行親友稱謂
     private String livingCity;          //@居住城市 可能要自己填
     private List<Attach> attachList = new ArrayList<Attach>();
+    private Insurance insurance = new Insurance();
     /* -- 不必填---------------------------------------------------------------
     private String tourGroupId;
     private String leaderPermitNo;      //收件號
@@ -429,6 +430,14 @@ public class Traveller {
         this.attachList.removeAll(la);
     }
     
+    public Insurance getInsurance(){
+        return this.insurance;
+    }
+    
+    public void setInsurance(Insurance i){
+        this.insurance = i;
+    }
+    
     public boolean isValidTraveller(){
         String[] chkArr = {"", "無", "如有生僻字請注明", null};
         for(String s : chkArr){
@@ -486,7 +495,7 @@ public class Traveller {
     }
 
     private boolean isExclude(String s){
-        String[] exList = {"attachList"};
+        String[] exList = {"attachList", "insurance"};
         for(String ex : exList){
             if(s.equals(ex)){
                 return true;
@@ -501,71 +510,75 @@ public class Traveller {
         if(this.attachList.isEmpty()){ errList.add(new ErrMsg("請選擇附件。", 1));
         }else if(!this.isSetHeadShot()){ errList.add(new ErrMsg("請設定大頭照。", 1)); }
 
-        if(this.chineseName == null || this.chineseName.isEmpty()){ errList.add(new ErrMsg("中文姓名未填寫。", 1));
+        if(this.chineseName == null || this.chineseName.isEmpty()){ errList.add(new ErrMsg("*中文姓名未填寫。", 0));
         }else if(this.chineseName.length() > 40){
-            errList.add(new ErrMsg("中文姓名格式有誤。", 0, "[Traveller]", String.format("\"%s\"", this.chineseName)));
+            errList.add(new ErrMsg("*中文姓名格式有誤。", 0, "[Traveller]", String.format("\"%s\"", this.chineseName)));
         }
 
-        if(this.englishName == null || this.englishName.isEmpty()){ errList.add(new ErrMsg("英文姓名未填寫。", 1));
+        if(this.englishName == null || this.englishName.isEmpty()){ errList.add(new ErrMsg("*英文姓名未填寫。", 0));
         }else if(this.englishName.length() > 50){
-            errList.add(new ErrMsg("英文姓名格式有誤。", 0, "[Traveller]", String.format("\"%s\"", this.englishName)));
+            errList.add(new ErrMsg("*英文姓名格式有誤。", 0, "[Traveller]", String.format("\"%s\"", this.englishName)));
         }
 
         if(this.birthDate == null || this.birthDate.isEmpty()){ errList.add(new ErrMsg("出生年月日未填寫。", 1));
         }else if(!this.birthDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-            errList.add(new ErrMsg("出生年月日格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthDate)));
+            errList.add(new ErrMsg("*出生年月日格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthDate)));
         }
 
-        if(this.personId == null || this.personId.isEmpty()){ errList.add(new ErrMsg("身分證號未填寫。", 1));
+        if(this.personId == null || this.personId.isEmpty()){ errList.add(new ErrMsg("*身分證號未填寫。", 0));
         }else if(!this.personId.matches("^\\w{18}$")){
-            errList.add(new ErrMsg("身分證號格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.personId)));
+            errList.add(new ErrMsg("*身分證號格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.personId)));
         }
 
-        if(this.passportNo == null || this.passportNo.isEmpty()){ errList.add(new ErrMsg("通行證號未填寫。", 1));
+        if(this.passportNo == null || this.passportNo.isEmpty()){ errList.add(new ErrMsg("*通行證號未填寫。", 0));
         }else if(!this.passportNo.matches("^T\\d{8}$")){
-            errList.add(new ErrMsg("通行證號格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.passportNo)));
+            errList.add(new ErrMsg("*通行證號格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.passportNo)));
         }
 
-        if(this.passportExpiryDate == null || this.passportExpiryDate.isEmpty()){ errList.add(new ErrMsg("通行證有效期未填寫。", 1));
+        if(this.passportExpiryDate == null || this.passportExpiryDate.isEmpty()){ errList.add(new ErrMsg("*通行證有效期未填寫。", 0));
         }else if(!this.passportExpiryDate.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
-            errList.add(new ErrMsg("通行證有效期格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.passportExpiryDate)));
+            errList.add(new ErrMsg("*通行證有效期格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.passportExpiryDate)));
         }
 
-        if(this.gender == null){ errList.add(new ErrMsg("性別未選擇。", 1)); }
+        if(this.gender == null){ errList.add(new ErrMsg("*性別未選擇。", 0)); }
         if(this.education == null){ errList.add(new ErrMsg("教育程度未選擇。", 1)); }
         if(this.occupation == null){ errList.add(new ErrMsg("職業類別未選擇。", 1)); }
         if(this.occupationDesc == null || this.occupationDesc.isEmpty()){ errList.add(new ErrMsg("職業未填寫。", 1));
         }else if(this.occupationDesc.length() > 40){
-            errList.add(new ErrMsg("職業格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.occupationDesc)));
+            errList.add(new ErrMsg("*職業格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.occupationDesc)));
         }
 
         if(this.livingCity == null){ errList.add(new ErrMsg("居住地未選擇。", 1)); }
         if(this.address == null || this.address.isEmpty()){ errList.add(new ErrMsg("地址未填寫。", 1));
         }else if(this.address.length() > 128){
-            errList.add(new ErrMsg("地址格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.address)));
+            errList.add(new ErrMsg("*地址格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.address)));
         }
 
         if(this.birthPlace1 == null){ errList.add(new ErrMsg("出生地-省(市)未選擇。", 1)); }
         if(this.birthPlace2 == null || this.birthPlace2.isEmpty()){ errList.add(new ErrMsg("出生地-縣(市)未填寫。", 1));
         }else if(this.birthPlace2.length() > 128){
-            errList.add(new ErrMsg("出生地-縣(市)格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthPlace2)));
+            errList.add(new ErrMsg("*出生地-縣(市)格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthPlace2)));
         }
 
         if(this.seqNo != 0){
             if(this.kinsfolk == null || this.kinsfolk.isEmpty()){ errList.add(new ErrMsg("隨行親友姓名未填寫。", 1));
             }else if(this.kinsfolk.length() > 20){
-                errList.add(new ErrMsg("隨行親友姓名格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.kinsfolk)));
+                errList.add(new ErrMsg("*隨行親友姓名格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.kinsfolk)));
             }
 
             if(this.relativeTitle == null || this.relativeTitle.isEmpty()){ errList.add(new ErrMsg("隨行親友稱謂未填寫。", 1));
             }else if(this.relativeTitle.length() > 16){
-                errList.add(new ErrMsg("隨行親友稱謂格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.relativeTitle)));
+                errList.add(new ErrMsg("*隨行親友稱謂格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.relativeTitle)));
             }
         }
 
         return errList;
     }
 
+    /**
+     * 回傳此Traveller的資料驗證結果。
+     * @return 0: OK, 1: warning, 2: error
+     */
     public int getValidateStatus(){
         int vs = 0;
         for(ErrMsg m : this.getErrMsgList()){

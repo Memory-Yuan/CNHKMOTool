@@ -46,6 +46,8 @@ public class Traveller {
     private String livingCity;          //@居住城市 可能要自己填
     private List<Attach> attachList = new ArrayList<Attach>();
     private Insurance insurance = new Insurance();
+    private String groupName;
+    private final String[] exList = {"exList", "attachList", "insurance", "groupName"};
     /* -- 不必填---------------------------------------------------------------
     private String tourGroupId;
     private String leaderPermitNo;      //收件號
@@ -78,7 +80,7 @@ public class Traveller {
 
     public void setTravelGroupId(String paramString){
         this.travelGroupId = paramString;
-    }   
+    }
 
     public Short getSeqNo(){
         return this.seqNo;
@@ -495,8 +497,7 @@ public class Traveller {
     }
 
     private boolean isExclude(String s){
-        String[] exList = {"attachList", "insurance"};
-        for(String ex : exList){
+        for(String ex : this.exList){
             if(s.equals(ex)){
                 return true;
             }
@@ -542,12 +543,6 @@ public class Traveller {
 
         if(this.gender == null){ errList.add(new ErrMsg("*性別未選擇。", 0)); }
         if(this.education == null){ errList.add(new ErrMsg("教育程度未選擇。", 1)); }
-        if(this.occupation == null){ errList.add(new ErrMsg("職業類別未選擇。", 1)); }
-        if(this.occupationDesc == null || this.occupationDesc.isEmpty()){ errList.add(new ErrMsg("職業未填寫。", 1));
-        }else if(this.occupationDesc.length() > 40){
-            errList.add(new ErrMsg("*職業格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.occupationDesc)));
-        }
-
         if(this.livingCity == null){ errList.add(new ErrMsg("居住地未選擇。", 1)); }
         if(this.address == null || this.address.isEmpty()){ errList.add(new ErrMsg("地址未填寫。", 1));
         }else if(this.address.length() > 128){
@@ -559,8 +554,14 @@ public class Traveller {
         }else if(this.birthPlace2.length() > 128){
             errList.add(new ErrMsg("*出生地-縣(市)格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.birthPlace2)));
         }
-
-        if(this.seqNo != 0){
+        
+        if(this.seqNo == 0){
+            if(this.occupation == null){ errList.add(new ErrMsg("職業類別未選擇。", 1)); }
+            if(this.occupationDesc == null || this.occupationDesc.isEmpty()){ errList.add(new ErrMsg("職業未填寫。", 1));
+            }else if(this.occupationDesc.length() > 40){
+                errList.add(new ErrMsg("*職業格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.occupationDesc)));
+            }
+        }else{
             if(this.kinsfolk == null || this.kinsfolk.isEmpty()){ errList.add(new ErrMsg("隨行親友姓名未填寫。", 1));
             }else if(this.kinsfolk.length() > 20){
                 errList.add(new ErrMsg("*隨行親友姓名格式錯誤。", 0, "[Traveller]", String.format("\"%s\"", this.kinsfolk)));
@@ -608,5 +609,13 @@ public class Traveller {
       for (Attach a : this.attachList) {
           a.setType("2");
       }
+    }
+    
+    public String getGroupName(){
+        return this.groupName;
+    }
+    
+    public void setGroupName(String s){
+        this.groupName = s;
     }
 }

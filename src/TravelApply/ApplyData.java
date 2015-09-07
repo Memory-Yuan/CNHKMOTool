@@ -11,22 +11,23 @@ import org.apache.logging.log4j.Level;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Range;
 import org.apache.poi.hwpf.usermodel.Table;
-import org.apache.poi.hwpf.usermodel.TableCell;
 import org.apache.poi.hwpf.usermodel.TableIterator;
 //import org.apache.poi.hwpf.usermodel.TableRow;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 //import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
+import org.json.simple.JSONObject;
 
 public class ApplyData {
-    public ApplyData(File f){
+    public ApplyData(File f, Config c){
         CommonHelp.logger.log(Level.INFO, String.format("Start---------------------------------------- path: %s", f.getAbsolutePath()));
         this.applyFolder = f;
+        this.config = c;
+        this.resolveMode = this.config.getSelModeIdx();
         this.initData();
-        this.handleApplyData();
+//        this.handleApplyData();
     }
     
     private void initData(){
@@ -47,7 +48,7 @@ public class ApplyData {
         this.status = 0;
     }
     
-    private int status; //0: 未處理、1: 成功、2: 失敗
+    private int status; //儲存狀態，0: 未處理、1: 成功、2: 失敗
     private File applyFolder;
     private File applyDoc;
     private TravelGroup travelgroup;
@@ -56,8 +57,8 @@ public class ApplyData {
     private List<ErrMsg> errOfResolvingList;
     private int applyPeopleFolderQty;
     private String savingErr;
-    private final String HeadShotName = "HeadShot.jpg";
-    
+    private int resolveMode;
+    private Config config;
     private FileFilter hiddenFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
@@ -179,7 +180,7 @@ public class ApplyData {
             }else if(fn.endsWith(".jpg") || fn.endsWith(".jpeg") || fn.endsWith(".png")){
                 a = new Attach();
                 a.setFile(f);
-                if(fn.equals(HeadShotName)){ a.setType("1"); }
+                if(fn.equals(this.config.getHeadShotName())){ a.setType("1"); }
                 la.add(a);
             }else if(f.isDirectory() && enter){
                 this.applyPeopleFolderQty++;
@@ -194,22 +195,58 @@ public class ApplyData {
         }
     }
     
-    private String getCellContent(Object obj, int r, int c){
-        if(obj instanceof Table){
-            return ((Table)obj).getRow(r) .getCell(c).getParagraph(0).text();
+    private String getCellContent(List<Object> tableList, int[] pos){
+        if(pos == null){ return ""; }
+        Object tableObj = tableList.get(pos[0]);
+        
+        if(tableObj instanceof Table){
+            return ((Table)tableObj).getRow(pos[1]) .getCell(pos[2]).getParagraph(0).text();
+        }else if(tableObj instanceof XWPFTable){
+            return ((XWPFTable)tableObj).getRow(pos[1]) .getCell(pos[2]).getText();
         }else{
-            return ((XWPFTable)obj).getRow(r) .getCell(c).getText();
+            return "";
         }
     }
     
-    private void wordResolve(File file, String docType){
+    /**
+     * 取得緊急聯絡人資料解析位置
+     */
+    private int[] getPosition(String key){
+        return this.config.getPosition(this.config.getModeObjByIdx(this.resolveMode), key);
+    }
+    
+    /**
+     * 取得旅客資料解析位置
+     */
+    private int[] getPosition(String key, int trNo){
+        JSONObject modeobj = this.config.getModeObjByIdx(this.resolveMode);
+        int[] interval = this.config.getPosition(modeobj, "SubInterval");
+        JSONObject trobj;
+        int n;
+        if(trNo < 1){
+            trobj = (JSONObject)modeobj.get("Main");
+            n = 0;
+        }else{
+            trobj = (JSONObject)modeobj.get("Sub");
+            n = trNo-1;
+        }
+        int[] pos = this.config.getPosition(trobj, key);
+        
+        //以隨行人1的位置加上間隔差，計算出隨行人2~的解析位置
+        int[] newpos = new int[pos.length];
+        for(int i = 0; i < pos.length; i++){
+            newpos[i] = pos[i] + interval[i]*n;
+        }
+        return newpos;
+    }
+    
+    private void wordResolve(File file){
         try{
             if(!(file.getName().endsWith(".doc") || file.getName().endsWith(".docx"))) {
                 throw new FileFormatException();
             }
-            
             List<Object> tableList = new ArrayList<Object>();            
-            if(docType.equals("doc")){
+            if(file.getName().endsWith(".doc")){
                 POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
                 HWPFDocument doc = new HWPFDocument(fs);
                 Range range = doc.getRange();
@@ -217,7 +254,7 @@ public class ApplyData {
                 while(it.hasNext()){
                     tableList.add(it.next());
                 }
-            }else if(docType.equals("docx")){
+            }else if(file.getName().endsWith(".docx")){
                 XWPFDocument doc = new XWPFDocument(new FileInputStream(file));
                 tableList.addAll(doc.getTables());
             }
@@ -225,70 +262,13 @@ public class ApplyData {
                 CommonHelp.logger.log(Level.WARN, String.format("[wordResolve] Word文件找不到資料表格！ path: %s", this.applyDoc.getAbsolutePath()));
                 this.errOfResolvingList.add(new ErrMsg("*Word文件找不到資料表格！", 0)); return;
             }
-            
-            Traveller traveller;
-            String mainTravellerName = null;
-            int rowBase, rowAdj;
+            /*
+            *   印出所有Table資料，確認用。
+            *
             for(int i = 0; i < tableList.size(); i++){
-                Object tableObj = tableList.get(i);
-                traveller = new Traveller();
-                if(i == 0){ continue; }
-                if(i == 1){
-                    try{
-                        this.travelgroup.setTourStartDate               (getCellContent(tableObj, 0, 2));
-                        this.travelgroup.setContactNameOfMainland       (getCellContent(tableObj, 6, 2));
-                        this.travelgroup.setContactTitleOfMainland      (getCellContent(tableObj, 7, 2));
-                        this.travelgroup.setContactGenderOfMainland     (getCellContent(tableObj, 8, 2));
-                        this.travelgroup.setContactMobileNoOfMainland   (getCellContent(tableObj, 9, 2));
-                        this.travelgroup.setContactTelNoOfMainland      (getCellContent(tableObj, 10, 2));
-                        this.travelgroup.setContactAddressOfMainland    (getCellContent(tableObj, 11, 2));
-                    }catch(Exception e){
-                        CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][TravelGroup] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
-                    }
-                    
-                    rowBase = 15;
-                    rowAdj = 2;
-                }else{
-                    rowBase = i == 2 ? 5 : 2;
-                    rowAdj = 0;
-                }
-                
-                try{
-                    traveller.setSeqNo(i-1);
-                    traveller.setChineseName        (getCellContent(tableObj, 0+rowBase, 2));
-                    traveller.setBirthDate          (getCellContent(tableObj, 1+rowBase, 2));
-                    traveller.setPassportNo         (getCellContent(tableObj, 2+rowBase, 2));
-                    traveller.setGender             (getCellContent(tableObj, 3+rowBase, 2));
-                    traveller.setAddress            (getCellContent(tableObj, 4+rowBase+rowAdj, 2));
-                    traveller.setLivingCity         (traveller.getLivingCityCode(traveller.getAddress()));
-                    traveller.setEnglishName        (getCellContent(tableObj, 5+rowBase+rowAdj, 2));
-                    traveller.setPassportExpiryDate (getCellContent(tableObj, 6+rowBase+rowAdj, 2));
-                    traveller.setPersonId           (getCellContent(tableObj, 7+rowBase+rowAdj, 2));
-                    traveller.setBirthPlace2        (getCellContent(tableObj, 8+rowBase+rowAdj, 2));
-                    traveller.setBirthPlace1        (traveller.getBirthPlace1Idx(traveller.getBirthPlace2()));
-                    traveller.setEducation          (traveller.getEducationIdx(getCellContent(tableObj, 9+rowBase+rowAdj, 2)));
-                    //手機 table.getRow(10+rowBase+rowAdj)
-                    if(i == 1){
-                        mainTravellerName = traveller.getChineseName();
-                        traveller.setOccupationDesc (getCellContent(tableObj, 4+rowBase, 2));
-                        traveller.setOccupation     (traveller.getOccupationId(traveller.getOccupationDesc()));
-                    }else{
-                        traveller.setRelative       (mainTravellerName);
-                        traveller.setRelativeTitle  (getCellContent(tableObj, 11+rowBase+rowAdj, 2));
-                    }
-                }catch(IndexOutOfBoundsException e){
-                    //@modify
-                    CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][Traveller] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
-                }catch (Exception e) {
-                    CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][Traveller] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
-                }
-                this.travellerList.add(traveller);
-                if(this.travellerList.size() >= applyPeopleFolderQty){ break; }
-                
-                /*
-                *   印出所有Table資料，確認用。
-                *
                 System.out.println("table " + i);
+                Table table = (Table)tableList.get(i);
+
                 for (int rowIdx=0; rowIdx<table.numRows(); rowIdx++) {
                     TableRow row = table.getRow(rowIdx);
                     System.out.println("row "+rowIdx);
@@ -297,7 +277,56 @@ public class ApplyData {
                         System.out.println("column: "+colIdx+", text: "+cell.getParagraph(0).text());
                     }
                 }
-                */
+            }
+            */
+            try{
+                this.travelgroup.setCnTravelAgency              (this.config.getSelAgcObj());
+                this.travelgroup.setTourStartDate               (this.getCellContent(tableList, this.getPosition("TourStartDate")));
+                this.travelgroup.setContactNameOfMainland       (this.getCellContent(tableList, this.getPosition("ContactNameOfMainland")));
+                this.travelgroup.setContactTitleOfMainland      (this.getCellContent(tableList, this.getPosition("ContactTitleOfMainland")));
+                this.travelgroup.setContactGenderOfMainland     (this.getCellContent(tableList, this.getPosition("ContactGenderOfMainland")));
+                this.travelgroup.setContactMobileNoOfMainland   (this.getCellContent(tableList, this.getPosition("ContactMobileNoOfMainland")));
+                this.travelgroup.setContactTelNoOfMainland      (this.getCellContent(tableList, this.getPosition("ContactTelNoOfMainland")));
+                this.travelgroup.setContactAddressOfMainland    (this.getCellContent(tableList, this.getPosition("ContactAddressOfMainland")));
+            }catch(Exception e){
+                CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][TravelGroup] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
+            }
+            
+            Traveller traveller;
+            String mainTravellerName = null;
+            for(int i = 0; i < applyPeopleFolderQty; i++){
+                traveller = new Traveller();
+                try{
+                    traveller.setSeqNo(i);
+                    traveller.setChineseName        (this.getCellContent(tableList, this.getPosition("ChineseName", i)));
+                    traveller.setBirthDate          (this.getCellContent(tableList, this.getPosition("BirthDate", i)));
+                    traveller.setPassportNo         (this.getCellContent(tableList, this.getPosition("PassportNo", i)));
+                    traveller.setGender             (this.getCellContent(tableList, this.getPosition("Gender", i)));
+                    traveller.setAddress            (this.getCellContent(tableList, this.getPosition("Address", i)));
+                    traveller.setLivingCity         (traveller.getLivingCityCode(traveller.getAddress()));
+                    traveller.setEnglishName        (this.getCellContent(tableList, this.getPosition("EnglishName", i)));
+                    traveller.setPassportExpiryDate (this.getCellContent(tableList, this.getPosition("PassportExpiryDate", i)));
+                    traveller.setPersonId           (this.getCellContent(tableList, this.getPosition("PersonId", i)));
+                    traveller.setBirthPlace2        (this.getCellContent(tableList, this.getPosition("BirthPlace2", i)));
+                    traveller.setBirthPlace1        (traveller.getBirthPlace1Idx(traveller.getBirthPlace2()));
+                    traveller.setEducation          (traveller.getEducationIdx((this.getCellContent(tableList, this.getPosition("Education", i)))));
+                    traveller.setGroupName(this.getTourName().replaceAll("-.*-", String.format("-%s-", traveller.getChineseName())));
+                    //手機 table.getRow(10+rowBase+rowAdj)
+                    if(i < 1){
+                        mainTravellerName = traveller.getChineseName();
+                        traveller.setOccupationDesc (this.getCellContent(tableList, this.getPosition("OccupationDesc", i)));
+                        traveller.setOccupation     (traveller.getOccupationId(traveller.getOccupationDesc()));
+                    }else{
+                        traveller.setRelative       (mainTravellerName);
+                        traveller.setRelativeTitle  (this.getCellContent(tableList, this.getPosition("RelativeTitle", i)));
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][Traveller] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
+                }catch (Exception e) {
+                    CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][Traveller] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
+                }
+                this.travellerList.add(traveller);
+//                if(this.travellerList.size() >= applyPeopleFolderQty){ break; }
             }
         } catch(FileFormatException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve] 請選擇正確的檔案格式 - Microsotf Word. path: %s", this.applyDoc.getAbsolutePath()));
@@ -373,10 +402,9 @@ public class ApplyData {
                 CommonHelp.logger.log(Level.ERROR, String.format("[handleApplyData] 找不到申請文件。 path: %s", this.applyFolder.getAbsolutePath()));
                 return;
             }
-            if(this.applyDoc.getName().endsWith(".doc")){
-                this.wordResolve(this.applyDoc, "doc");
-            }else if(this.applyDoc.getName().endsWith(".docx")){
-                this.wordResolve(this.applyDoc, "docx");
+            
+            if(this.applyDoc.getName().endsWith(".doc") || this.applyDoc.getName().endsWith(".docx")){
+                this.wordResolve(this.applyDoc);
             }else{
                 CommonHelp.logger.log(Level.ERROR, String.format("[handleApplyData] 檔案格式錯誤。 path: %s", this.applyDoc.getAbsolutePath()));
                 return;
@@ -391,11 +419,11 @@ public class ApplyData {
 
             if(this.applyAttachList.isEmpty() || !this.mappingProcess()){
                 CommonHelp.logger.log(
-                        Level.ERROR,
-                        String.format(
-                                "[handleApplyData] 找不到附加圖片資料，或圖片資料無法與旅客資料對應。 無附件旅客: %s; 待認領附件: %s; path: %s",
-                                this.getTravellerNamesOfNoAttach(), this.getRestApplyFolderNames(), this.applyFolder.getAbsolutePath()
-                        )
+                    Level.ERROR,
+                    String.format(
+                        "[handleApplyData] 找不到附加圖片資料，或圖片資料無法與旅客資料對應。 無附件旅客: %s; 待認領附件: %s; path: %s",
+                        this.getTravellerNamesOfNoAttach(), this.getRestApplyFolderNames(), this.applyFolder.getAbsolutePath()
+                    )
                 );
             }
 
@@ -482,6 +510,14 @@ public class ApplyData {
         }else{
             return 0;
         }
+    }
+    
+    public int getResolveMode(){
+        return this.resolveMode;
+    }
+    
+    public void setResolveMode(int mode){
+        this.resolveMode = mode;
     }
     
     /*

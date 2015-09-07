@@ -13,6 +13,7 @@ import taobe.tec.jcc.JChineseConvertor;
 public class CommonHelp {
     public CommonHelp(){}
     
+    private static final String FormatString = "yyyyMMdd";
     public static Logger logger = LogManager.getLogger();
     
     public static String transToTC(String str){
@@ -28,7 +29,7 @@ public class CommonHelp {
     public static String dateFormatFix(String d){
         d = transToTC(d.trim());
         try{
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");;
+            SimpleDateFormat formatter = new SimpleDateFormat(FormatString);
             if(d.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
                 return d;
             }else if(d.matches("^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|1\\d|2\\d|3[0-1])$")){
@@ -52,7 +53,7 @@ public class CommonHelp {
     }
     
     public static String calculateTourDate(String startDate, int num) throws ParseException{
-        SimpleDateFormat formatter=new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat formatter=new SimpleDateFormat(FormatString);
         Date sdt=formatter.parse(startDate);
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(sdt);
@@ -88,4 +89,22 @@ public class CommonHelp {
             }
         }
     }
+
+    public static Date getDateFromString(String s){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat(FormatString);
+            Date date = sdf.parse(s);
+            return date;
+        }catch(Exception e){}
+        return null;
+    }
+    
+    public static String getFormatDate(Date date){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat(FormatString);
+            return sdf.format(date);
+        }catch(Exception e){}
+        return "";
+    }
+    
 }

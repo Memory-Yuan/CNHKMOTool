@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.logging.log4j.Level;
+import org.json.simple.JSONObject;
 
 public class TravelGroup {
     //--------------------------------------------------
     private String id;                  //@必填
     private Integer version = 2;        //?? @必填(填2)
     private String travelAgencyNo = ""; //?? @必填
-    private String cnTravelAgencyNo = "L-ZJ-CJ00055";                   //組團社代號@
-    private String cnTravelAgencyName = "浙江商務國際旅行社有限公司";   //組團社名稱@
+    private String cnTravelAgencyNo;    //組團社代號@
+    private String cnTravelAgencyName;  //組團社名稱@
     private String applyDate;           //申請日期 @必填
     private String niaApplyDate;        //申請日期
     private String tourStartDate;       //入境日期
@@ -41,6 +42,8 @@ public class TravelGroup {
     private String contactAddressOfMainland;    //緊急聯絡人-地址
     private String contactTitleOfMainland;      //緊急聯絡人-稱謂
     private List<Traveller> travellerList = new ArrayList<Traveller>();
+    private JSONObject cnTravelAgency;
+    private final String[] exList = {"exList", "travellerList", "cnTravelAgency"};
     /* -- 不必填---------------------------------------------------------------
     private String tourGroupId;         //??
     private String tourType;            //??
@@ -105,10 +108,30 @@ public class TravelGroup {
     private String tourBureauP05Status;     //??
     --------------------------------------------------------------------------*/
 
+    public String getId(){
+        return this.id;
+    }
+
     public void setId(String paramString){
         this.id = paramString;
     }
 
+    public void setCnTravelAgencyNo(String s){
+        this.cnTravelAgencyNo = s;
+    }
+        
+    public void setCnTravelAgencyName(String s){
+        this.cnTravelAgencyName = s;
+    }
+    
+    public JSONObject getCnTravelAgency(){
+        return this.cnTravelAgency;
+    }
+    
+    public void setCnTravelAgency(JSONObject jo){
+        this.cnTravelAgency = jo;
+    }
+    
     public void setApplyDate(){
         Date dNow = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -132,13 +155,16 @@ public class TravelGroup {
             return;
         }
         try{
+            int ttd = Integer.valueOf(this.cnTravelAgency.get("TotalTourDays").toString());
             String sDate = CommonHelp.dateFormatFix(paramString.trim());
-            String eDate = CommonHelp.calculateTourDate(sDate, 14);
+            String eDate = CommonHelp.calculateTourDate(sDate, ttd-1);
             this.tourStartDate = sDate;
             this.tourEndDate = eDate;
         }catch (ParseException e) {}
     }
-
+    
+//    public void setTourEndDate(String s){}
+    
     public String getTourEndDate(){
         return this.tourEndDate;
     }
@@ -237,7 +263,7 @@ public class TravelGroup {
     public void setTravellerList(List<Traveller> lt){
         this.travellerList = lt;
     }
-
+    
     public void removeTraveller(Traveller tr){
         this.travellerList.remove(tr);
     }
@@ -289,8 +315,8 @@ public class TravelGroup {
     }
 
     private boolean isExclude(String s){
-        String[] exList = {"travellerList", "logger"};
-        for(String ex : exList){
+        
+        for(String ex : this.exList){
             if(s.equals(ex)){
                 return true;
             }

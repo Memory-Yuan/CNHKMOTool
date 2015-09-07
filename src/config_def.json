@@ -1,0 +1,109 @@
+{
+    "version": "1.0.0",
+    "DBPath": "D:/CNHKMO/db/CNHKMO",
+    "HeadShotName": "HeadShot.jpg",
+    "Insurance": {
+        "APIAddress": "https://b2bn.south-china.com.tw/eCommerceB2B/Secure/TravelDutyReceiver.ashx",
+        "NoAddress": "http://service.hotelnabe.com.tw/kawanagale_insurance_secno.php",
+        "Name": "林宜錚",
+        "Email": "julian.lin@pctravel.com.tw"
+    },
+    
+    "TravelAgency": 0,
+    "TravelAgencyList": [
+        {
+            "No": "L-ZJ-CJ00055",
+            "Name": "浙江商務國際旅行社有限公司",
+            "TotalTourDays": 15
+        },
+        {
+            "No": "L-BJ-CJ00014",
+            "Name": "海洋國際旅行社有限公司",
+            "TotalTourDays": 16
+        }
+    ],
+    
+    "ResolveMode": 0,
+    "DataTitle":                         ["Table", "Row", "Col"],
+    "ResolveModeList": [
+        {
+            "TourStartDate":             null,
+            "ContactNameOfMainland":     [1, 4, 2],
+            "ContactTitleOfMainland":    [1, 5, 2],
+            "ContactGenderOfMainland":   [1, 6, 2],
+            "ContactMobileNoOfMainland": [1, 7, 2],
+            "ContactTelNoOfMainland":    [1, 8, 2],
+            "ContactAddressOfMainland":  [1, 9, 2],
+            "Main": {
+                "ChineseName":           [1, 13, 2],
+                "BirthDate":             [1, 14, 2],
+                "PassportNo":            [1, 15, 2],
+                "Gender":                [1, 16, 2],
+                "OccupationDesc":        [1, 17, 2],
+                "Address":               [1, 19, 2],
+                "EnglishName":           [1, 20, 2],
+                "PassportExpiryDate":    [1, 21, 2],
+                "PersonId":              [1, 22, 2],
+                "BirthPlace2":           [1, 23, 2],
+                "Education":             [1, 24, 2],
+                "MobileNo":              [1, 25, 2]
+            },
+            "Sub": {
+                "ChineseName":           [2, 5, 2],
+                "BirthDate":             [2, 6, 2],
+                "PassportNo":            [2, 7, 2],
+                "Gender":                [2, 8, 2],
+                "Address":               [2, 9, 2],
+                "EnglishName":           [2, 10, 2],
+                "PassportExpiryDate":    [2, 11, 2],
+                "PersonId":              [2, 12, 2],
+                "BirthPlace2":           [2, 13, 2],
+                "Education":             [2, 14, 2],
+                "MobileNo":              [2, 15, 2],
+                "RelativeTitle":         [2, 16, 2]
+            },
+            "SubInterval":               [1, 0, 0]
+        },
+        {
+            "TourStartDate":             [0, 0, 2],
+            "ContactNameOfMainland":     [0, 4, 1],
+            "ContactTitleOfMainland":    [0, 4, 3],
+            "ContactGenderOfMainland":   [0, 5, 3],
+            "ContactMobileNoOfMainland": [0, 5, 1],
+            "ContactTelNoOfMainland":    [0, 5, 5],
+            "ContactAddressOfMainland":  [0, 6, 1],
+            "Main": {
+                "ChineseName":           [0, 11, 1],
+                "BirthDate":             [0, 11, 5],
+                "PassportNo":            [0, 12, 3],
+                "Gender":                [0, 11, 3],
+                "OccupationDesc":        [0, 14, 3],
+                "Address":               [0, 15, 3],
+                "EnglishName":           [0, 12, 1],
+                "PassportExpiryDate":    [0, 12, 5],
+                "PersonId":              [0, 13, 1],
+                "BirthPlace2":           [0, 15, 1],
+                "Education":             [0, 14, 1],
+                "MobileNo":              [0, 13, 3]
+            },
+            "Sub": {
+                "ChineseName":           [0, 18, 1],
+                "BirthDate":             [0, 18, 5],
+                "PassportNo":            [0, 19, 3],
+                "Gender":                [0, 18, 3],
+                "OccupationDesc":        [0, 21, 3],
+                "Address":               [0, 22, 3],
+                "EnglishName":           [0, 19, 1],
+                "PassportExpiryDate":    [0, 19, 5],
+                "PersonId":              [0, 20, 1],
+                "BirthPlace2":           [0, 22, 1],
+                "Education":             [0, 21, 1],
+                "MobileNo":              [0, 20, 3],
+                "RelativeTitle":         [0, 23, 1]
+            },
+            "SubInterval":               [0, 7, 0]
+        }
+    ]
+    
+    
+}

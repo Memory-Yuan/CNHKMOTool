@@ -35,10 +35,6 @@ public class Insurance {
     private String xml;
     private int status;     //0: 未處理、1: 成功、2: 失敗
     private String err;
-    private static final String PostUrl = "https://b2bn.south-china.com.tw/eCommerceB2B/Secure/TravelDutyReceiver.ashx";
-//    private static final String PostUrl = "http://memory.justest.com/InsuranceRequest.php";
-    private static final String InsNoUrl = "http://service.hotelnabe.com.tw/kawanagale_insurance_secno.php";
-//    private static final String InsNoUrl = "http://memory.justest.com/kawanagale_insurance_secno.php";
     private final String INSUCOID = "PN";                           //保代編號（由華南產物提供）
     private final String INSUCONAME = "品安";                       //保代名稱
     private final String ICUSTOMER = "70452857";                    //旅行社公司統一編號
@@ -100,7 +96,7 @@ public class Insurance {
         return this.err;
     }
     
-    public boolean postXML() {
+    public boolean postXML(String postUrl) {
         PrintWriter pw = null;
         HttpURLConnection conn = null;
         try{
@@ -109,7 +105,7 @@ public class Insurance {
                 this.err = "保單資料不存在。";
                 return false;
             }
-            URL url = new URL(PostUrl);
+            URL url = new URL(postUrl);
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true);
             conn.setDoOutput(true);
@@ -246,10 +242,10 @@ public class Insurance {
         } catch (Exception e){}
     }
     
-    public static int getInsuranceNo(){
+    public static int getInsuranceNo(String noUrl){
         HttpURLConnection conn = null;
         try{
-            URL url = new URL(InsNoUrl);
+            URL url = new URL(noUrl);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             String line;
@@ -272,13 +268,13 @@ public class Insurance {
         return -2;
     }
     
-    public static void setInsuranceNo(int no){
+    public static void setInsuranceNo(String noUrl, int no){
         HttpURLConnection conn = null;
         try{
             String urlParameters  = String.format("insno=%s", no);
             byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
             int    postDataLength = postData.length;
-            URL    url            = new URL(InsNoUrl);
+            URL    url            = new URL(noUrl);
             conn = (HttpURLConnection) url.openConnection();           
             conn.setDoOutput( true );
             conn.setInstanceFollowRedirects( false );

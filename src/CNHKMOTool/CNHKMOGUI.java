@@ -1,22 +1,3 @@
-/**
- * CNHKMOTool v1.4.5
- * 保險串接修改
- * 介面修改
- * 文件解析修改，將每個資料位於文件的位置寫在Config檔，這樣文件有修改的話只需要改Config
- * 能以不同模式解析文件
- * 新增設定
- *      旅行社
- *      旅遊天數
- *      解析文件模式
- *      大頭照
- *      保險設定
- *      資料庫位置
- * 儲存失敗時，刪除已存資料(Rollback)
- * 儲存時原本是只有未儲存&Pass才會被執行，現在失敗也可以被儲存（因為）增加了Rollback
- * 右鍵選單修改顯示條件
- * 右鍵選單增加重新解析
- * 
- */
 package CNHKMOTool;
 
 import TravelApply.*;
@@ -530,7 +511,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.5");
+        setTitle("CNHKMOTool-v1.4.6");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -633,7 +614,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         loadingPanel.setLayout(loadingPanelLayout);
         loadingPanelLayout.setHorizontalGroup(
             loadingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 536, Short.MAX_VALUE)
+            .addGap(0, 543, Short.MAX_VALUE)
         );
         loadingPanelLayout.setVerticalGroup(
             loadingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1045,12 +1026,13 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trRelativePanelLayout.setVerticalGroup(
             trRelativePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(trRelativePanelLayout.createSequentialGroup()
-                .addGroup(trRelativePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(trRelativeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(trRelativePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(trRelativePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(trRelativeTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(trRelativePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(trRelativeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -1174,7 +1156,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(trEducationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(trGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1288,7 +1270,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, attachFilePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(attachScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                .addComponent(attachScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(attachFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(attachFilePanelLayout.createSequentialGroup()
@@ -1342,7 +1324,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(selectRestAttachBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -3479,7 +3461,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         public Void doInBackground() {
             try{
-                int no = Insurance.getInsuranceNo();
+                int no = Insurance.getInsuranceNo(config.getInsuranceNoAddress());
                 if(no == -2){
                     showMessage("取得保險申請編號失敗。", "warning");
                     return null;
@@ -3501,11 +3483,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                             continue;
                         }
                         System.out.println("post...");
-                        boolean isOk = ins.postXML();
+                        boolean isOk = ins.postXML(config.getInsuranceAPIAddress());
                         ins.setStatus(isOk? 1 : 2);
                     }
                 }
-                Insurance.setInsuranceNo(no);
+                Insurance.setInsuranceNo(config.getInsuranceNoAddress(), no);
             }catch(Exception e){
                 CommonHelp.logger.log(Level.ERROR, "[SubmitWorker] 錯誤", e);
             }

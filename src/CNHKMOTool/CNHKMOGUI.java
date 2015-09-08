@@ -13,7 +13,13 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,8 +27,20 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.filechooser.FileFilter;
@@ -192,8 +210,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         attachCountLabel = new javax.swing.JLabel();
         imageCheckBox = new javax.swing.JCheckBox();
         jToolBar2 = new javax.swing.JToolBar();
-        resetHeadShot = new javax.swing.JButton();
         setToHeadShot = new javax.swing.JButton();
+        resetHeadShot = new javax.swing.JButton();
         jToolBar6 = new javax.swing.JToolBar();
         selectAttachBtn = new javax.swing.JButton();
         removeAllAttachBtn = new javax.swing.JButton();
@@ -511,7 +529,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.6");
+        setTitle("CNHKMOTool-v1.4.7");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -1212,16 +1230,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jToolBar2.setRollover(true);
         jToolBar2.setEnabled(false);
 
-        resetHeadShot.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
-        resetHeadShot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/portrait_delete.png"))); // NOI18N
-        resetHeadShot.setToolTipText("重設大頭照");
-        resetHeadShot.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetHeadShotActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(resetHeadShot);
-
         setToHeadShot.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         setToHeadShot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/portrait2.png"))); // NOI18N
         setToHeadShot.setToolTipText("設為大頭照");
@@ -1231,6 +1239,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
         jToolBar2.add(setToHeadShot);
+
+        resetHeadShot.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        resetHeadShot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/portrait_delete.png"))); // NOI18N
+        resetHeadShot.setToolTipText("重設大頭照");
+        resetHeadShot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetHeadShotActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(resetHeadShot);
 
         jToolBar6.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar6.setRollover(true);
@@ -2035,20 +2053,29 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_reResolveMenuItemActionPerformed
 
     private void cleanBDButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanBDButtonActionPerformed
-        Statement st = null;
-        try {
-            st = conn.createStatement();
-            String sql;
-            for(String table : this.tableList){
-                sql = String.format("delete from %s where true", table);
-                System.out.println(sql);
-                st.executeUpdate(sql);
-            }
-        } catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, "[claenBDButtonAction] 失敗。", e);
-        } finally{
-            if(st != null){
-                try{ st.close(); }catch(Exception ignore){}
+        int n = JOptionPane.showConfirmDialog(
+                null,
+                "真的要清空資料庫嗎？",
+                "清空資料庫",
+                JOptionPane.WARNING_MESSAGE,
+                JOptionPane.YES_NO_OPTION);
+
+        if (n == JOptionPane.YES_OPTION) {
+            Statement st = null;
+            try {
+                st = conn.createStatement();
+                String sql;
+                for(String table : this.tableList){
+                    sql = String.format("delete from %s where true", table);
+                    System.out.println(sql);
+                    st.executeUpdate(sql);
+                }
+            } catch(Exception e){
+                CommonHelp.logger.log(Level.ERROR, "[claenBDButtonAction] 失敗。", e);
+            } finally{
+                if(st != null){
+                    try{ st.close(); }catch(Exception ignore){}
+                }
             }
         }
     }//GEN-LAST:event_cleanBDButtonActionPerformed

@@ -10,6 +10,12 @@
 <project name="CNHKMOTool" default="default" basedir=".">
     <description>Builds, tests, and runs the project CNHKMOTool.</description>
     <import file="nbproject/build-impl.xml"/>
+    
+    <target name="-post-compile">
+        <copy file="src/config_def.json" todir="${dist.dir}"/>
+        <copy file="src/log4j2.xml" todir="${dist.dir}"/>
+        <copydir src="src/images" dest="${dist.dir}/images/"/>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 

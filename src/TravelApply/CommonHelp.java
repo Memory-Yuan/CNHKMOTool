@@ -1,5 +1,11 @@
 package TravelApply;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -105,6 +111,28 @@ public class CommonHelp {
             return sdf.format(date);
         }catch(Exception e){}
         return "";
+    }
+    
+    public static String readFile(File file) throws IOException {
+        InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8"); 
+        BufferedReader br = new BufferedReader(isr); 
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append("\n");
+                line = br.readLine();
+            }
+            return sb.toString();
+        } catch(Exception e){
+            logger.log(Level.ERROR, "[readFile]失敗。", e);
+            return "";
+        } finally {
+            isr.close();
+            br.close();
+        }
     }
     
 }

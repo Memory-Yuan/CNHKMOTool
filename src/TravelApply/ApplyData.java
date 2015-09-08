@@ -291,11 +291,10 @@ public class ApplyData {
             }catch(Exception e){
                 CommonHelp.logger.log(Level.ERROR, String.format("[wordResolve][TravelGroup] 資料解析有誤！ path: %s", this.applyDoc.getAbsolutePath()), e);
             }
-            
-            Traveller traveller;
+
             String mainTravellerName = null;
             for(int i = 0; i < applyPeopleFolderQty; i++){
-                traveller = new Traveller();
+                Traveller traveller = new Traveller();
                 try{
                     traveller.setSeqNo(i);
                     traveller.setChineseName        (this.getCellContent(tableList, this.getPosition("ChineseName", i)));

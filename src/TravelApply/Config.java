@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Scanner;
 import org.apache.logging.log4j.Level;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,11 +34,11 @@ public class Config {
                 throw new FileNotFoundException();
             }
             JSONParser parser = new JSONParser();
-            String defContent = new Scanner(defConfig).useDelimiter("\\Z").next();
+            String defContent = CommonHelp.readFile(defConfig);
             JSONObject defJsonObj = (JSONObject)parser.parse(defContent);
             
             if(config.exists()){
-                String content = new Scanner(config).useDelimiter("\\Z").next();
+                String content = CommonHelp.readFile(config);
                 JSONObject jsonObj = (JSONObject)parser.parse(content);
                 String defVer = defJsonObj.get("version").toString();
                 String ver = jsonObj.get("version").toString();
@@ -54,6 +53,8 @@ public class Config {
             return;
         } catch(FileNotFoundException e){
             CommonHelp.logger.log(Level.ERROR, "[getConfig]失敗，找不到檔案！", e);
+        } catch(IOException e){
+            CommonHelp.logger.log(Level.ERROR, "[getConfig]失敗！", e);
         } catch(Exception e){
             CommonHelp.logger.log(Level.ERROR, "[getConfig]失敗！", e);
         }
@@ -67,7 +68,7 @@ public class Config {
         }
         File file = new File(ConfigPath);
         try{
-            BufferedWriter bufWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false)));
+            BufferedWriter bufWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "utf-8"));
             bufWriter.write(jsonConfig.toJSONString()); 
             bufWriter.close();
         }catch(IOException e){

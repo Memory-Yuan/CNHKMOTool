@@ -201,7 +201,7 @@ public class Insurance {
             ( root.addElement("INSSRC")       ).addText(this.INSSRC);
             ( root.addElement("EMAIL")        ).addText(this.EMAIL);
             ( root.addElement("FAX_NAME")     ).addText(this.FAX_NAME);
-            ( root.addElement("FILE")         ).addText(tg.getTourName() + "_" + tr.getChineseName());
+            ( root.addElement("FILE")         ).addText(tr.getGroupName());
             Element item = root.addElement("ITEM");
             Element data = item.addElement("DATA");
             data.addAttribute("ISEQ",           this.DATA_ISEQ);

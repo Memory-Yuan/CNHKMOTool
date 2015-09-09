@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="guidePanel">
 
@@ -32,7 +32,7 @@
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>
-                <Property name="text" type="java.lang.String" value="&#x4e00;&#x3001;&#x64cd;&#x4f5c;&#x65b9;&#x6cd5; - &#x5132;&#x5b58;&#x8cc7;&#x6599;&#xa;  1.&#x65b0;&#x589e;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x593e;&#xff08;&#x9078;&#x64c7;&#x5b8c;&#x5c07;&#x81ea;&#x52d5;&#x5e36;&#x5165;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x53ca;&#x9644;&#x4ef6;&#xff09;&#x3002;&#xa;    1)&#x55ae;&#x7b46;&#x65b0;&#x589e;&#xff1a;&#x9078;&#x64c7;&#x8cc7;&#x6599;&#x593e;&#x5982;&#x300c;CL02051006-0321-&#x8449;&#x5927;&#x96c4; &#x9673;&#x975c;&#x9999;(&#x6d59;&#x5546;15)&#x300d;&#x3002;&#xa;    2)&#x6279;&#x6b21;&#x65b0;&#x589e;&#xff1a;&#x9078;&#x64c7;&#x5305;&#x542b;&#x5404;&#x7b46;&#x8cc7;&#x6599;&#x7684;&#x8cc7;&#x6599;&#x593e;&#x3002;&#xa;    3)&#x4ee5;&#x4e0a;&#x5169;&#x500b;&#x65b9;&#x6cd5;&#x7686;&#x53ef;&#x591a;&#x91cd;&#x9078;&#x64c7;&#x3002;&#xa;  2.&#x78ba;&#x8a8d;&#x5404;&#x7b46;&#x8cc7;&#x6599;&#x6709;&#x7121;&#x932f;&#x8aa4;&#xff0c;&#x4fee;&#x6539;&#x8acb;&#x8a18;&#x5f97;&#x5132;&#x5b58;&#x624d;&#x80fd;&#x751f;&#x6548;&#x3002;&#xa;  3.&#x78ba;&#x8a8d;&#x9644;&#x4ef6;&#x53ca;&#x8a2d;&#x5b9a;&#x5404;&#x7533;&#x8acb;&#x4eba;&#x5927;&#x982d;&#x7167;&#x3002;&#xa;  4.&#x6309;&#x4e0b;&#x5132;&#x5b58;&#x8cc7;&#x6599;&#xff08;&#x65b0;&#x589e;&#x6210;&#x529f;&#x7684;&#x8cc7;&#x6599;&#x6703;&#x5728;&#x524d;&#x65b9;&#x52a0;&#x4e0a;&#x300c;&#x5132;&#x5b58;&#x6210;&#x529f;&#x300d;&#x6a19;&#x7c64;&#xff0c;&#x53cd;&#x4e4b;&#x70ba;&#x300c;&#x5132;&#x5b58;&#x5931;&#x6557;&#x300d;&#xff09;&#x3002;&#xa;  5.&#x5f85;&#x8655;&#x7406;&#x5b8c;&#x6210;&#x4e4b;&#x5f8c;&#x9078;&#x64c7;&#x300c;&#x95dc;&#x9589;&#x8cc7;&#x6599;&#x5eab;&#x300d;&#x6216;&#x662f;&#x95dc;&#x9589;&#x6b64;&#x5de5;&#x5177;&#x3002;&#xa;  6.&#x81f3;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#x67e5;&#x8a62;&#x8cc7;&#x6599;&#x61c9;&#x53ef;&#x627e;&#x5230;&#x5404;&#x7b46;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x3002;&#xa;&#xa;&#x4e8c;&#x3001;&#x64cd;&#x4f5c;&#x65b9;&#x6cd5; - &#x7533;&#x8acb;&#x4fdd;&#x55ae;(&#x63a5;&#x7e8c; &#x64cd;&#x4f5c;&#x65b9;&#x6cd5; - &#x5132;&#x5b58;&#x8cc7;&#x6599; &#x7b2c;4&#x9ede;)&#xa;  1.&#x6309;&#x4e0b;&#x4fdd;&#x96aa;&#x7533;&#x8acb; (&#x7533;&#x8acb;&#x6210;&#x529f;&#x6703;&#x5728;&#x524d;&#x65b9;&#x52a0;&#x4e0a;&#x300c;&#x7533;&#x8acb;&#x6210;&#x529f;&#x300d;&#x6a19;&#x7c64;&#xff0c;&#x53cd;&#x4e4b;&#x70ba;&#x300c;&#x7533;&#x8acb;&#x5931;&#x6557;&#x300d;&#x3002;)&#xa;&#xa;&#x4e8c;&#x3001;&#x6ce8;&#x610f;&#x4e8b;&#x9805;&#xff1a;&#xa;  1.&#x5728;&#x4f7f;&#x7528;&#x6b64;&#x5de5;&#x5177;&#x4e4b;&#x524d;&#xff0c;&#x8acb;&#x5148;&#x78ba;&#x5b9a;&#x662f;&#x5426;&#x6709;&#x5148;&#x958b;&#x555f;&#x5165;&#x53f0;&#x8b49;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xff0c;&#xa;    &#x5982;&#x6709;&#x958b;&#x555f;&#xff0c;&#x8acb;&#x5c07;&#x4e4b;&#x95dc;&#x9589;&#xff0c;&#x624d;&#x80fd;&#x5920;&#x4f7f;&#x7528;&#x3002;&#xa;  2.&#x5728;&#x6b64;&#x5de5;&#x5177;&#x8cc7;&#x6599;&#x5eab;&#x9023;&#x7dda;&#x4e2d;&#x7684;&#x60c5;&#x6cc1;&#x4e0b;&#xff0c;&#x7121;&#x6cd5;&#x4f7f;&#x7528;&#x5165;&#x53f0;&#x8b49;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xff0c;&#xa;    &#x5fc5;&#x9808;&#x95dc;&#x9589;&#x8cc7;&#x6599;&#x5eab;&#x9023;&#x7dda;&#x6216;&#x662f;&#x95dc;&#x9589;&#x6b64;&#x5de5;&#x5177;&#x3002;&#xa;  3.&#x5982;&#x679c;&#x9047;&#x5230;&#x7121;&#x6cd5;&#x89e3;&#x6790;&#x6a94;&#x6848;&#x7684;&#x60c5;&#x6cc1;&#xff0c;&#x53ef;&#x4ee5;&#x8a66;&#x8457;&#x628a;Word&#x6a94;&#x8f49;&#x6210;2007&#x4ee5;&#x4e0a;&#x7248;&#x672c;&#x3002;&#xa;  4.&#x4ee5;&#x4e0b;&#x8cc7;&#x6599;&#x7121;&#x6cd5;&#x5f9e;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x7372;&#x5f97;&#xff0c;&#x6216;&#x53ef;&#x80fd;&#x7121;&#x6cd5;&#x8fa8;&#x8b58;&#xff0c;&#x56e0;&#x6b64;&#x5fc5;&#x9808;&#x624b;&#x52d5;&#x586b;&#x5beb;:&#xa;    1) &#x7533;&#x8acb;&#x8cc7;&#x683c; (&#x9810;&#x8a2d;&#x70ba;&#x300c;&#x5e74;&#x6eff;20&#x6b72;&#x4e14;&#x6709;&#x76f8;&#x7576;&#x65b0;&#x81fa;&#x5e63;20&#x842c;&#x4ee5;&#x4e0a;&#x5b58;&#x6b3e;&#x300d;)&#xa;    2) &#x51fa;&#x751f;&#x5730;&#xa;    3) &#x8077;&#x696d;&#x985e;&#x5225;&#xa;    4) &#x5c45;&#x4f4f;&#x57ce;&#x5e02;&#xa;    5) &#x5927;&#x982d;&#x7167; (&#x53ef;&#x8a2d;&#x5b9a;&#x89e3;&#x6790;&#x6642;&#x7684;&#x9810;&#x8a2d;&#x6a94;&#x540d;)&#xa;  5.&#x6587;&#x5b57;&#x984f;&#x8272;&#x610f;&#x7fa9;&#xa;    1)&#x7d05;&#x8272;&#x4ee3;&#x8868;&#x932f;&#x8aa4;&#xff0c;&#x8a72;&#x7b46;&#x8cc7;&#x6599;&#x4e0d;&#x6703;&#x88ab;&#x5132;&#x5b58;(&#x7533;&#x8acb;)&#xff0c;&#x6216;&#x662f;&#x8a72;&#x7b46;&#x8cc7;&#x6599;&#x5132;&#x5b58;(&#x7533;&#x8acb;)&#x5931;&#x6557;&#xff0c;&#x6216;&#x662f;&#x4fdd;&#x96aa;&#x672a;&#x7533;&#x8acb;&#x3002;&#xa;    2)&#x9ec3;&#x8272;&#x4ee3;&#x8868;&#x8b66;&#x544a;&#xff0c;&#x8a72;&#x7b46;&#x8cc7;&#x6599;&#x53ef;&#x4ee5;&#x88ab;&#x5132;&#x5b58;&#xff0c;&#x4f46;&#x662f;&#x6700;&#x5f8c;&#x4ecd;&#x9700;&#x81f3;&#x5165;&#x53f0;&#x8b49;&#x7533;&#x8acb;&#x5e73;&#x53f0;&#x4fee;&#x6539;&#x3002;&#xa;    3)&#x7da0;&#x8272;&#x4ee3;&#x8868;&#x5132;&#x5b58;(&#x7533;&#x8acb;)&#x6210;&#x529f;&#x3002;"/>
+                <Property name="text" type="java.lang.String" value="&#x4e00;&#x3001;&#x64cd;&#x4f5c;&#x65b9;&#x6cd5; - &#x5132;&#x5b58;&#x8cc7;&#x6599;&#xa;  1.&#x65b0;&#x589e;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x593e;&#xff08;&#x9078;&#x64c7;&#x5b8c;&#x5c07;&#x81ea;&#x52d5;&#x5e36;&#x5165;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x53ca;&#x9644;&#x4ef6;&#xff09;&#x3002;&#xa;    1)&#x55ae;&#x7b46;&#x65b0;&#x589e;&#xff1a;&#x9078;&#x64c7;&#x8cc7;&#x6599;&#x593e;&#x5982;&#x300c;CL02051006-0321-&#x8449;&#x5927;&#x96c4; &#x9673;&#x975c;&#x9999;(&#x6d59;&#x5546;15)&#x300d;&#x3002;&#xa;    2)&#x6279;&#x6b21;&#x65b0;&#x589e;&#xff1a;&#x9078;&#x64c7;&#x5305;&#x542b;&#x5404;&#x7b46;&#x8cc7;&#x6599;&#x7684;&#x8cc7;&#x6599;&#x593e;&#x3002;&#xa;    3)&#x4ee5;&#x4e0a;&#x5169;&#x500b;&#x65b9;&#x6cd5;&#x7686;&#x53ef;&#x591a;&#x91cd;&#x9078;&#x64c7;&#x3002;&#xa;  2.&#x78ba;&#x8a8d;&#x5404;&#x7b46;&#x8cc7;&#x6599;&#x6709;&#x7121;&#x932f;&#x8aa4;&#xff0c;&#x4fee;&#x6539;&#x8acb;&#x8a18;&#x5f97;&#x5132;&#x5b58;&#x624d;&#x80fd;&#x751f;&#x6548;&#x3002;&#xa;  3.&#x78ba;&#x8a8d;&#x9644;&#x4ef6;&#x53ca;&#x8a2d;&#x5b9a;&#x5404;&#x7533;&#x8acb;&#x4eba;&#x5927;&#x982d;&#x7167;&#x3002;&#xa;  4.&#x6309;&#x4e0b;&#x5132;&#x5b58;&#x8cc7;&#x6599;&#xff08;&#x65b0;&#x589e;&#x6210;&#x529f;&#x7684;&#x8cc7;&#x6599;&#x6703;&#x5728;&#x524d;&#x65b9;&#x52a0;&#x4e0a;&#x300c;&#x5132;&#x5b58;&#x6210;&#x529f;&#x300d;&#x6a19;&#x7c64;&#xff0c;&#x53cd;&#x4e4b;&#x70ba;&#x300c;&#x5132;&#x5b58;&#x5931;&#x6557;&#x300d;&#xff09;&#x3002;&#xa;  5.&#x5f85;&#x8655;&#x7406;&#x5b8c;&#x6210;&#x4e4b;&#x5f8c;&#x9078;&#x64c7;&#x300c;&#x95dc;&#x9589;&#x8cc7;&#x6599;&#x5eab;&#x300d;&#x6216;&#x662f;&#x95dc;&#x9589;&#x6b64;&#x5de5;&#x5177;&#x3002;&#xa;  6.&#x81f3;&#x5165;&#x53f0;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#x67e5;&#x8a62;&#x8cc7;&#x6599;&#x61c9;&#x53ef;&#x627e;&#x5230;&#x5404;&#x7b46;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x3002;&#xa;&#xa;&#x4e8c;&#x3001;&#x64cd;&#x4f5c;&#x65b9;&#x6cd5; - &#x7533;&#x8acb;&#x4fdd;&#x55ae;(&#x63a5;&#x7e8c; &#x64cd;&#x4f5c;&#x65b9;&#x6cd5; - &#x5132;&#x5b58;&#x8cc7;&#x6599; &#x7b2c;4&#x9ede;)&#xa;  1.&#x6309;&#x4e0b;&#x4fdd;&#x96aa;&#x7533;&#x8acb; (&#x7533;&#x8acb;&#x6210;&#x529f;&#x6703;&#x5728;&#x524d;&#x65b9;&#x52a0;&#x4e0a;&#x300c;&#x7533;&#x8acb;&#x6210;&#x529f;&#x300d;&#x6a19;&#x7c64;&#xff0c;&#x53cd;&#x4e4b;&#x70ba;&#x300c;&#x7533;&#x8acb;&#x5931;&#x6557;&#x300d;&#x3002;)&#xa;&#xa;&#x4e8c;&#x3001;&#x6ce8;&#x610f;&#x4e8b;&#x9805;&#xff1a;&#xa;  1.&#x5728;&#x4f7f;&#x7528;&#x6b64;&#x5de5;&#x5177;&#x4e4b;&#x524d;&#xff0c;&#x9700;&#x5148;&#x8a2d;&#x5b9a;&#x8cc7;&#x6599;&#x5eab;&#x4f4d;&#x7f6e;&#xff0c;&#x8acb;&#x8a2d;&#x5b9a;&#x70ba;CNHKMO&#x5e95;&#x4e0b;&#x7684;db&#x8cc7;&#x6599;&#x593e;&#x5e95;&#x4e0b;&#x7684;CNHKMO&#x3002;&#xa;    &#x4f8b;&#x5982;&#xff1a;D:\u005cCNHKMO\u005cdb\u005cCNHKMO&#xa;  2.&#x8acb;&#x5148;&#x78ba;&#x5b9a;&#x662f;&#x5426;&#x6709;&#x5148;&#x958b;&#x555f;&#x5165;&#x53f0;&#x8b49;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xff0c;&#xa;    &#x5982;&#x6709;&#x958b;&#x555f;&#xff0c;&#x8acb;&#x5c07;&#x4e4b;&#x95dc;&#x9589;&#xff0c;&#x624d;&#x80fd;&#x5920;&#x4f7f;&#x7528;&#x3002;&#xa;  2.&#x5728;&#x6b64;&#x5de5;&#x5177;&#x8cc7;&#x6599;&#x5eab;&#x9023;&#x7dda;&#x4e2d;&#x7684;&#x60c5;&#x6cc1;&#x4e0b;&#xff0c;&#x7121;&#x6cd5;&#x4f7f;&#x7528;&#x5165;&#x53f0;&#x8b49;&#x7533;&#x8acb;&#x5e73;&#x53f0;-&#x96e2;&#x7dda;&#x7248;&#xff0c;&#xa;    &#x5fc5;&#x9808;&#x95dc;&#x9589;&#x8cc7;&#x6599;&#x5eab;&#x9023;&#x7dda;&#x6216;&#x662f;&#x95dc;&#x9589;&#x6b64;&#x5de5;&#x5177;&#x3002;&#xa;  3.&#x5982;&#x679c;&#x9047;&#x5230;&#x7121;&#x6cd5;&#x89e3;&#x6790;&#x6a94;&#x6848;&#x7684;&#x60c5;&#x6cc1;&#xff0c;&#x53ef;&#x4ee5;&#x8a66;&#x8457;&#x628a;Word&#x6a94;&#x8f49;&#x6210;2007&#x4ee5;&#x4e0a;&#x7248;&#x672c;&#x3002;&#xa;  4.&#x4ee5;&#x4e0b;&#x8cc7;&#x6599;&#x7121;&#x6cd5;&#x5f9e;&#x7533;&#x8acb;&#x8cc7;&#x6599;&#x7372;&#x5f97;&#xff0c;&#x6216;&#x53ef;&#x80fd;&#x7121;&#x6cd5;&#x8fa8;&#x8b58;&#xff0c;&#x56e0;&#x6b64;&#x5fc5;&#x9808;&#x624b;&#x52d5;&#x586b;&#x5beb;:&#xa;    1) &#x7533;&#x8acb;&#x8cc7;&#x683c; (&#x9810;&#x8a2d;&#x70ba;&#x300c;&#x5e74;&#x6eff;20&#x6b72;&#x4e14;&#x6709;&#x76f8;&#x7576;&#x65b0;&#x81fa;&#x5e63;20&#x842c;&#x4ee5;&#x4e0a;&#x5b58;&#x6b3e;&#x300d;)&#xa;    2) &#x51fa;&#x751f;&#x5730;&#xa;    3) &#x8077;&#x696d;&#x985e;&#x5225;&#xa;    4) &#x5c45;&#x4f4f;&#x57ce;&#x5e02;&#xa;    5) &#x5927;&#x982d;&#x7167; (&#x53ef;&#x8a2d;&#x5b9a;&#x89e3;&#x6790;&#x6642;&#x7684;&#x9810;&#x8a2d;&#x6a94;&#x540d;)&#xa;  5.&#x6587;&#x5b57;&#x984f;&#x8272;&#x610f;&#x7fa9;&#xa;    1)&#x7d05;&#x8272;&#x4ee3;&#x8868;&#x932f;&#x8aa4;&#xff0c;&#x8a72;&#x7b46;&#x8cc7;&#x6599;&#x4e0d;&#x6703;&#x88ab;&#x5132;&#x5b58;(&#x7533;&#x8acb;)&#xff0c;&#x6216;&#x662f;&#x8a72;&#x7b46;&#x8cc7;&#x6599;&#x5132;&#x5b58;(&#x7533;&#x8acb;)&#x5931;&#x6557;&#xff0c;&#x6216;&#x662f;&#x4fdd;&#x96aa;&#x672a;&#x7533;&#x8acb;&#x3002;&#xa;    2)&#x9ec3;&#x8272;&#x4ee3;&#x8868;&#x8b66;&#x544a;&#xff0c;&#x8a72;&#x7b46;&#x8cc7;&#x6599;&#x53ef;&#x4ee5;&#x88ab;&#x5132;&#x5b58;&#xff0c;&#x4f46;&#x662f;&#x6700;&#x5f8c;&#x4ecd;&#x9700;&#x81f3;&#x5165;&#x53f0;&#x8b49;&#x7533;&#x8acb;&#x5e73;&#x53f0;&#x4fee;&#x6539;&#x3002;&#xa;    3)&#x7da0;&#x8272;&#x4ee3;&#x8868;&#x5132;&#x5b58;(&#x7533;&#x8acb;)&#x6210;&#x529f;&#x3002;" containsInvalidXMLChars="true"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -174,7 +174,6 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="jTabbedPane2" max="32767" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -239,7 +238,7 @@
                               <Component id="jLabel31" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="settingTotalTourDaysSpinner" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="62" max="32767" attributes="0"/>
+                          <EmptySpace pref="90" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -297,6 +296,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/images/folder_open.png"/>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="&#x9078;&#x64c7;&#x8cc7;&#x6599;&#x5eab;"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingDBButtonActionPerformed"/>
@@ -349,7 +349,7 @@
                               <Component id="jLabel35" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="settingHeadShotNameText" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="106" max="32767" attributes="0"/>
+                          <EmptySpace pref="134" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -404,6 +404,7 @@
                               <Component id="jLabel36" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel38" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel39" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel42" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -411,6 +412,7 @@
                               <Component id="settingInsuranceAPIAddressText" max="32767" attributes="0"/>
                               <Component id="settingInsuranceNoAddressText" max="32767" attributes="0"/>
                               <Component id="settingInsuranceNameText" alignment="1" max="32767" attributes="0"/>
+                              <Component id="settingInsuranceChkConnText" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -423,6 +425,11 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel36" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="settingInsuranceAPIAddressText" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel42" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="settingInsuranceChkConnText" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -485,6 +492,16 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="settingInsuranceEmailText">
                 </Component>
+                <Component class="javax.swing.JLabel" name="jLabel42">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="&#x65b0;&#x7d30;&#x660e;&#x9ad4;" size="13" style="0"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="&#x9023;&#x7dda;&#x6e2c;&#x8a66;"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="settingInsuranceChkConnText">
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>
@@ -494,7 +511,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="CNHKMOTool-v1.4.7"/>
+    <Property name="title" type="java.lang.String" value="CNHKMOTool-v1.4.8"/>
     <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
@@ -567,7 +584,9 @@
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="statusLabel" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="appProgressBar" min="-2" pref="155" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="dbStatusLabel" min="-2" pref="203" max="-2" attributes="0"/>
@@ -577,15 +596,21 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="statusLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="dbStatusLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel2" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                              <Component id="statusLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                              <Component id="jLabel9" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                              <Component id="dbStatusLabel" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Component id="appProgressBar" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -622,6 +647,14 @@
             </Property>
             <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JProgressBar" name="appProgressBar">
+          <Properties>
+            <Property name="indeterminate" type="boolean" value="true"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="appProgressBar.setVisible(false);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -757,15 +790,10 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel6" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="jScrollPane5" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jPanel6" alignment="1" max="32767" attributes="0"/>
+                          <Component id="jScrollPane5" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -2088,17 +2116,6 @@
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectAttachBtnActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="removeAllAttachBtn">
-                          <Properties>
-                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                              <Image iconType="3" name="/images/trash_canfull.png"/>
-                            </Property>
-                            <Property name="toolTipText" type="java.lang.String" value="&#x5168;&#x90e8;&#x79fb;&#x9664;"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeAllAttachBtnActionPerformed"/>
-                          </Events>
-                        </Component>
                         <Component class="javax.swing.JButton" name="removeAttachBtn">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -2108,6 +2125,17 @@
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeAttachBtnActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="removeAllAttachBtn">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/images/trash_canfull.png"/>
+                            </Property>
+                            <Property name="toolTipText" type="java.lang.String" value="&#x5168;&#x90e8;&#x79fb;&#x9664;"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeAllAttachBtnActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>
@@ -2364,6 +2392,20 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="insuranceApplyActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="chkConnButton">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/images/connect_chk.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&#x9023;&#x7dda;&#x6e2c;&#x8a66;"/>
+                <Property name="focusable" type="boolean" value="false"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
+                <Property name="verticalTextPosition" type="int" value="3"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkConnButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

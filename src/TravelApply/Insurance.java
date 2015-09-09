@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -112,7 +113,7 @@ public class Insurance {
             conn.setUseCaches(false);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-type", "text/xml");
-            pw = new PrintWriter(conn.getOutputStream());
+            pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8), true);
             pw.write(this.xml);
             pw.flush();
             if(conn.getResponseCode() != HttpURLConnection.HTTP_OK){
@@ -123,7 +124,7 @@ public class Insurance {
             
             SAXReader saxReader = new SAXReader();
             Document document = saxReader.read(conn.getInputStream());
-            this.saveXML(document, String.format("./test/%s.xml", CommonHelp.getNowTimeToSS()));
+//            CommonHelp.saveFile(String.format("./test/%s.xml", CommonHelp.getNowTimeToSS()), CommonHelp.formatXML(document, "utf-8"));
             Element statusCode = document.getRootElement().element("STATUS_CODE");
             if(statusCode == null){
                 CommonHelp.logger.log(Level.ERROR, String.format("[Insurance][postXML] XML解析失敗，找不到STATUS_CODE。%s%s", System.getProperty("line.separator"), document.asXML()));
@@ -216,9 +217,10 @@ public class Insurance {
             data.addAttribute("MEDICALPREMUM",  this.DATA_MEDICALPREMUM);
             data.addAttribute("EXTRAPREMUM",    this.DATA_EXTRAPREMUM);
             data.addAttribute("PERSONS",        this.DATA_PERSONS);
-            
+
             this.xml = doc.asXML();
-            this.saveXML(doc, String.format("./test/%s_%s.xml", tg.getTourName(), CommonHelp.getNowTimeToSS()));
+//            this.xml = CommonHelp.formatXML(doc, "utf-8");
+//            CommonHelp.saveFile(String.format("./test/%s_%s.xml", tg.getTourName(), CommonHelp.getNowTimeToSS()), this.xml);
             return true;
 
         } catch (Exception e){

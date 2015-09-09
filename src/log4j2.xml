@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <RandomAccessFile name="FILE" fileName="CNHKMOTool.log">
+        <RandomAccessFile name="FILE" fileName="log.log">
             <PatternLayout>
                 <Pattern>[%d{DEFAULT}][%-5level][%t] - %msg%n: %throwable{15}%n</Pattern>
             </PatternLayout>

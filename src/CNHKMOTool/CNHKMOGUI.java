@@ -13,13 +13,10 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -60,7 +57,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         initAllArea();
         initSettingArea();
-        createLink();
+        startDBWork(true);
         Runtime.getRuntime().addShutdownHook(new ShutdownThread(this.conn));
     }
 
@@ -114,11 +111,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         settingInsuranceNoAddressText = new javax.swing.JTextField();
         settingInsuranceNameText = new javax.swing.JTextField();
         settingInsuranceEmailText = new javax.swing.JTextField();
+        jLabel42 = new javax.swing.JLabel();
+        settingInsuranceChkConnText = new javax.swing.JTextField();
         bottomPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         dbStatusLabel = new javax.swing.JLabel();
+        appProgressBar = new javax.swing.JProgressBar();
         treePanel = new javax.swing.JPanel();
         applyDataTreeScrollPane = new javax.swing.JScrollPane();
         rootNode = new DefaultMutableTreeNode("root");
@@ -214,8 +214,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         resetHeadShot = new javax.swing.JButton();
         jToolBar6 = new javax.swing.JToolBar();
         selectAttachBtn = new javax.swing.JButton();
-        removeAllAttachBtn = new javax.swing.JButton();
         removeAttachBtn = new javax.swing.JButton();
+        removeAllAttachBtn = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         selectRestAttachBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -233,6 +233,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jToolBar3 = new javax.swing.JToolBar();
         submit = new javax.swing.JButton();
         insuranceApply = new javax.swing.JButton();
+        chkConnButton = new javax.swing.JButton();
         jToolBar4 = new javax.swing.JToolBar();
         createLinkBtn = new javax.swing.JButton();
         closeLinkBtn = new javax.swing.JButton();
@@ -244,7 +245,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         guideContent.setEditable(false);
         guideContent.setColumns(20);
         guideContent.setRows(5);
-        guideContent.setText("一、操作方法 - 儲存資料\n  1.新增申請資料夾（選擇完將自動帶入申請資料及附件）。\n    1)單筆新增：選擇資料夾如「CL02051006-0321-葉大雄 陳靜香(浙商15)」。\n    2)批次新增：選擇包含各筆資料的資料夾。\n    3)以上兩個方法皆可多重選擇。\n  2.確認各筆資料有無錯誤，修改請記得儲存才能生效。\n  3.確認附件及設定各申請人大頭照。\n  4.按下儲存資料（新增成功的資料會在前方加上「儲存成功」標籤，反之為「儲存失敗」）。\n  5.待處理完成之後選擇「關閉資料庫」或是關閉此工具。\n  6.至入台申請平台-離線版查詢資料應可找到各筆申請資料。\n\n二、操作方法 - 申請保單(接續 操作方法 - 儲存資料 第4點)\n  1.按下保險申請 (申請成功會在前方加上「申請成功」標籤，反之為「申請失敗」。)\n\n二、注意事項：\n  1.在使用此工具之前，請先確定是否有先開啟入台證申請平台-離線版，\n    如有開啟，請將之關閉，才能夠使用。\n  2.在此工具資料庫連線中的情況下，無法使用入台證申請平台-離線版，\n    必須關閉資料庫連線或是關閉此工具。\n  3.如果遇到無法解析檔案的情況，可以試著把Word檔轉成2007以上版本。\n  4.以下資料無法從申請資料獲得，或可能無法辨識，因此必須手動填寫:\n    1) 申請資格 (預設為「年滿20歲且有相當新臺幣20萬以上存款」)\n    2) 出生地\n    3) 職業類別\n    4) 居住城市\n    5) 大頭照 (可設定解析時的預設檔名)\n  5.文字顏色意義\n    1)紅色代表錯誤，該筆資料不會被儲存(申請)，或是該筆資料儲存(申請)失敗，或是保險未申請。\n    2)黃色代表警告，該筆資料可以被儲存，但是最後仍需至入台證申請平台修改。\n    3)綠色代表儲存(申請)成功。");
+        guideContent.setText("一、操作方法 - 儲存資料\n  1.新增申請資料夾（選擇完將自動帶入申請資料及附件）。\n    1)單筆新增：選擇資料夾如「CL02051006-0321-葉大雄 陳靜香(浙商15)」。\n    2)批次新增：選擇包含各筆資料的資料夾。\n    3)以上兩個方法皆可多重選擇。\n  2.確認各筆資料有無錯誤，修改請記得儲存才能生效。\n  3.確認附件及設定各申請人大頭照。\n  4.按下儲存資料（新增成功的資料會在前方加上「儲存成功」標籤，反之為「儲存失敗」）。\n  5.待處理完成之後選擇「關閉資料庫」或是關閉此工具。\n  6.至入台申請平台-離線版查詢資料應可找到各筆申請資料。\n\n二、操作方法 - 申請保單(接續 操作方法 - 儲存資料 第4點)\n  1.按下保險申請 (申請成功會在前方加上「申請成功」標籤，反之為「申請失敗」。)\n\n二、注意事項：\n  1.在使用此工具之前，需先設定資料庫位置，請設定為CNHKMO底下的db資料夾底下的CNHKMO。\n    例如：D:\\CNHKMO\\db\\CNHKMO\n  2.請先確定是否有先開啟入台證申請平台-離線版，\n    如有開啟，請將之關閉，才能夠使用。\n  2.在此工具資料庫連線中的情況下，無法使用入台證申請平台-離線版，\n    必須關閉資料庫連線或是關閉此工具。\n  3.如果遇到無法解析檔案的情況，可以試著把Word檔轉成2007以上版本。\n  4.以下資料無法從申請資料獲得，或可能無法辨識，因此必須手動填寫:\n    1) 申請資格 (預設為「年滿20歲且有相當新臺幣20萬以上存款」)\n    2) 出生地\n    3) 職業類別\n    4) 居住城市\n    5) 大頭照 (可設定解析時的預設檔名)\n  5.文字顏色意義\n    1)紅色代表錯誤，該筆資料不會被儲存(申請)，或是該筆資料儲存(申請)失敗，或是保險未申請。\n    2)黃色代表警告，該筆資料可以被儲存，但是最後仍需至入台證申請平台修改。\n    3)綠色代表儲存(申請)成功。");
         jScrollPanel1.setViewportView(guideContent);
 
         javax.swing.GroupLayout guidePanelLayout = new javax.swing.GroupLayout(guidePanel);
@@ -365,6 +366,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         });
 
         settingDBButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder_open.png"))); // NOI18N
+        settingDBButton.setToolTipText("選擇資料庫");
         settingDBButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingDBButtonActionPerformed(evt);
@@ -409,7 +411,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingTotalTourDaysSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("一般", jPanel2);
@@ -451,7 +453,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingHeadShotNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("資料解析", jPanel4);
@@ -468,6 +470,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jLabel39.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel39.setText("Email");
 
+        jLabel42.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
+        jLabel42.setText("連線測試");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -478,13 +483,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addComponent(jLabel37)
                     .addComponent(jLabel36)
                     .addComponent(jLabel38)
-                    .addComponent(jLabel39))
+                    .addComponent(jLabel39)
+                    .addComponent(jLabel42))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(settingInsuranceEmailText, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                     .addComponent(settingInsuranceAPIAddressText)
                     .addComponent(settingInsuranceNoAddressText)
-                    .addComponent(settingInsuranceNameText, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(settingInsuranceNameText, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(settingInsuranceChkConnText))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -494,6 +501,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingInsuranceAPIAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(settingInsuranceChkConnText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -524,12 +535,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jTabbedPane2)
-                .addGap(0, 0, 0))
+                .addComponent(jTabbedPane2))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.7");
+        setTitle("CNHKMOTool-v1.4.8");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -547,6 +557,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         dbStatusLabel.setFont(new java.awt.Font("新細明體", 1, 13)); // NOI18N
         dbStatusLabel.setText("0");
 
+        appProgressBar.setVisible(false);
+        appProgressBar.setIndeterminate(true);
+
         javax.swing.GroupLayout bottomPanelLayout = new javax.swing.GroupLayout(bottomPanel);
         bottomPanel.setLayout(bottomPanelLayout);
         bottomPanelLayout.setHorizontalGroup(
@@ -556,7 +569,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(191, 191, 191)
+                .addGap(18, 18, 18)
+                .addComponent(appProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dbStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -565,13 +580,17 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         bottomPanelLayout.setVerticalGroup(
             bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottomPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(statusLabel)
-                    .addComponent(jLabel9)
-                    .addComponent(dbStatusLabel))
-                .addContainerGap())
+                .addGap(5, 5, 5)
+                .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bottomPanelLayout.createSequentialGroup()
+                        .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dbStatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(appProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
         );
 
         treePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -903,13 +922,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         applyDataPanelLayout.setHorizontalGroup(
             applyDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, applyDataPanelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
                 .addGroup(applyDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(applyDataPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(applyDataPanelLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jScrollPane5)))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5))
                 .addGap(5, 5, 5))
         );
         applyDataPanelLayout.setVerticalGroup(
@@ -1264,15 +1280,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         });
         jToolBar6.add(selectAttachBtn);
 
-        removeAllAttachBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/trash_canfull.png"))); // NOI18N
-        removeAllAttachBtn.setToolTipText("全部移除");
-        removeAllAttachBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeAllAttachBtnActionPerformed(evt);
-            }
-        });
-        jToolBar6.add(removeAllAttachBtn);
-
         removeAttachBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/delete.png"))); // NOI18N
         removeAttachBtn.setToolTipText("移除");
         removeAttachBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -1281,6 +1288,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             }
         });
         jToolBar6.add(removeAttachBtn);
+
+        removeAllAttachBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/trash_canfull.png"))); // NOI18N
+        removeAllAttachBtn.setToolTipText("全部移除");
+        removeAllAttachBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAllAttachBtnActionPerformed(evt);
+            }
+        });
+        jToolBar6.add(removeAllAttachBtn);
 
         javax.swing.GroupLayout attachFilePanelLayout = new javax.swing.GroupLayout(attachFilePanel);
         attachFilePanel.setLayout(attachFilePanelLayout);
@@ -1471,6 +1487,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         });
         jToolBar3.add(insuranceApply);
 
+        chkConnButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/connect_chk.png"))); // NOI18N
+        chkConnButton.setToolTipText("連線測試");
+        chkConnButton.setFocusable(false);
+        chkConnButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chkConnButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        chkConnButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkConnButtonActionPerformed(evt);
+            }
+        });
+        jToolBar3.add(chkConnButton);
+
         jToolBar4.setRollover(true);
         jToolBar4.setEnabled(false);
 
@@ -1586,6 +1614,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         mainCards.show(mainPanel, "loadingCard");
+        appProgressBar.setVisible(true);
         setAllAreaEnabled(false);
         SwingWorker smworker = new SubmitWorker();
         smworker.execute();
@@ -1604,7 +1633,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         myFileChooser.setFileFilter(ff);
         int status = myFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
-            addDoc(myFileChooser.getSelectedFile());
+            startDocReResolveWorker(myFileChooser.getSelectedFile());
         }
     }//GEN-LAST:event_selectApplyDocBtnActionPerformed
 
@@ -1621,6 +1650,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             initMainArea(); //@modify
             setAllAreaEnabled(false);
             statusLabel.setText("讀取中...");
+            appProgressBar.setVisible(true);
             SwingWorker fworker = new FolderWorker(files);
             fworker.execute();
         }
@@ -1643,7 +1673,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.resetHeadShot();
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }//GEN-LAST:event_resetHeadShotActionPerformed
 
     private void setToHeadShotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setToHeadShotActionPerformed
@@ -1665,7 +1695,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         Attach attach = (Attach) attachJList.getSelectedValue();
         attach.setType("1");
 
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }//GEN-LAST:event_setToHeadShotActionPerformed
 
     private void removeAllAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAllAttachBtnActionPerformed
@@ -1675,7 +1705,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.setAttachList(new ArrayList<Attach>());
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }//GEN-LAST:event_removeAllAttachBtnActionPerformed
 
     private void removeAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAttachBtnActionPerformed
@@ -1686,7 +1716,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         if (attachJList.getSelectedIndices().length == 0) { return; }
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.removeAttachs(attachJList.getSelectedValuesList());
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }//GEN-LAST:event_removeAttachBtnActionPerformed
 
     private void selectAttachBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectAttachBtnActionPerformed
@@ -1724,33 +1754,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             File[] files = myFileChooser.getSelectedFiles();
             setAllAreaEnabled(false);
             statusLabel.setText("讀取中...");
+            appProgressBar.setVisible(true);
             SwingWorker rfworker = new RootFolderWorker(files);
             rfworker.execute();
         }
     }//GEN-LAST:event_batchSelectFolderBtnActionPerformed
 
     private void createLinkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createLinkBtnActionPerformed
-        createLink();
+        startDBWork(true);
     }//GEN-LAST:event_createLinkBtnActionPerformed
 
     private void closeLinkBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeLinkBtnActionPerformed
-        try {
-            if (!this.conn.isClosed()) {
-                DriverManager.getConnection("jdbc:derby:" + this.config.getDBPath() + ";shutdown=true");
-                this.conn.close();
-            }
-        } catch (SQLException e) {
-            if (e.getSQLState().equals("08006")) {    //08006代表關閉特定資料庫
-                createLinkBtn.setEnabled(true);
-                closeLinkBtn.setEnabled(false);
-                submit.setEnabled(false);
-                cleanBDButton.setEnabled(false);
-                dbStatusLabel.setText("離線。");
-            }else{
-                showMessage("資料庫關閉失敗，請確認資料庫位置是否正確。", "warning");
-            }
-        } catch(Exception e){
-        }
+        startDBWork(false);
     }//GEN-LAST:event_closeLinkBtnActionPerformed
 
     private void removeApplyDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeApplyDataBtnActionPerformed
@@ -1765,10 +1780,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         selectedNode = (DefaultMutableTreeNode) applyDataTree.getLastSelectedPathComponent();
         if (selectedNode instanceof ApplyDataNode) {
             ApplyData applyData = (ApplyData) selectedNode.getUserObject();
-            loadApplyData(applyData);
+            startApplyDataLoadWorker(applyData);
         } else if (selectedNode instanceof TravellerNode) {
             Traveller traveller = (Traveller) selectedNode.getUserObject();
-            loadTravellerData(traveller);
+            startTravellerDataLoadWorker(traveller);
         }
     }//GEN-LAST:event_applyDataTreeValueChanged
 
@@ -1855,7 +1870,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }catch(Exception e){
             CommonHelp.logger.log(Level.ERROR, String.format("[applyDataSave][TravelGroup] applyDataSave失敗。 path: %s", ad.getApplyFolder().getAbsolutePath()), e);
         }
-        loadApplyData(ad);
+        startApplyDataLoadWorker(ad);
     }//GEN-LAST:event_applyDataSaveBtnActionPerformed
     
     /**
@@ -1884,7 +1899,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         aa.setMappingStatus(true);
         
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }//GEN-LAST:event_selectRestAttachBtnActionPerformed
 
     private void expandjMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expandjMenuItemActionPerformed
@@ -1964,50 +1979,19 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     private void insuranceApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insuranceApplyActionPerformed
         mainCards.show(mainPanel, "loadingCard");
+        statusLabel.setText("處理中...");
+        appProgressBar.setVisible(true);
         setAllAreaEnabled(false);
         SwingWorker insworker = new InsuranceWorker();
         insworker.execute();
     }//GEN-LAST:event_insuranceApplyActionPerformed
 
     private void settingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingButtonActionPerformed
-        try{
-            initSettingArea();
-
-            int n = JOptionPane.showOptionDialog(null,
-                    settingPanel,
-                    "設定",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null, 
-                    new String[]{"儲存", "取消"},
-                    "default");
-
-            if (n == JOptionPane.YES_OPTION) {
-                this.config.setDBPath(settingDBPathText.getText());
-                this.config.setSelAgcIdx(settingTravelAgencyComboBox.getSelectedIndex());
-                this.config.setSelAgcTTD((Integer)settingTotalTourDaysSpinner.getValue());
-                this.config.setSelModeIdx(settingResolveModeComboBox.getSelectedIndex());
-                this.config.setHeadShotName(settingHeadShotNameText.getText());
-                this.config.setInsuranceAPIAddress(settingInsuranceAPIAddressText.getText());
-                this.config.setInsuranceNoAddress(settingInsuranceNoAddressText.getText());
-                this.config.setInsuranceName(settingInsuranceNameText.getText());
-                this.config.setInsuranceEmail(settingInsuranceEmailText.getText());
-                
-                boolean ok = this.config.saveToFile();
-                if(ok){
-                    statusLabel.setText("設定成功！");
-                }else{
-                    showMessage("設定失敗！", "warning");
-                    statusLabel.setText("設定失敗！");
-                }
-            }
-        } catch (Exception e){
-            CommonHelp.logger.log(Level.ERROR, "[settingButtonAction] 設定失敗", e);
-        }
+        showSettingDialog();
     }//GEN-LAST:event_settingButtonActionPerformed
 
     private void reResolveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reResolveButtonActionPerformed
-        reResolveDoc();
+        startBatchDocReResolveWork();
     }//GEN-LAST:event_reResolveButtonActionPerformed
 
     private void tgTourStartDatePickerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tgTourStartDatePickerPropertyChange
@@ -2049,7 +2033,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_settingDBButtonActionPerformed
 
     private void reResolveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reResolveMenuItemActionPerformed
-        this.reResolveDoc();
+        this.startBatchDocReResolveWork();
     }//GEN-LAST:event_reResolveMenuItemActionPerformed
 
     private void cleanBDButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanBDButtonActionPerformed
@@ -2061,6 +2045,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION);
 
         if (n == JOptionPane.YES_OPTION) {
+            appProgressBar.setVisible(true);
             Statement st = null;
             try {
                 st = conn.createStatement();
@@ -2070,12 +2055,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     System.out.println(sql);
                     st.executeUpdate(sql);
                 }
+                statusLabel.setText("資料庫清空完成。");
             } catch(Exception e){
                 CommonHelp.logger.log(Level.ERROR, "[claenBDButtonAction] 失敗。", e);
             } finally{
                 if(st != null){
                     try{ st.close(); }catch(Exception ignore){}
                 }
+                appProgressBar.setVisible(false);
             }
         }
     }//GEN-LAST:event_cleanBDButtonActionPerformed
@@ -2109,8 +2096,16 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             CommonHelp.logger.log(Level.ERROR, String.format("[travellerSave][Traveller][%s] travellerSave失敗。 path: %s", tr.getChineseName(), ad.getApplyFolder().getAbsolutePath()), e);
         }
         applyDataTree.repaint();
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }//GEN-LAST:event_travellerSaveBtnActionPerformed
+
+    private void chkConnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkConnButtonActionPerformed
+        statusLabel.setText("處理中...");
+        appProgressBar.setVisible(true);
+        setAllAreaEnabled(false);
+        SwingWorker capicworker = new ChkAPIConnWorker();
+        capicworker.execute();
+    }//GEN-LAST:event_chkConnButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2153,6 +2148,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addTravellerjMenuItem;
+    private javax.swing.JProgressBar appProgressBar;
     private javax.swing.JLabel applyDataCountLabel;
     private javax.swing.JPanel applyDataPanel;
     private javax.swing.JButton applyDataSaveBtn;
@@ -2176,6 +2172,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane attachScrollPane;
     private javax.swing.JButton batchSelectFolderBtn;
     private javax.swing.JPanel bottomPanel;
+    private javax.swing.JButton chkConnButton;
     private javax.swing.JButton cleanBDButton;
     private javax.swing.JButton clearAllBtn;
     private javax.swing.JButton closeLinkBtn;
@@ -2234,6 +2231,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2283,6 +2281,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextField settingDBPathText;
     private javax.swing.JTextField settingHeadShotNameText;
     private javax.swing.JTextField settingInsuranceAPIAddressText;
+    private javax.swing.JTextField settingInsuranceChkConnText;
     private javax.swing.JTextField settingInsuranceEmailText;
     private javax.swing.JTextField settingInsuranceNameText;
     private javax.swing.JTextField settingInsuranceNoAddressText;
@@ -2433,46 +2432,67 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         settingHeadShotNameText.setText(this.config.getHeadShotName());
         
         settingInsuranceAPIAddressText.setText(this.config.getInsuranceAPIAddress());
+        settingInsuranceChkConnText.setText(this.config.getChkConnectAddress());
         settingInsuranceNoAddressText.setText(this.config.getInsuranceNoAddress());
         settingInsuranceNameText.setText(this.config.getInsuranceName());
         settingInsuranceEmailText.setText(this.config.getInsuranceEmail());
     }
     
     private void createLink() {
-        createLink(this.config.getDBPath());
+        String dbpath = this.config.getDBPath();
+        if(dbpath == null || dbpath.isEmpty()){
+            showMessage("請設定資料庫位置！", "info");
+            showSettingDialog();
+            return;
+        }
+        createLink(dbpath);
     }
 
     private void createLink(String Path) {
+        Statement st = null;
         try {
-            if (this.conn != null && this.conn.isValid(2000)) {
+            if (this.isDBConnected()) {
                 showMessage("資料庫已連結！", "warning");
                 return;
             }
-//            Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();  //此行用不到
             this.conn = DriverManager.getConnection("jdbc:derby:" + Path);
-            dbStatusLabel.setText("連線中。");
-            createLinkBtn.setEnabled(false);
-            closeLinkBtn.setEnabled(true);
-            allEnableChk();
-
-            Statement st = conn.createStatement();
-            try {
-                st.execute("select * from TravelGroup");
-            } catch (SQLException e) {
-                CommonHelp.logger.log(Level.FATAL, "Table不存在！", e);
-                showMessage("Table不存在！", "err");
-            } finally {
-                st.close();
-            }
-        } catch (SQLException e) {
-            CommonHelp.logger.log(Level.ERROR, "資料庫連結失敗！", e);
-            showMessage("資料庫連結失敗！如有開啟入台證申請-離線版，請先關閉。", "warning");
+            st = conn.createStatement();
+            st.execute("select * from TravelGroup");
         } catch (Exception e) {
+            this.conn = null;
             CommonHelp.logger.log(Level.ERROR, "資料庫連結失敗！", e);
-            showMessage("資料庫連結失敗！如有開啟入台證申請-離線版，請先關閉。", "warning");
+            showMessage("資料庫連結失敗！請確認資料庫位置是否正確；如有開啟入台證申請-離線版，請先關閉。", "warning");
+        } finally{
+            try {
+                if (st != null && !st.isClosed()) {
+                    st.close();
+                }
+            } catch (SQLException ignore) {}
         }
     }
 
+    private void closeLink(){
+        try {
+            if (this.conn != null && !this.conn.isClosed()) {
+                DriverManager.getConnection("jdbc:derby:" + this.config.getDBPath() + ";shutdown=true");
+                this.conn.close();
+            }else{
+                showMessage("資料庫已關閉。", "warning");
+            }
+        } catch (SQLException e) {
+            if (!e.getSQLState().equals("08006")) {    //08006代表關閉特定資料庫
+                showMessage("資料庫關閉失敗，請確認資料庫位置是否正確。", "warning");
+            }
+        } catch(Exception e){}
+    }
+    
+    private boolean isDBConnected(){
+        try{
+            return (this.conn != null && this.conn.isValid(2000));
+        }catch(Exception e){}
+        return false;
+    }
+    
     /**
      * 將資料載入ApplyDataArea
      * @param applyData 
@@ -2646,6 +2666,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         settingButton.setEnabled(b);
         reResolveButton.setEnabled(b);
         cleanBDButton.setEnabled(b);
+        chkConnButton.setEnabled(b);
     }
     
     private void setBottomAreaEnabled(boolean b) {
@@ -2713,23 +2734,21 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             reResolveButton.setEnabled(false);
         }
         
-        try {
-            if (this.conn == null || this.conn.isClosed()) {
-                createLinkBtn.setEnabled(true);
-                closeLinkBtn.setEnabled(false);
+        if (this.isDBConnected()) {
+            createLinkBtn.setEnabled(false);
+            closeLinkBtn.setEnabled(true);
+            cleanBDButton.setEnabled(true);
+            if (rootNode.getChildCount() > 0) {
+                submit.setEnabled(true);
+            }else{
                 submit.setEnabled(false);
-                cleanBDButton.setEnabled(false);
-            } else {
-                createLinkBtn.setEnabled(false);
-                closeLinkBtn.setEnabled(true);
-                cleanBDButton.setEnabled(true);
-                if (rootNode.getChildCount() > 0) {
-                    submit.setEnabled(true);
-                }else{
-                    submit.setEnabled(false);
-                }
             }
-        } catch (SQLException ignore) {}
+        } else {
+            createLinkBtn.setEnabled(true);
+            closeLinkBtn.setEnabled(false);
+            submit.setEnabled(false);
+            cleanBDButton.setEnabled(false);
+        }
 
         applyDataTree.updateUI();
         attachJList.updateUI();
@@ -2752,7 +2771,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     }
 
     /**
-     * 將一筆申請資料傳入資料庫
+     * 將一筆申請資料存入資料庫
      *
      * @param applyData
      * @return 儲存成功return true
@@ -2827,24 +2846,21 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         } catch (IOException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             applyData.setSavingErr("儲存失敗。" + e.getMessage());
-            return false;
         } catch (SQLException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             applyData.setSavingErr("儲存失敗。" + e.getMessage());
-            return false;
         } catch (ParseException e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             applyData.setSavingErr("儲存失敗。" + e.getMessage());
-            return false;
         } catch (Exception e) {
             CommonHelp.logger.log(Level.ERROR, String.format("[insertData] 失敗。 path: %s", applyData.getApplyFolder().getAbsolutePath()), e);
             applyData.setSavingErr("儲存失敗。" + e.getMessage());
-            return false;
         } finally{
             if(st != null){
                 try{ st.close(); }catch(Exception ignore){}
             }
         }
+        return false;
     }
 
     private void rollbackData(String id){
@@ -2869,47 +2885,35 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private void addAttach(List<File> files) {
         Traveller tr = (Traveller) selectedNode.getUserObject();
         tr.addAttach(files);
-        loadTravellerData(tr);
+        startTravellerDataLoadWorker(tr);
     }
 
-    /**
-     * 用來手動選擇文件時使用
-     * @param file 
-     */
-    private void addDoc(File file) {
-        try{
-            String fn = file.getName().toLowerCase();
-            if (fn.endsWith(".doc") || fn.endsWith(".docx")) {
-                ApplyData ad = (ApplyData) selectedNode.getUserObject();
-                ad.setApplyDoc(file);
-                mainCards.show(mainPanel, "loadingCard");
-                initMainArea();
-                setAllAreaEnabled(false);
-                statusLabel.setText("讀取中...");
-                SwingWorker drsworker = new DocReResolveWorker(ad);
-                drsworker.execute();
-            }
-        }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("addDoc失敗。 path: %s", file.getAbsolutePath()), e);
-        }
+    private void loadFile(File f){
+        ApplyData ad = new ApplyData(f, this.config);
+        ad.handleApplyData();
+        ApplyDataNode adNode = addParentNode(ad);
+        setChildNode(adNode);
     }
-
-    private void addNode(File f) {
+    
+    private ApplyDataNode addParentNode(ApplyData ad) {
         try{
-            ApplyData ad = new ApplyData(f, this.config);
-            ad.handleApplyData();
             ApplyDataNode adNode = new ApplyDataNode();
             adNode.setUserObject(ad);
             applyDataTreeModel.insertNodeInto(adNode, rootNode, rootNode.getChildCount());
-            setChildNode(adNode);
+            return adNode;
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("addNode失敗。 path: %s", f.getAbsolutePath()), e);
+            CommonHelp.logger.log(Level.ERROR, String.format("addNode失敗。 tour: %s", ad.getTourName()), e);
         }
+        return null;
     }
 
     private void setChildNode(ApplyDataNode adNode){
+        if(adNode == null){
+            CommonHelp.logger.log(Level.ERROR, "setNode失敗，adNode is null。");
+            return;
+        }
         try{
-//            adNode.removeAllChildren();
+            adNode.removeAllChildren();
             ApplyData applyData = (ApplyData) adNode.getUserObject();
             List<Traveller> travellerList = applyData.getTravelgroup().getTravellerList();
             for (Traveller tr : travellerList) {
@@ -2918,7 +2922,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 applyDataTreeModel.insertNodeInto(trNode, adNode, adNode.getChildCount());
             }
         }catch(Exception e){
-            CommonHelp.logger.log(Level.ERROR, String.format("setNode失敗。"), e);
+            CommonHelp.logger.log(Level.ERROR, "setNode失敗。", e);
         }
     }
     
@@ -2961,7 +2965,68 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
     }
 
-    private void loadApplyData(ApplyData applyData){
+    private void showSettingDialog(){
+        try{
+            initSettingArea();
+
+            int n = JOptionPane.showOptionDialog(null,
+                    settingPanel,
+                    "設定",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, 
+                    new String[]{"儲存", "取消"},
+                    "default");
+
+            if (n == JOptionPane.YES_OPTION) {
+                this.config.setDBPath(settingDBPathText.getText());
+                this.config.setSelAgcIdx(settingTravelAgencyComboBox.getSelectedIndex());
+                this.config.setSelAgcTTD((Integer)settingTotalTourDaysSpinner.getValue());
+                this.config.setSelModeIdx(settingResolveModeComboBox.getSelectedIndex());
+                this.config.setHeadShotName(settingHeadShotNameText.getText());
+                this.config.setInsuranceAPIAddress(settingInsuranceAPIAddressText.getText());
+                this.config.setChkConnectAddress(settingInsuranceChkConnText.getText());
+                this.config.setInsuranceNoAddress(settingInsuranceNoAddressText.getText());
+                this.config.setInsuranceName(settingInsuranceNameText.getText());
+                this.config.setInsuranceEmail(settingInsuranceEmailText.getText());
+                
+                boolean ok = this.config.saveToFile();
+                if(ok){
+                    statusLabel.setText("設定成功！");
+                }else{
+                    showMessage("設定失敗！", "warning");
+                    statusLabel.setText("設定失敗！");
+                }
+            }
+        } catch (Exception e){
+            CommonHelp.logger.log(Level.ERROR, "[settingButtonAction] 設定失敗", e);
+        }
+    }
+    
+    /**
+     * 用來手動選擇文件時使用
+     * @param file 
+     */
+    private void startDocReResolveWorker(File file) {
+        try{
+            String fn = file.getName().toLowerCase();
+            if (fn.endsWith(".doc") || fn.endsWith(".docx")) {
+                ApplyData ad = (ApplyData) selectedNode.getUserObject();
+                ad.setApplyDoc(file);
+                mainCards.show(mainPanel, "loadingCard");
+                initMainArea();
+                setAllAreaEnabled(false);
+                statusLabel.setText("讀取中...");
+                appProgressBar.setVisible(true);
+                SwingWorker drsworker = new DocReResolveWorker(ad);
+                drsworker.execute();
+            }
+        }catch(Exception e){
+            CommonHelp.logger.log(Level.ERROR, String.format("addDoc失敗。 path: %s", file.getAbsolutePath()), e);
+        }
+    }
+    
+    private void startApplyDataLoadWorker(ApplyData applyData){
         mainCards.show(mainPanel, "loadingCard");
         setAllAreaEnabled(false);
         statusLabel.setText("讀取中...");
@@ -2969,7 +3034,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         sadlworker.execute();
     }
     
-    private void loadTravellerData(Traveller traveller){
+    private void startTravellerDataLoadWorker(Traveller traveller){
         mainCards.show(mainPanel, "loadingCard");
         setAllAreaEnabled(false);
         statusLabel.setText("讀取中...");
@@ -2977,9 +3042,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         trdlworker.execute();
     }
 
-    private void reResolveDoc(){
+    private void startDBWork(boolean b){
+        setAllAreaEnabled(false);
+        dbStatusLabel.setText("處理中...");
+        appProgressBar.setVisible(true);
+        SwingWorker dbworker = new DBWorker(b);
+        dbworker.execute();
+    }
+    
+    private void startBatchDocReResolveWork(){
         mainCards.show(mainPanel, "loadingCard");
         statusLabel.setText("解析中...");
+        appProgressBar.setVisible(true);
         setAllAreaEnabled(false);
         BatchDocReResolveWork bdrrworker = new BatchDocReResolveWork();
         bdrrworker.execute();
@@ -3117,93 +3191,94 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 int row,
                 boolean hasFocus) {
             super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-            String colorType = "", saveStatusStr = "未儲存", insStatusStr = "未申請";
-            if (node instanceof ApplyDataNode) {
-                ApplyData applyData = (ApplyData) node.getUserObject();
-                int saveStatus = applyData.getStatus();
-                int insStatus = applyData.getTravelgroup().getInsuranceStatus();
-                if (saveStatus == 1) {
-                    saveStatusStr = "儲存完成";
-                    colorType = "success";
-                } else if (saveStatus == 2) {
-                    saveStatusStr = "儲存失敗";
-                    colorType = "danger";
-                } else {
-                    int validStatus = applyData.getValidateStatus();
-                    if (validStatus == 2) {
+            try{
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+                String colorType = "", saveStatusStr = "未儲存", insStatusStr = "未申請";
+                if (node instanceof ApplyDataNode) {
+                    ApplyData applyData = (ApplyData) node.getUserObject();
+                    int saveStatus = applyData.getStatus();
+                    int insStatus = applyData.getTravelgroup().getInsuranceStatus();
+                    if (saveStatus == 1) {
+                        saveStatusStr = "儲存完成";
+                        colorType = "success";
+                    } else if (saveStatus == 2) {
+                        saveStatusStr = "儲存失敗";
                         colorType = "danger";
-                    } else if (validStatus == 1){
-                        colorType = "warning";
                     } else {
-                        colorType = "";
+                        int validStatus = applyData.getValidateStatus();
+                        if (validStatus == 2) {
+                            colorType = "danger";
+                        } else if (validStatus == 1){
+                            colorType = "warning";
+                        } else {
+                            colorType = "";
+                        }
                     }
-                }
-                if (insStatus == 1) {
-                    insStatusStr = "申請成功";
-                } else if (insStatus == 2) {
-                    insStatusStr = "申請失敗";
-                    colorType = "danger";
-                } else if(colorType.equals("success")) {
-                    colorType = "warning";
-                }
-                setText(String.format("[%s][%s]%s", saveStatusStr, insStatusStr, applyData.getTourName()));
-            } else if (node instanceof TravellerNode) {
-                Traveller traveller = (Traveller) node.getUserObject();
-                ApplyData applyData = (ApplyData) ((ApplyDataNode) node.getParent()).getUserObject();
-                int saveStatus = applyData.getStatus();
-                int insStatus = traveller.getInsurance().getStatus();
-                setIcon(traveller.getHeadShot());
-                String applyType = traveller.getSeqNo() == 0 ? "主" : "隨";
-                if (saveStatus == 1) {
-                    colorType = "success";
-                } else if (saveStatus == 2) {
-                    colorType = "danger";
-                } else {
-                    int validStatus = traveller.getValidateStatus();
-                    if (validStatus == 2) {
+                    if (insStatus == 1) {
+                        insStatusStr = "申請成功";
+                    } else if (insStatus == 2) {
+                        insStatusStr = "申請失敗";
                         colorType = "danger";
-                    } else if(validStatus == 1){
+                    } else if(colorType.equals("success")) {
                         colorType = "warning";
-                    } else {
-                        colorType = "";
                     }
+                    setText(String.format("[%s][%s]%s", saveStatusStr, insStatusStr, applyData.getTourName()));
+                } else if (node instanceof TravellerNode) {
+                    Traveller traveller = (Traveller) node.getUserObject();
+                    ApplyData applyData = (ApplyData) ((ApplyDataNode) node.getParent()).getUserObject();
+                    int saveStatus = applyData.getStatus();
+                    int insStatus = traveller.getInsurance().getStatus();
+                    setIcon(traveller.getHeadShot());
+                    String applyType = traveller.getSeqNo() == 0 ? "主" : "隨";
+                    if (saveStatus == 1) {
+                        colorType = "success";
+                    } else if (saveStatus == 2) {
+                        colorType = "danger";
+                    } else {
+                        int validStatus = traveller.getValidateStatus();
+                        if (validStatus == 2) {
+                            colorType = "danger";
+                        } else if(validStatus == 1){
+                            colorType = "warning";
+                        } else {
+                            colorType = "";
+                        }
+                    }
+                    if (insStatus == 1) {
+                        insStatusStr = "申請成功";
+                    } else if (insStatus == 2) {
+                        insStatusStr = "申請失敗";
+                        colorType = "danger";
+                    } else if(colorType.equals("success")) {
+                        colorType = "warning";
+                    }
+
+                    setText(String.format("[%s][%s]%s", insStatusStr, applyType, traveller.getChineseName()));
                 }
-                if (insStatus == 1) {
-                    insStatusStr = "申請成功";
-                } else if (insStatus == 2) {
-                    insStatusStr = "申請失敗";
-                    colorType = "danger";
-                } else if(colorType.equals("success")) {
-                    colorType = "warning";
+
+                switch(colorType){
+                    case "success":
+                        setForeground(successColor);
+                        setBackground(selected? successBGColor.darker() : successBGColor);
+                        setBorder(javax.swing.BorderFactory.createLineBorder(successBDRColor, 1));
+                        break;
+                    case "warning":
+                        setForeground(warningColor);
+                        setBackground(selected? warningBGColor.darker() : warningBGColor);
+                        setBorder(javax.swing.BorderFactory.createLineBorder(warningBDRColor, 1));
+                        break;
+                    case "danger":
+                        setForeground(dangerColor);
+                        setBackground(selected? dangerBGColor.darker() : dangerBGColor);
+                        setBorder(javax.swing.BorderFactory.createLineBorder(dangerBDRColor, 1));
+                        break;
+                    default:
+                        setForeground(selected? Color.WHITE : Color.BLACK);
+                        setBackground(selected? defSelectedColor : this.backgroundNonSelectionColor);
+                        setBorder(javax.swing.BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+                        break;
                 }
-                
-                setText(String.format("[%s][%s]%s", insStatusStr, applyType, traveller.getChineseName()));
-            }
-            
-            switch(colorType){
-                case "success":
-                    setForeground(successColor);
-                    setBackground(selected? successBGColor.darker() : successBGColor);
-                    setBorder(javax.swing.BorderFactory.createLineBorder(successBDRColor, 1));
-                    break;
-                case "warning":
-                    setForeground(warningColor);
-                    setBackground(selected? warningBGColor.darker() : warningBGColor);
-                    setBorder(javax.swing.BorderFactory.createLineBorder(warningBDRColor, 1));
-                    break;
-                case "danger":
-                    setForeground(dangerColor);
-                    setBackground(selected? dangerBGColor.darker() : dangerBGColor);
-                    setBorder(javax.swing.BorderFactory.createLineBorder(dangerBDRColor, 1));
-                    break;
-                default:
-                    setForeground(selected? Color.WHITE : Color.BLACK);
-                    setBackground(selected? defSelectedColor : this.backgroundNonSelectionColor);
-                    setBorder(javax.swing.BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
-                    break;
-            }
-            
+            } catch(Exception ignore){}
             setOpaque(true);
             setPreferredSize(new Dimension(tree.getWidth(), tree.getRowHeight()));
             return this;
@@ -3265,7 +3340,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 for (File f : fileList) {
                     msg = String.format("處理中...(資料夾：%d/%d , %d/%d筆)", i, folderList.length, j, fileList.length);
                     statusLabel.setText(msg);
-                    addNode(f);
+                    loadFile(f);
                     j++;
                 }
                 i++;
@@ -3276,6 +3351,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         protected void done() {
             statusLabel.setText("讀取完成");
+            appProgressBar.setVisible(false);
             applyDataCountLabel.setText(String.valueOf(rootNode.getChildCount()));
             allEnableChk();
         }
@@ -3299,7 +3375,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             for (File folder : folderList) {
                 msg = String.format("處理中...(%d/%d筆)", i, folderList.length);
                 statusLabel.setText(msg);
-                addNode(folder);
+                loadFile(folder);
                 i++;
             }
             return null;
@@ -3308,6 +3384,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         protected void done() {
             statusLabel.setText("讀取完成");
+            appProgressBar.setVisible(false);
             applyDataCountLabel.setText(String.valueOf(rootNode.getChildCount()));
             allEnableChk();
         }
@@ -3384,11 +3461,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         public Void doInBackground() {
             this.applyData.handleApplyData(true);
             ApplyDataNode adn = (ApplyDataNode)selectedNode;
-            adn.removeAllChildren();
             setChildNode(adn);
             TreePath path = new TreePath(adn.getPath());
             applyDataTree.setSelectionPath(path);
-            loadApplyData(applyData);
+            startApplyDataLoadWorker(applyData);
             return null;
         }
 
@@ -3399,6 +3475,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             applyDataTree.setSelectionPath(path);
             mainCards.show(mainPanel, "applyDataCard");
             statusLabel.setText("讀取完成");
+            appProgressBar.setVisible(false);
             allEnableChk();
         }
     }
@@ -3428,7 +3505,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         }
                     }
                     applyData.handleApplyData(true);
-                    node.removeAllChildren();
                     setChildNode((ApplyDataNode)node);
                     i++;
                 }
@@ -3442,6 +3518,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         @Override
         protected void done() {
             statusLabel.setText("完成");
+            appProgressBar.setVisible(false);
             allEnableChk();
         }
     }
@@ -3477,6 +3554,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         protected void done() {
             allEnableChk();
             statusLabel.setText("處理完畢");
+            appProgressBar.setVisible(false);
         }
     }
 
@@ -3487,10 +3565,14 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         @Override
         public Void doInBackground() {
+            if(!CommonHelp.chkConnect(config.getChkConnectAddress())){
+                showMessage("保險申請連線測試失敗！", "warning");
+                return null;
+            }
             try{
                 int no = Insurance.getInsuranceNo(config.getInsuranceNoAddress());
                 if(no == -2){
-                    showMessage("取得保險申請編號失敗。", "warning");
+                    showMessage("取得保險申請編號失敗，請確定編號地址是否正確。", "warning");
                     return null;
                 }
                 for (int i = 0; i < rootNode.getChildCount(); i++) {
@@ -3525,6 +3607,54 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         protected void done() {
             allEnableChk();
             statusLabel.setText("處理完畢");
+            appProgressBar.setVisible(false);
+        }
+    }
+    
+    /**
+     * 處理資料庫的開關
+     */
+    public class DBWorker extends SwingWorker<Void, Void> {
+
+        private boolean isConn;
+
+        public DBWorker(boolean b) {
+            this.isConn = b;
+        }
+
+        @Override
+        public Void doInBackground() {
+            if(this.isConn){
+                createLink();
+            }else{
+                closeLink();
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            dbStatusLabel.setText(isDBConnected()? "連線。" : "離線。");
+            allEnableChk();
+            appProgressBar.setVisible(false);
+        }
+    }
+    
+    public class ChkAPIConnWorker extends SwingWorker<Void, Void> {
+
+        @Override
+        public Void doInBackground() {
+            if(!CommonHelp.chkConnect(config.getChkConnectAddress())){
+                showMessage("保險申請連線測試失敗！", "warning");
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            allEnableChk();
+            statusLabel.setText("處理完畢");
+            appProgressBar.setVisible(false);
         }
     }
     
@@ -3590,7 +3720,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     if (flavor.isFlavorJavaFileListType()) {
                         List< File> files = (List) transferable.getTransferData(flavor);
                         if (files.size() == 1) {
-                            addDoc(files.get(0));
+                            startDocReResolveWorker(files.get(0));
                         }
                     }
                 } catch (Exception e) {
@@ -3630,7 +3760,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
 
         public void run() {
             try {
-                if (!conn.isClosed()) {
+                if (conn != null && !conn.isClosed()) {
                     this.conn.close();
                 }
             } catch (SQLException e) {

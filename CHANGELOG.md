@@ -1,3 +1,15 @@
+# v1.4.8
+ * 資料庫路徑設定提示
+ * config v1.0.1
+     * 資料庫路徑預設為空
+     * 增加API連線測試地址
+     * 正式環境API地址
+ * 修復config getStringValByKey 空值會出錯
+ * 修復保單申請xml編碼問題
+ * 增加progress bar
+ * 修改DB的開與關，並放入SwingWorker處理
+ * 申請保單增加連線測試
+
 # v1.4.7
  * 清空資料庫提示
  * 保險FILE名稱改成跟團號一樣

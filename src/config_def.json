@@ -1,9 +1,10 @@
 {
-    "version": "1.0.0",
-    "DBPath": "D:/CNHKMO/db/CNHKMO",
+    "version": "1.0.1",
+    "DBPath": "",
     "HeadShotName": "HeadShot.jpg",
     "Insurance": {
-        "APIAddress": "https://b2bn.south-china.com.tw/eCommerceB2B/Secure/TravelDutyReceiver.ashx",
+        "APIAddress": "http://b2b.south-china.com.tw/eCommerceB2B/Secure/TravelDutyReceiver.ashx",
+        "ChkConnect": "http://b2b.south-china.com.tw/eCommerceB2B/Secure/ChkConnection.aspx",
         "NoAddress": "http://service.hotelnabe.com.tw/kawanagale_insurance_secno.php",
         "Name": "林宜錚",
         "Email": "julian.lin@pctravel.com.tw"

@@ -1,11 +1,16 @@
 package TravelApply;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +19,9 @@ import java.util.List;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import taobe.tec.jcc.JChineseConvertor;
 
 public class CommonHelp {
@@ -113,6 +121,26 @@ public class CommonHelp {
         return "";
     }
     
+     /** 
+     * 格式化XML文檔 
+     * @param document xml doc
+     * @param charset 編碼
+     * @return 格式化後String
+     */ 
+    public static String formatXML(Document document, String charset) {
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        format.setEncoding(charset);
+        StringWriter sw = new StringWriter();
+        XMLWriter xw = new XMLWriter(sw, format);
+        try {
+                xw.write(document);
+                xw.flush();
+                xw.close(); 
+        } catch (IOException e) {
+        }
+        return sw.toString();
+    }
+    
     public static String readFile(File file) throws IOException {
         InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8"); 
         BufferedReader br = new BufferedReader(isr); 
@@ -133,6 +161,34 @@ public class CommonHelp {
             isr.close();
             br.close();
         }
+    }
+    
+    public static void saveFile(String path, String content) throws IOException {
+        File file = new File(path);
+        try{
+            BufferedWriter bufWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "utf-8"));
+            bufWriter.write(content); 
+            bufWriter.close();
+        }catch(Exception e){
+            CommonHelp.logger.log(Level.ERROR, "[saveFile]失敗！", e);
+        }
+    }
+    
+    public static boolean chkConnect(String chkUrl){
+        HttpURLConnection conn = null;
+        try{
+            URL url = new URL(chkUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            if(conn.getResponseCode() == HttpURLConnection.HTTP_OK){
+                return true;
+            }
+        } catch (Exception e){
+            CommonHelp.logger.log(Level.ERROR, "[chkConnect]失敗。", e);
+        } finally{
+            if(conn != null){ conn.disconnect(); }
+        }
+        return false;
     }
     
 }

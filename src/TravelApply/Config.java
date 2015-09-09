@@ -79,7 +79,11 @@ public class Config {
     }
     
     public String getStringValByKey(String key){
-        return this.jsonConfig.get(key).toString();
+        try{
+            return this.jsonConfig.get(key).toString();
+        }catch(Exception e){
+            return "";
+        }
     }
     
     public JSONArray getTravelAgencyList(){
@@ -198,6 +202,14 @@ public class Config {
     
     public void setInsuranceNoAddress(String s){
         this.getInsuranceObj().put("NoAddress", s);
+    }
+    
+    public String getChkConnectAddress(){
+        return this.getInsuranceObj().get("ChkConnect").toString();
+    }
+    
+    public void setChkConnectAddress(String s){
+        this.getInsuranceObj().put("ChkConnect", s);
     }
     
     public String getInsuranceName(){

@@ -42,7 +42,7 @@ public class TravelGroup {
     private String contactAddressOfMainland;    //緊急聯絡人-地址
     private String contactTitleOfMainland;      //緊急聯絡人-稱謂
     private List<Traveller> travellerList = new ArrayList<Traveller>();
-    private JSONObject cnTravelAgency;
+//    private JSONObject cnTravelAgency;
     private final String[] exList = {"exList", "travellerList", "cnTravelAgency"};
     /* -- 不必填---------------------------------------------------------------
     private String tourGroupId;         //??
@@ -124,13 +124,13 @@ public class TravelGroup {
         this.cnTravelAgencyName = s;
     }
     
-    public JSONObject getCnTravelAgency(){
-        return this.cnTravelAgency;
-    }
-    
-    public void setCnTravelAgency(JSONObject jo){
-        this.cnTravelAgency = jo;
-    }
+//    public JSONObject getCnTravelAgency(){
+//        return this.cnTravelAgency;
+//    }
+//    
+//    public void setCnTravelAgency(JSONObject jo){
+//        this.cnTravelAgency = jo;
+//    }
     
     public void setApplyDate(){
         Date dNow = new Date();
@@ -151,22 +151,37 @@ public class TravelGroup {
     public void setTourStartDate(String paramString){
         if(paramString.trim() == null || paramString.trim().isEmpty()){
             this.tourStartDate = null;
+            return;
+        }
+        
+        this.tourStartDate = CommonHelp.dateFormatFix(paramString.trim());
+//        try{
+//            int ttd = Integer.valueOf(this.cnTravelAgency.get("TotalTourDays").toString());
+//            String sDate = CommonHelp.dateFormatFix(paramString.trim());
+//            String eDate = CommonHelp.calculateTourDate(sDate, ttd-1);
+//            this.tourStartDate = sDate;
+//            this.tourEndDate = eDate;
+//        }catch (ParseException e) {}
+    }
+    
+    public void setTourEndDate(String paramString){
+        if(this.tourStartDate == null || paramString.trim() == null || paramString.trim().isEmpty()){
             this.tourEndDate = null;
             return;
         }
-        try{
-            int ttd = Integer.valueOf(this.cnTravelAgency.get("TotalTourDays").toString());
-            String sDate = CommonHelp.dateFormatFix(paramString.trim());
-            String eDate = CommonHelp.calculateTourDate(sDate, ttd-1);
-            this.tourStartDate = sDate;
-            this.tourEndDate = eDate;
-        }catch (ParseException e) {}
+        this.tourEndDate = CommonHelp.dateFormatFix(paramString.trim());
     }
-    
-//    public void setTourEndDate(String s){}
     
     public String getTourEndDate(){
         return this.tourEndDate;
+    }
+    
+    public Integer getTotalTourDays(){
+        try{
+            return CommonHelp.daysBetween(this.tourStartDate, this.tourEndDate) + 1;
+        }catch(ParseException e){
+            return 0;
+        }
     }
 
     public String getTourName(){
@@ -392,6 +407,7 @@ public class TravelGroup {
             if(tr.getInsurance().getStatus() == 2){ return 2;
             }else if(tr.getInsurance().getStatus() == 0){ is = 0; }
         }
+        if(this.travellerList.size() == 0){ is = 0; }
         return is;
     }
 }

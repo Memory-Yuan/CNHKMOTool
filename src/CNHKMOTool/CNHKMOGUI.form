@@ -842,8 +842,8 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="tgTourStartDatePicker" pref="160" max="32767" attributes="0"/>
-                                              <Component id="tgTravelAgencyText" max="32767" attributes="0"/>
+                                              <Component id="tgTourStartDatePicker" max="32767" attributes="0"/>
+                                              <Component id="tgTravelAgencyText" min="-2" pref="160" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="32767" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -858,18 +858,19 @@
                                                   <Component id="tgTourEndDateText" min="-2" pref="160" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="tourNameText" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="tourNameText" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="applyDocPanel" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                           <Component id="selectApplyDocBtn" min="-2" pref="31" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="folderPath" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="folderPath" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
@@ -949,7 +950,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="applyDocPath" alignment="0" pref="392" max="32767" attributes="0"/>
+                          <Component id="applyDocPath" alignment="0" min="-2" pref="392" max="-2" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -1013,6 +1014,11 @@
                               <EmptySpace min="16" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
+                                      <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="contactGenderComboBox" min="-2" pref="160" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
@@ -1025,7 +1031,7 @@
                                               <Component id="contactNameText" min="-2" pref="160" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
@@ -1039,19 +1045,13 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="contactGenderComboBox" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="contactAddressText" max="32767" attributes="0"/>
+                                      <Component id="contactAddressText" min="-2" pref="418" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1322,112 +1322,100 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="trPersonIdText" min="-2" pref="160" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="trChineseNameText" min="-2" pref="160" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                      <Component id="travellerSaveBtn" min="-2" pref="45" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="trRelativePanel" alignment="0" max="32767" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Component id="trPersonIdText" min="-2" pref="160" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Component id="trChineseNameText" min="-2" pref="160" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                              <Component id="travellerSaveBtn" min="-2" pref="45" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="trRelativePanel" alignment="0" max="32767" attributes="0"/>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                          <Component id="jLabel24" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                          <Group type="102" attributes="0">
-                                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                                  <Group type="102" attributes="0">
-                                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                                          <Component id="trGenderComboBox" min="-2" pref="160" max="-2" attributes="0"/>
-                                                                          <Component id="trPassportNoText" min="-2" pref="160" max="-2" attributes="0"/>
-                                                                      </Group>
-                                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                                          <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                                          <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                                      </Group>
-                                                                  </Group>
-                                                                  <Group type="102" alignment="0" attributes="0">
-                                                                      <EmptySpace min="-2" pref="178" max="-2" attributes="0"/>
-                                                                      <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                                                  </Group>
-                                                              </Group>
-                                                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                                  <Component id="trBirthDateText" pref="160" max="32767" attributes="0"/>
-                                                                  <Component id="trEnglishNameText" alignment="0" pref="160" max="32767" attributes="0"/>
-                                                                  <Component id="trPassportExpiryDateText" pref="160" max="32767" attributes="0"/>
-                                                                  <Component id="trEducationComboBox" alignment="0" pref="160" max="32767" attributes="0"/>
-                                                              </Group>
-                                                          </Group>
-                                                          <Group type="102" attributes="0">
-                                                              <Component id="trOccupationComboBox" min="-2" pref="102" max="-2" attributes="0"/>
-                                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                              <Component id="trOccupationDescText" max="32767" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                  </Group>
-                                              </Group>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace pref="23" max="32767" attributes="0"/>
-                                                      <Component id="trLivingCityComboBox" min="-2" pref="102" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
-                                                      <Component id="trBirthPlace1ComboBox" min="-2" pref="66" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabel24" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" attributes="0">
-                                                      <Component id="trBirthPlace2Text" max="32767" attributes="0"/>
+                                                      <Component id="trLivingCityComboBox" min="-2" pref="102" max="-2" attributes="0"/>
+                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <Component id="trAddressText" min="-2" pref="318" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Group type="102" attributes="0">
+                                                          <Group type="103" groupAlignment="0" attributes="0">
+                                                              <Group type="102" attributes="0">
+                                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                                      <Component id="trGenderComboBox" min="-2" pref="160" max="-2" attributes="0"/>
+                                                                      <Component id="trPassportNoText" min="-2" pref="160" max="-2" attributes="0"/>
+                                                                  </Group>
+                                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                                      <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                                      <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                                  </Group>
+                                                              </Group>
+                                                              <Group type="102" alignment="0" attributes="0">
+                                                                  <EmptySpace min="-2" pref="178" max="-2" attributes="0"/>
+                                                                  <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                                                              </Group>
+                                                          </Group>
+                                                          <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                              <Component id="trBirthDateText" min="-2" pref="160" max="-2" attributes="0"/>
+                                                              <Component id="trEnglishNameText" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
+                                                              <Component id="trPassportExpiryDateText" min="-2" pref="160" max="-2" attributes="0"/>
+                                                              <Component id="trEducationComboBox" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
+                                                          </Group>
+                                                      </Group>
+                                                      <Group type="102" attributes="0">
+                                                          <Component id="trOccupationComboBox" min="-2" pref="102" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Component id="trOccupationDescText" max="32767" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="trBirthPlace1ComboBox" min="-2" pref="66" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jLabel26" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <Component id="trBirthPlace2Text" min="-2" pref="274" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jLabel27" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <Component id="trAddressText" min="-2" pref="318" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
+                                  <Component id="jLabel23" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel28" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel41" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="trGroupNameText" max="32767" attributes="0"/>
-                                          <Component id="trApplyQualificationComboBox" max="32767" attributes="0"/>
+                                          <Component id="trApplyQualificationComboBox" min="-2" pref="442" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1500,7 +1488,7 @@
                                       <Component id="jLabel27" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                       <Component id="trBirthPlace1ComboBox" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jLabel22" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="jLabel22" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="32767" attributes="0"/>
                               <Component id="trRelativePanel" min="-2" max="-2" attributes="0"/>
@@ -1892,7 +1880,7 @@
                                   <Component id="trRelativeLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                   <Component id="trRelativeText" min="-2" pref="160" max="-2" attributes="0"/>
-                                  <EmptySpace pref="66" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="trRelativeTitleLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="trRelativeTitleText" min="-2" pref="160" max="-2" attributes="0"/>

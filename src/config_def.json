@@ -1,6 +1,6 @@
 {
-    "version": "1.0.1",
-    "DBPath": "",
+    "version": "1.0.2",
+    "DBPath": "..\\CNHKMO\\db\\CNHKMO",
     "HeadShotName": "HeadShot.jpg",
     "Insurance": {
         "APIAddress": "http://b2b.south-china.com.tw/eCommerceB2B/Secure/TravelDutyReceiver.ashx",
@@ -10,7 +10,7 @@
         "Email": "julian.lin@pctravel.com.tw"
     },
     
-    "TravelAgency": 0,
+    "TravelAgency": 1,
     "TravelAgencyList": [
         {
             "No": "L-ZJ-CJ00055",
@@ -19,12 +19,12 @@
         },
         {
             "No": "L-BJ-CJ00014",
-            "Name": "海洋國際旅行社有限公司",
+            "Name": "海洋國際旅行社有限責任公司",
             "TotalTourDays": 16
         }
     ],
     
-    "ResolveMode": 0,
+    "ResolveMode": 1,
     "DataTitle":                         ["Table", "Row", "Col"],
     "ResolveModeList": [
         {

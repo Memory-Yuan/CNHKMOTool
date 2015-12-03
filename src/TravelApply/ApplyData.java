@@ -280,8 +280,13 @@ public class ApplyData {
             }
             */
             try{
-                this.travelgroup.setCnTravelAgency              (this.config.getSelAgcObj());
-                this.travelgroup.setTourStartDate               (this.getCellContent(tableList, this.getPosition("TourStartDate")));
+//                this.travelgroup.setCnTravelAgency              (this.config.getSelAgcObj());
+                this.travelgroup.setTourStartDate               (CommonHelp.dateFormatFix(this.getCellContent(tableList, this.getPosition("TourStartDate"))));
+                String eDate = null;
+                if(this.travelgroup.getTourStartDate() != null){
+                    eDate = CommonHelp.calculateTourDate(this.travelgroup.getTourStartDate(), this.config.getSelAgcTTD()-1);
+                }
+                this.travelgroup.setTourEndDate(eDate);
                 this.travelgroup.setContactNameOfMainland       (this.getCellContent(tableList, this.getPosition("ContactNameOfMainland")));
                 this.travelgroup.setContactTitleOfMainland      (this.getCellContent(tableList, this.getPosition("ContactTitleOfMainland")));
                 this.travelgroup.setContactGenderOfMainland     (this.getCellContent(tableList, this.getPosition("ContactGenderOfMainland")));
@@ -310,11 +315,11 @@ public class ApplyData {
                     traveller.setBirthPlace1        (traveller.getBirthPlace1Idx(traveller.getBirthPlace2()));
                     traveller.setEducation          (traveller.getEducationIdx((this.getCellContent(tableList, this.getPosition("Education", i)))));
                     traveller.setGroupName(this.getTourName().replaceAll("-.*-", String.format("-%s-", traveller.getChineseName())));
+                    traveller.setOccupationDesc (this.getCellContent(tableList, this.getPosition("OccupationDesc", i)));
+                    traveller.setOccupation     (traveller.getOccupationId(traveller.getOccupationDesc()));
                     //手機 table.getRow(10+rowBase+rowAdj)
                     if(i < 1){
                         mainTravellerName = traveller.getChineseName();
-                        traveller.setOccupationDesc (this.getCellContent(tableList, this.getPosition("OccupationDesc", i)));
-                        traveller.setOccupation     (traveller.getOccupationId(traveller.getOccupationDesc()));
                     }else{
                         traveller.setRelative       (mainTravellerName);
                         traveller.setRelativeTitle  (this.getCellContent(tableList, this.getPosition("RelativeTitle", i)));

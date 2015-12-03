@@ -170,7 +170,7 @@ public class Insurance {
             SimpleDateFormat formatter = new SimpleDateFormat("YYMMdd");
             String today = formatter.format(dNow);
             String secno = String.format("GR%s%04d", today, no);
-            Integer ttd = Integer.valueOf(tg.getCnTravelAgency().get("TotalTourDays").toString());
+            Integer ttd = tg.getTotalTourDays();
             Integer mprem = this.InsuranceFee.get(ttd);
             long mprem_rcp = Math.round((double)mprem / 100 * Integer.valueOf(this.PCOMMISSION));
 

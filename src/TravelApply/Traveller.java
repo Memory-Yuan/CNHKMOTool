@@ -28,7 +28,7 @@ public class Traveller {
     private Short birthPlace1;          //出生地 省(市) 可能要自己填@
     private String birthPlace2;         //出生地 縣(市) 可能要自己填@
     private Integer education;          //教育程度 可能要自己填@
-    private Integer occupation;         //職業類別 可能要自己填@
+    private Integer occupation;    //職業類別 可能要自己填@
     private String occupationDesc;      //職業
     private String address;             //居住地
     private String personId;            //身分證號
@@ -251,38 +251,37 @@ public class Traveller {
     public Integer getOccupationId(String s){
         String occuDesc = CommonHelp.transToTC(s.trim());
         if(occuDesc == "" || occuDesc.isEmpty()){
-            return 17;
+            return 17;  //無
         }
         
-        HashMap occuMap = new HashMap();
-        occuMap.put(14, "學生");
+        HashMap<Integer, String[]> occuMap = new HashMap<Integer, String[]>();
+        occuMap.put(1, new String[] {"軍人"});          //軍
+        occuMap.put(2, new String[] {"公務"});          //公
+        occuMap.put(3, new String[] {"老師", "教師"});  //教
+        occuMap.put(4, new String[] {});                //私
+        occuMap.put(5, new String[] {});                //商
+        occuMap.put(6, new String[] {"農夫"});          //農
+        occuMap.put(7, new String[] {"工人"});          //工
+        occuMap.put(8, new String[] {"醫生"});          //醫
+        occuMap.put(9, new String[] {});                //宗
+        occuMap.put(10, new String[] {});               //演
+        occuMap.put(11, new String[] {"主播", "記者"}); //新聞
+        occuMap.put(12, new String[] {"漁夫"});         //漁
+        occuMap.put(13, new String[] {});               //輪
+        occuMap.put(14, new String[] {"學生"});         //學
+        occuMap.put(15, new String[] {"自由"});         //自
+        occuMap.put(17, new String[] {"無", "退休"});   //無
+        occuMap.put(18, new String[] {"警察"});         //警
 
         for (Object key : occuMap.keySet()) {
-            String val = (String)occuMap.get(key);
-            if(occuDesc.indexOf(val) >= 0){
-                return (int)key;
+            String[] list = occuMap.get(key);
+            for(int i = 0; i < list.length; i++){
+                if(occuDesc.indexOf(list[i]) >= 0){
+                    return (int)key;
+                }
             }
         }
-        return 0;
-            
-//<option value="1">軍</option>
-//<option value="2">公</option>
-//<option value="3">教</option>
-//<option value="4">私</option>
-//<option value="5">商</option>
-//<option value="6">農</option>
-//<option value="7">工</option>
-//<option value="8">醫</option>
-//<option value="9">宗</option>
-//<option value="10">演</option>
-//<option value="11">新聞</option>
-//<option value="12">漁</option>
-//<option value="13">輪</option>
-//<option value="14">學</option>
-//<option value="15">自</option>
-//<option value="16">其他</option>
-//<option value="17">無</option>
-//<option value="18">警</option>
+        return 16;  //其他
     }
     
     public String getOccupationDesc(){

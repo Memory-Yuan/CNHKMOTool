@@ -679,7 +679,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         applyDocPanel.setLayout(applyDocPanelLayout);
         applyDocPanelLayout.setHorizontalGroup(
             applyDocPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(applyDocPath, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+            .addComponent(applyDocPath, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         applyDocPanelLayout.setVerticalGroup(
             applyDocPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -735,6 +735,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(contactGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel15)
@@ -744,7 +748,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(contactNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(62, 62, 62)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
@@ -755,15 +759,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(contactTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(contactGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(contactAddressText)))
-                .addContainerGap())
+                        .addComponent(contactAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -853,8 +852,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tgTourStartDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                    .addComponent(tgTravelAgencyText))
+                                    .addComponent(tgTourStartDatePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tgTravelAgencyText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -864,14 +863,15 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addComponent(jLabel30)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(tgTourEndDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(tourNameText)
+                                        .addComponent(tgTourEndDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(tourNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                                 .addComponent(applyDocPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(selectApplyDocBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(folderPath))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(folderPath, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(15, 15, 15))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(applyDataSaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1051,7 +1051,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addComponent(trRelativeLabel)
                 .addGap(12, 12, 12)
                 .addComponent(trRelativeText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(trRelativeTitleLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(trRelativeTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1078,82 +1078,75 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(trPersonIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(trChineseNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel11))
+                    .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(travellerSaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(trRelativePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, travellerDetailPanelLayout.createSequentialGroup()
                                 .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel20)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(trPersonIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(trChineseNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel11))
-                            .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(travellerSaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(trRelativePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, travellerDetailPanelLayout.createSequentialGroup()
-                                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel18)
-                                            .addComponent(jLabel10)
-                                            .addComponent(jLabel24))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(trGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addComponent(trPassportNoText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGap(18, 18, 18)
-                                                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(jLabel19)
-                                                            .addComponent(jLabel21)))
-                                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                                        .addGap(178, 178, 178)
-                                                        .addComponent(jLabel12)))
-                                                .addGap(14, 14, 14)
-                                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(trBirthDateText, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                                    .addComponent(trEnglishNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                                    .addComponent(trPassportExpiryDateText, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                                    .addComponent(trEducationComboBox, 0, 160, Short.MAX_VALUE)))
-                                            .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                                .addComponent(trOccupationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(trOccupationDescText))))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, travellerDetailPanelLayout.createSequentialGroup()
-                                .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel23)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                                        .addComponent(trLivingCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                        .addComponent(jLabel22)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(trBirthPlace1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel26)))
+                                    .addComponent(jLabel18)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel24))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(travellerDetailPanelLayout.createSequentialGroup()
-                                        .addComponent(trBirthPlace2Text)
+                                        .addComponent(trLivingCityComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(trAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                            .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                                    .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(trGenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(trPassportNoText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGap(18, 18, 18)
+                                                    .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel19)
+                                                        .addComponent(jLabel21)))
+                                                .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                                    .addGap(178, 178, 178)
+                                                    .addComponent(jLabel12)))
+                                            .addGap(14, 14, 14)
+                                            .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(trBirthDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(trEnglishNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(trPassportExpiryDateText, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(trEducationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                            .addComponent(trOccupationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(trOccupationDescText)))
+                                    .addGroup(travellerDetailPanelLayout.createSequentialGroup()
+                                        .addComponent(trBirthPlace1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel27))
-                                    .addComponent(trAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(jLabel26)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(trBirthPlace2Text, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel27))))))
+                    .addComponent(jLabel23)
+                    .addComponent(jLabel22)
                     .addGroup(travellerDetailPanelLayout.createSequentialGroup()
                         .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel28)
                             .addComponent(jLabel41))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(trGroupNameText)
-                            .addComponent(trApplyQualificationComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+                            .addComponent(trApplyQualificationComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         travellerDetailPanelLayout.setVerticalGroup(
             travellerDetailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1861,6 +1854,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         try{
             tg.setTourName(tourNameText.getText());
             tg.setTourStartDate(CommonHelp.getFormatDate(tgTourStartDatePicker.getDate()));
+            tg.setTourEndDate(tgTourEndDateText.getText());
             tg.setContactNameOfMainland(contactNameText.getText());
             tg.setContactTitleOfMainland(contactTitleText.getText());
             tg.setContactGenderOfMainland(contactGenderComboBox.getSelectedItem().toString());
@@ -2000,13 +1994,12 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         }
         
         try{
-            ApplyData ad = (ApplyData)selectedNode.getUserObject();
             String sDate = CommonHelp.getFormatDate(tgTourStartDatePicker.getDate());
             if(sDate.trim() == null || sDate.trim().isEmpty()){
                 tgTourEndDateText.setText("");
                 return;
             }
-            int ttd = Integer.valueOf(ad.getTravelgroup().getCnTravelAgency().get("TotalTourDays").toString());
+            int ttd = this.config.getSelAgcTTD();
             tgTourEndDateText.setText(CommonHelp.calculateTourDate(sDate, ttd-1));
         }catch(Exception e){tgTourEndDateText.setText("");}
     }//GEN-LAST:event_tgTourStartDatePickerPropertyChange
@@ -2506,8 +2499,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             TravelGroup tg = applyData.getTravelgroup();
             tgTourStartDatePicker.setDate(CommonHelp.getDateFromString(tg.getTourStartDate()));
 //            tgTourEndDateText.setText(tg.getTourEndDate());   //end date 會隨著start date變化而自動改變。
-            tgTravelAgencyText.setText(tg.getCnTravelAgency().get("Name").toString());
-            tgTotalTourDaysText.setText(tg.getCnTravelAgency().get("TotalTourDays").toString());
+            tgTravelAgencyText.setText(this.config.getSelAgcName());
+            tgTotalTourDaysText.setText(String.valueOf(this.config.getSelAgcTTD()));
             contactAddressText.setText(tg.getContactAddressOfMainland());
             contactGenderComboBox.setSelectedIndex(tg.getContactGenderOfMainland() == null ? 0 : Integer.valueOf(tg.getContactGenderOfMainland()) + 1);
             contactMobileNoText.setText(tg.getContactMobileNoOfMainland());
@@ -2783,6 +2776,8 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         travelgroup.setNiaApplyDate();
         travelgroup.setGroupCount(travellerList.size());
         travelgroup.setPermitApplyCount(travellerList.size());
+        travelgroup.setCnTravelAgencyNo(this.config.getSelAgcNo());
+        travelgroup.setCnTravelAgencyName(this.config.getSelAgcName());
         
         //自行生出ID
         String travelGroupId = idBase + "tg";
@@ -2831,7 +2826,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     travelTourId, travelGroupId);
             st.executeUpdate(insertStr);
 
-            int ttd = Integer.valueOf(travelgroup.getCnTravelAgency().get("TotalTourDays").toString());
+            int ttd = this.config.getSelAgcTTD();
             
             for (int i = 0; i < ttd; i++) {
                 String tourDate = CommonHelp.calculateTourDate(travelgroup.getTourStartDate(), i);

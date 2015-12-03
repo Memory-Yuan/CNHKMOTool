@@ -43,7 +43,7 @@ public class CommonHelp {
     public static String dateFormatFix(String d){
         d = transToTC(d.trim());
         try{
-            SimpleDateFormat formatter = new SimpleDateFormat(FormatString);
+            SimpleDateFormat formatter;
             if(d.matches("^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|1\\d|2\\d|3[0-1])$")){
                 return d;
             }else if(d.matches("^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|1\\d|2\\d|3[0-1])$")){
@@ -57,13 +57,15 @@ public class CommonHelp {
             }else if(d.matches("^(19|20)\\d{2}年(0[1-9]|1[0-2])月(0[1-9]|1\\d|2\\d|3[0-1])日$")){
                 formatter = new SimpleDateFormat("yyyy年MM月dd日");
             }else{
-                return d;
+                formatter = new SimpleDateFormat(FormatString);
             }
+
             Date tmpD = formatter.parse(d);
-            formatter = new SimpleDateFormat("yyyyMMdd");
+            formatter = new SimpleDateFormat(FormatString);
             return formatter.format(tmpD);
-        }catch(Exception e){}
-        return d;
+        }catch(Exception e){
+            return d;
+        }
     }
     
     public static String calculateTourDate(String startDate, int num) throws ParseException{
@@ -191,4 +193,18 @@ public class CommonHelp {
         return false;
     }
     
+    public static Integer daysBetween(String smdate, String bdate) throws ParseException{
+        if(smdate == null || bdate == null){
+            return 0;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sdf.parse(smdate));
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(sdf.parse(bdate));
+        long time2 = cal.getTimeInMillis();
+        long between_days=(time2-time1)/(1000*3600*24);
+        
+        return Integer.parseInt(String.valueOf(between_days));
+    }   
 }

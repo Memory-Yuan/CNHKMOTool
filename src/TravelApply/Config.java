@@ -16,12 +16,16 @@ import org.json.simple.parser.JSONParser;
 public class Config {
     
     public Config(){
+        this.desEnc = new DesEncrypt(this.EncryptKey);
         this.setConfigFromFile();
     }
     private JSONObject jsonConfig;
-    private final String DefConfigPath = "config_def.json";
-    private final String ConfigPath = "config.json";
-    
+    private final DesEncrypt desEnc;
+    private final String OriConfigPath = "src/config_origin.json";
+    private final String DefConfigPath = "config_def";
+    private final String ConfigPath = "config";
+    private final String EncryptKey = "surehigh";
+
     public JSONObject getConfig(){
         return this.jsonConfig;
     }
@@ -31,14 +35,17 @@ public class Config {
             File config    = new File(this.ConfigPath),
                  defConfig = new File(this.DefConfigPath);
             if(!defConfig.exists()){
-                throw new FileNotFoundException();
+                this.reEncDefConfig();
+                if(!defConfig.exists()){
+                    throw new FileNotFoundException();
+                }
             }
             JSONParser parser = new JSONParser();
-            String defContent = CommonHelp.readFile(defConfig);
+            String defContent = desEnc.getDesString(CommonHelp.readFile(defConfig));
             JSONObject defJsonObj = (JSONObject)parser.parse(defContent);
             
             if(config.exists()){
-                String content = CommonHelp.readFile(config);
+                String content = desEnc.getDesString(CommonHelp.readFile(config));
                 JSONObject jsonObj = (JSONObject)parser.parse(content);
                 String defVer = defJsonObj.get("version").toString();
                 String ver = jsonObj.get("version").toString();
@@ -69,7 +76,7 @@ public class Config {
         File file = new File(ConfigPath);
         try{
             BufferedWriter bufWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "utf-8"));
-            bufWriter.write(jsonConfig.toJSONString()); 
+            bufWriter.write(desEnc.getEncString(jsonConfig.toJSONString()));
             bufWriter.close();
         }catch(IOException e){
             CommonHelp.logger.log(Level.ERROR, "[儲存設定]失敗！", e);
@@ -228,4 +235,21 @@ public class Config {
         this.getInsuranceObj().put("Email", s);
     }
     
+    public void reEncDefConfig(){
+        try{
+            File oriConfig = new File(this.OriConfigPath),
+                 defConfig = new File(this.DefConfigPath);
+            if(!oriConfig.exists()){
+                throw new FileNotFoundException();
+            }
+            JSONParser parser = new JSONParser();
+            String oriConfigCnt = CommonHelp.readFile(oriConfig);
+            JSONObject oriJsonObj = (JSONObject)parser.parse(oriConfigCnt);
+            BufferedWriter bufWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(defConfig,false), "utf-8"));
+            bufWriter.write(desEnc.getEncString(oriJsonObj.toJSONString()));
+            bufWriter.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }

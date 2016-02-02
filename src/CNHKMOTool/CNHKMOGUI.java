@@ -53,7 +53,9 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         initComponents();
         this.config = new Config();
         if(this.config.getConfig() == null){
-            showMessage("載入Config檔失敗！", "err");
+            showMessage("設定檔載入檔失敗！", "err");
+        }else{
+            setTitle("CNHKMOTool-v" + this.config.getStringValByKey("appVersion"));
         }
         initAllArea();
         initSettingArea();
@@ -88,7 +90,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         collapseAlljMenuItem = new javax.swing.JMenuItem();
         myFileChooser = new javax.swing.JFileChooser();
         settingPanel = new javax.swing.JPanel();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
+        settingTabbedPane = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
@@ -102,7 +104,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jLabel35 = new javax.swing.JLabel();
         settingResolveModeComboBox = new javax.swing.JComboBox();
         settingHeadShotNameText = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
+        settingInsuranceTab = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
@@ -245,7 +247,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         guideContent.setEditable(false);
         guideContent.setColumns(20);
         guideContent.setRows(5);
-        guideContent.setText("一、操作方法 - 儲存資料\n  1.新增申請資料夾（選擇完將自動帶入申請資料及附件）。\n    1)單筆新增：選擇資料夾如「CL02051006-0321-葉大雄 陳靜香(浙商15)」。\n    2)批次新增：選擇包含各筆資料的資料夾。\n    3)以上兩個方法皆可多重選擇。\n  2.確認各筆資料有無錯誤，修改請記得儲存才能生效。\n  3.確認附件及設定各申請人大頭照。\n  4.按下儲存資料（新增成功的資料會在前方加上「儲存成功」標籤，反之為「儲存失敗」）。\n  5.待處理完成之後選擇「關閉資料庫」或是關閉此工具。\n  6.至入台申請平台-離線版查詢資料應可找到各筆申請資料。\n\n二、操作方法 - 申請保單(接續 操作方法 - 儲存資料 第4點)\n  1.按下保險申請 (申請成功會在前方加上「申請成功」標籤，反之為「申請失敗」。)\n\n二、注意事項：\n  1.在使用此工具之前，需先設定資料庫位置，請設定為CNHKMO底下的db資料夾底下的CNHKMO。\n    例如：D:\\CNHKMO\\db\\CNHKMO\n  2.請先確定是否有先開啟入台證申請平台-離線版，\n    如有開啟，請將之關閉，才能夠使用。\n  2.在此工具資料庫連線中的情況下，無法使用入台證申請平台-離線版，\n    必須關閉資料庫連線或是關閉此工具。\n  3.如果遇到無法解析檔案的情況，可以試著把Word檔轉成2007以上版本。\n  4.以下資料無法從申請資料獲得，或可能無法辨識，因此必須手動填寫:\n    1) 申請資格 (預設為「年滿20歲且有相當新臺幣20萬以上存款」)\n    2) 出生地\n    3) 職業類別\n    4) 居住城市\n    5) 大頭照 (可設定解析時的預設檔名)\n  5.文字顏色意義\n    1)紅色代表錯誤，該筆資料不會被儲存(申請)，或是該筆資料儲存(申請)失敗，或是保險未申請。\n    2)黃色代表警告，該筆資料可以被儲存，但是最後仍需至入台證申請平台修改。\n    3)綠色代表儲存(申請)成功。");
+        guideContent.setText("一、操作方法 - 儲存資料\n  1.新增申請資料夾（選擇完將自動帶入申請資料及附件）。\n    1)單筆新增：選擇資料夾如「CL02051006-0321-葉大雄 陳靜香(浙商15)」。\n    2)批次新增：選擇包含各筆資料的資料夾。\n    3)以上兩個方法皆可多重選擇。\n  2.確認各筆資料有無錯誤，修改請記得儲存才能生效。\n  3.確認附件及設定各申請人大頭照。\n  4.按下儲存資料（新增成功的資料會在前方加上「儲存成功」標籤，反之為「儲存失敗」）。\n  5.待處理完成之後選擇「關閉資料庫」或是關閉此工具。\n  6.至入台申請平台-離線版查詢資料應可找到各筆申請資料。\n\n二、操作方法 - 申請保單(接續 操作方法 - 儲存資料 第4點)\n  0.目前功能未開放。\n  1.按下保險申請 (申請成功會在前方加上「申請成功」標籤，反之為「申請失敗」。)\n\n二、注意事項：\n  1.在使用此工具之前，需先設定資料庫位置，請設定為CNHKMO底下的db資料夾底下的CNHKMO。\n    例如：D:\\CNHKMO\\db\\CNHKMO\n  2.請先確定是否有先開啟入台證申請平台-離線版，\n    如有開啟，請將之關閉，才能夠使用。\n  2.在此工具資料庫連線中的情況下，無法使用入台證申請平台-離線版，\n    必須關閉資料庫連線或是關閉此工具。\n  3.如果遇到無法解析檔案的情況，可以試著把Word檔轉成2007以上版本。\n  4.以下資料無法從申請資料獲得，或可能無法辨識，因此必須手動填寫:\n    1) 申請資格 (預設為「年滿20歲且有相當新臺幣20萬以上存款」)\n    2) 出生地\n    3) 職業類別\n    4) 居住城市\n    5) 大頭照 (可設定解析時的預設檔名)\n  5.文字顏色意義\n    1)紅色代表錯誤，該筆資料不會被儲存(申請)，或是該筆資料儲存(申請)失敗。\n    2)黃色代表警告，該筆資料可以被儲存，但是最後仍需至入台證申請平台修改，或是保險未申請。\n    3)綠色代表儲存(申請)成功。");
         jScrollPanel1.setViewportView(guideContent);
 
         javax.swing.GroupLayout guidePanelLayout = new javax.swing.GroupLayout(guidePanel);
@@ -414,7 +416,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap(90, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("一般", jPanel2);
+        settingTabbedPane.addTab("一般", jPanel2);
 
         jLabel32.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel32.setText("文件解析模式");
@@ -456,7 +458,7 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                 .addContainerGap(134, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("資料解析", jPanel4);
+        settingTabbedPane.addTab("資料解析", jPanel4);
 
         jLabel36.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel36.setText("API地址");
@@ -473,20 +475,20 @@ public class CNHKMOGUI extends javax.swing.JFrame {
         jLabel42.setFont(new java.awt.Font("新細明體", 0, 13)); // NOI18N
         jLabel42.setText("連線測試");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout settingInsuranceTabLayout = new javax.swing.GroupLayout(settingInsuranceTab);
+        settingInsuranceTab.setLayout(settingInsuranceTabLayout);
+        settingInsuranceTabLayout.setHorizontalGroup(
+            settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(settingInsuranceTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel37)
                     .addComponent(jLabel36)
                     .addComponent(jLabel38)
                     .addComponent(jLabel39)
                     .addComponent(jLabel42))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(settingInsuranceEmailText, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                     .addComponent(settingInsuranceAPIAddressText)
                     .addComponent(settingInsuranceNoAddressText)
@@ -494,33 +496,33 @@ public class CNHKMOGUI extends javax.swing.JFrame {
                     .addComponent(settingInsuranceChkConnText))
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        settingInsuranceTabLayout.setVerticalGroup(
+            settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(settingInsuranceTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingInsuranceAPIAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingInsuranceChkConnText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingInsuranceNoAddressText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingInsuranceNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(settingInsuranceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingInsuranceEmailText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("保險申請", jPanel3);
+        settingTabbedPane.addTab("保險申請", settingInsuranceTab);
 
         javax.swing.GroupLayout settingPanelLayout = new javax.swing.GroupLayout(settingPanel);
         settingPanel.setLayout(settingPanelLayout);
@@ -528,18 +530,18 @@ public class CNHKMOGUI extends javax.swing.JFrame {
             settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jTabbedPane2)
+                .addComponent(settingTabbedPane)
                 .addGap(0, 0, 0))
         );
         settingPanelLayout.setVerticalGroup(
             settingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jTabbedPane2))
+                .addComponent(settingTabbedPane))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CNHKMOTool-v1.4.8");
+        setTitle("CNHKMOTool");
         setLocationByPlatform(true);
         setResizable(false);
 
@@ -2232,7 +2234,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -2243,7 +2244,6 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
@@ -2278,8 +2278,10 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     private javax.swing.JTextField settingInsuranceEmailText;
     private javax.swing.JTextField settingInsuranceNameText;
     private javax.swing.JTextField settingInsuranceNoAddressText;
+    private javax.swing.JPanel settingInsuranceTab;
     private javax.swing.JPanel settingPanel;
     private javax.swing.JComboBox settingResolveModeComboBox;
+    private javax.swing.JTabbedPane settingTabbedPane;
     private javax.swing.JSpinner settingTotalTourDaysSpinner;
     private javax.swing.SpinnerNumberModel settingTotalTourDaysSpinnerModel;
     private javax.swing.JComboBox settingTravelAgencyComboBox;
@@ -2345,6 +2347,11 @@ public class CNHKMOGUI extends javax.swing.JFrame {
     };
     
     private void initAllArea() {
+        //隱藏保險申請相關功能------------------
+        insuranceApply.setVisible(false);
+        chkConnButton.setVisible(false);
+        settingTabbedPane.remove(2);
+        //--------------------------------------
         mainCards.show(mainPanel, "loadingCard");
         initApplyTree();
         initMainArea();

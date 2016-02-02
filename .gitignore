@@ -1,0 +1,10 @@
+*
+!.gitignore
+!CHANGELOG.md
+!nbbuild.xml
+!README.md
+!kawanagale_insurance_secno.php
+!src/
+!src/*
+!src/*/*
+!src/*/*/*
